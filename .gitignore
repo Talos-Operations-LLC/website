@@ -1,0 +1,14 @@
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Netlify
+.netlify/
+
+# Dependencies / build output (if tooling is added later)
+node_modules/
+dist/
+
+# Logs
+*.log
