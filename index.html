@@ -253,7 +253,7 @@
         The County Rolls <span>what is held, and by whom</span>
       </h2>
       <table>
-        <thead><tr><th>County</th><th>Status</th><th>Portal vendor</th><th>Since</th></tr></thead>
+        <thead><tr><th>County</th><th>Status</th><th>Since</th></tr></thead>
         <tbody id="register-body"></tbody>
       </table>
     </div>
@@ -285,44 +285,56 @@ const CONFIG = {
     instrumentsInCorpus: 182,   // unique deed instruments, hash-deduped
   },
   counties: {
-    "37183": { name: "Wake", status: "live", vendor: "Self-hosted / Tyler ROD", since: "2026" },
-    "37063": { name: "Durham", status: "live", vendor: "Tyler Eagle", since: "2026" },
-    "37101": { name: "Johnston", status: "live", vendor: "ITSPublic / Tyler", since: "2026" },
-    "37077": { name: "Granville", status: "live", vendor: "ITSPublic / Cott", since: "2026" },
-    "37085": { name: "Harnett", status: "live", vendor: "ITSPublic / CCS", since: "2026" },
-    "37069": { name: "Franklin", status: "surveyed", vendor: "Tyler iasWorld", since: "—" },
-    "37053": { name: "Currituck", status: "surveyed", vendor: "Tyler iasWorld", since: "—" },
-    "37105": { name: "Lee", status: "surveyed", vendor: "Tyler iasWorld", since: "—" },
-    "37125": { name: "Moore", status: "surveyed", vendor: "Tyler iasWorld", since: "—" },
-    "37127": { name: "Nash", status: "surveyed", vendor: "Tyler iasWorld", since: "—" },
-    "37129": { name: "New Hanover", status: "surveyed", vendor: "Tyler iasWorld", since: "—" },
-    "37141": { name: "Pender", status: "surveyed", vendor: "Tyler iasWorld", since: "—" },
-    "37159": { name: "Rowan", status: "surveyed", vendor: "Tyler iasWorld", since: "—" },
-    "37163": { name: "Sampson", status: "surveyed", vendor: "Tyler iasWorld", since: "—" },
-    "37189": { name: "Watauga", status: "surveyed", vendor: "Tyler iasWorld", since: "—" },
-    "37193": { name: "Wilkes", status: "surveyed", vendor: "Tyler iasWorld", since: "—" },
-    "37185": { name: "Warren", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37033": { name: "Caswell", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37145": { name: "Person", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37197": { name: "Yadkin", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37057": { name: "Davidson", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37051": { name: "Cumberland", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37151": { name: "Randolph", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37195": { name: "Wilson", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37037": { name: "Chatham", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37081": { name: "Guilford", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37067": { name: "Forsyth", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37065": { name: "Edgecombe", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37109": { name: "Lincoln", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37131": { name: "Northampton", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37079": { name: "Greene", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37181": { name: "Vance", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37093": { name: "Hoke", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37169": { name: "Stokes", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37123": { name: "Montgomery", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37157": { name: "Rockingham", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37011": { name: "Avery", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
-    "37097": { name: "Iredell", status: "surveyed", vendor: "Parcel keys confirmed", since: "—" },
+    "37183": { name: "Wake", status: "live", since: "2026" },
+    "37063": { name: "Durham", status: "live", since: "2026" },
+    "37101": { name: "Johnston", status: "live", since: "2026" },
+    "37077": { name: "Granville", status: "live", since: "2026" },
+    "37085": { name: "Harnett", status: "live", since: "2026" },
+    "37069": { name: "Franklin", status: "surveyed", since: "—" },
+    "37053": { name: "Currituck", status: "surveyed", since: "—" },
+    "37105": { name: "Lee", status: "surveyed", since: "—" },
+    "37125": { name: "Moore", status: "surveyed", since: "—" },
+    "37127": { name: "Nash", status: "surveyed", since: "—" },
+    "37129": { name: "New Hanover", status: "surveyed", since: "—" },
+    "37141": { name: "Pender", status: "surveyed", since: "—" },
+    "37159": { name: "Rowan", status: "surveyed", since: "—" },
+    "37163": { name: "Sampson", status: "surveyed", since: "—" },
+    "37189": { name: "Watauga", status: "surveyed", since: "—" },
+    "37193": { name: "Wilkes", status: "surveyed", since: "—" },
+    "37185": { name: "Warren", status: "surveyed", since: "—" },
+    "37033": { name: "Caswell", status: "surveyed", since: "—" },
+    "37145": { name: "Person", status: "surveyed", since: "—" },
+    "37197": { name: "Yadkin", status: "surveyed", since: "—" },
+    "37057": { name: "Davidson", status: "surveyed", since: "—" },
+    "37051": { name: "Cumberland", status: "surveyed", since: "—" },
+    "37151": { name: "Randolph", status: "surveyed", since: "—" },
+    "37195": { name: "Wilson", status: "surveyed", since: "—" },
+    "37037": { name: "Chatham", status: "surveyed", since: "—" },
+    "37081": { name: "Guilford", status: "surveyed", since: "—" },
+    "37067": { name: "Forsyth", status: "surveyed", since: "—" },
+    "37065": { name: "Edgecombe", status: "surveyed", since: "—" },
+    "37109": { name: "Lincoln", status: "surveyed", since: "—" },
+    "37131": { name: "Northampton", status: "surveyed", since: "—" },
+    "37079": { name: "Greene", status: "surveyed", since: "—" },
+    "37181": { name: "Vance", status: "surveyed", since: "—" },
+    "37093": { name: "Hoke", status: "surveyed", since: "—" },
+    "37169": { name: "Stokes", status: "surveyed", since: "—" },
+    "37123": { name: "Montgomery", status: "surveyed", since: "—" },
+    "37157": { name: "Rockingham", status: "surveyed", since: "—" },
+    "37011": { name: "Avery", status: "surveyed", since: "—" },
+    "37097": { name: "Iredell", status: "surveyed", since: "—" },
+    "37031": { name: "Carteret", status: "surveyed", since: "—" },
+    "37191": { name: "Wayne", status: "surveyed", since: "—" },
+    "37019": { name: "Brunswick", status: "surveyed", since: "—" },
+    "37133": { name: "Onslow", status: "surveyed", since: "—" },
+    "37107": { name: "Lenoir", status: "surveyed", since: "—" },
+    "37061": { name: "Duplin", status: "surveyed", since: "—" },
+    "37027": { name: "Caldwell", status: "surveyed", since: "—" },
+    "37023": { name: "Burke", status: "surveyed", since: "—" },
+    "37111": { name: "McDowell", status: "surveyed", since: "—" },
+    "37035": { name: "Catawba", status: "surveyed", since: "—" },
+    "37147": { name: "Pitt", status: "surveyed", since: "—" },
+    "37139": { name: "Pasquotank", status: "surveyed", since: "—" },
   },
 };
 /* ===================== end CONFIG ===================================== */
@@ -378,7 +390,7 @@ entries
     const tr = document.createElement("tr");
     tr.innerHTML = `<td>${c.name} <span style="color:var(--soft)">· ${fips}</span></td>
       <td class="stamp-cell" style="${c.status==='surveyed' ? 'color:var(--slate)' : ''}">${c.status === 'live' ? 'INSCRIBED' : 'SURVEYED'}</td>
-      <td>${c.vendor}</td><td>${c.since}</td>`;
+      <td>${c.since}</td>`;
     tbody.appendChild(tr);
   });
 
@@ -425,8 +437,8 @@ g.selectAll("path.county")
     tooltip.innerHTML = `<div class="t-name">${d.properties.name} County</div>` +
       (c
         ? (c.status === "live"
-            ? `<span class="t-stamp">Inscribed · Live</span><div class="t-detail">${c.vendor}</div>`
-            : `<span class="t-stamp" style="border-color:var(--slate);color:var(--slate)">Surveyed</span><div class="t-detail">${c.vendor}</div>`)
+            ? `<span class="t-stamp">Inscribed · Live</span>`
+            : `<span class="t-stamp" style="border-color:var(--slate);color:var(--slate)">Surveyed</span>`)
         : `<div class="t-detail">Unrecorded</div>`);
   })
   .on("mouseleave", () => { tooltip.style.display = "none"; });
