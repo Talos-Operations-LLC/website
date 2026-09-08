@@ -1,0 +1,1276 @@
+<!doctype html>
+<html><head><meta name="robots" content="noindex,nofollow"><meta name="description" content="Fee Simple demo - sample data only"><meta charset="utf-8">
+<title>Fee Simple — parcel workbench</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{
+  --paper:#fbfaf7;
+  --panel:#ffffff;
+  --ink:#1c2733;
+  --ink-soft:#5a6875;
+  --rule:#e3e1da;
+  --verify:#1e7a4d;
+  --verify-bg:#e9f4ee;
+  --flag:#9a6b00;
+  --flag-bg:#fdf6e3;
+  --flag-border:#e8cf8a;
+  --abort:#a8322a;
+  --abort-bg:#faeceb;
+  --accent:#2b4a6f;
+  --accent-bg:#eef2f7;
+  --win:var(--paper);
+  --line:var(--rule);
+  --edge:#b9b3a6;          
+  --grey:var(--ink-soft); --dim:var(--ink-soft); --dim2:var(--ink-soft);
+  --ok:var(--verify); --warn:var(--flag); --histfail:var(--abort);
+  --amber:var(--flag); --sel:var(--accent-bg);
+  --gate-edge:var(--flag-border); --gate-bg:var(--flag-bg);
+  --gate-fg:var(--flag);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden;
+     font:14px/1.45 "Segoe UI", system-ui, -apple-system, sans-serif;
+     display:flex;flex-direction:column}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;color:var(--ink)}
+.mono{font-family:Consolas,"Courier New",monospace}
+.apphdr{display:flex;align-items:center;gap:14px;flex:0 0 auto;
+        padding:7px 14px;background:#fbfaf7;border-bottom:1px solid #e3e1da;
+        white-space:nowrap;overflow-x:auto;
+        position:sticky;top:0;z-index:10}   
+.apphdr-brand{color:#1c2733;font:700 13px "Segoe UI",system-ui,sans-serif;flex:0 0 auto}
+.apphdr-nav{display:flex;gap:6px;flex:0 0 auto}
+.apphdr .nav-link{flex:0 0 auto;color:#2b4a6f;text-decoration:none;
+     padding:5px 12px;border:1px solid #e3e1da;border-radius:7px;background:#fff;
+     font:12.5px "Segoe UI",system-ui,sans-serif}
+.apphdr .nav-link:hover{border-color:#2b4a6f}
+.apphdr .nav-link.on{background:#2b4a6f;color:#fff;border-color:#2b4a6f;font-weight:600}
+.apphdr-who{margin-left:auto;flex:0 0 auto;color:#5a6875;font-size:11.5px;padding-left:10px}
+.apphdr-out{flex:0 0 auto;color:#5a6875;font-size:11.5px;text-decoration:none;
+     padding:4px 10px;border:1px solid #e3e1da;border-radius:7px;background:#fff}
+.apphdr-out:hover{border-color:#2b4a6f;color:#2b4a6f}
+.pane{flex:1 1 auto;overflow:auto;background:var(--paper);padding-bottom:40px}
+.pane.hide{display:none}
+button{font:600 12.5px "Segoe UI",system-ui,sans-serif;padding:5px 11px;
+       color:var(--ink);cursor:pointer;border:1px solid var(--rule);
+       border-radius:7px;background:#fff}
+button:hover:not(:disabled){border-color:var(--ink-soft)}
+button:disabled{opacity:.45;cursor:default}
+button.on{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
+.btn{font-size:13.5px;padding:9px 16px;border-color:var(--accent);
+     background:var(--accent);color:#fff}
+.btn:hover:not(:disabled){border-color:var(--accent);filter:brightness(.94)}
+button.stop{background:var(--abort-bg);color:var(--abort);border-color:#dfa39e}
+button.stop:hover:not(:disabled){border-color:var(--abort)}
+kbd{font-family:Consolas,"Courier New",monospace;font-size:12px;
+    border:1px solid var(--rule);border-radius:4px;padding:0 5px;background:#fff}
+.main{max-width:1150px;margin:0 auto;padding:26px 34px}
+.sect-h{font-size:13px;font-weight:600;color:var(--ink-soft);letter-spacing:.02em;
+        margin-bottom:10px;display:flex;align-items:baseline;gap:10px}
+.sect-h .prov{font-weight:400;font-size:12px}
+.sect-h .right{margin-left:auto;display:flex;gap:6px}
+.sect{margin-top:20px}
+.cmd{max-width:900px;margin:10px auto 26px}
+.cmd h1{font-size:26px;font-weight:600;letter-spacing:-.01em;text-align:center;margin:0 0 4px}
+.cmd .lead{text-align:center;color:var(--ink-soft);font-size:13.5px;margin-bottom:16px}
+.cmdbar{display:flex;align-items:stretch;background:var(--panel);border:1px solid var(--rule);
+        border-radius:10px;padding:6px;gap:6px;box-shadow:0 1px 2px rgba(28,39,51,.04)}
+.cmdbar:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.cmdbar input{border:none;background:transparent;font:inherit;font-size:15px;
+              padding:8px 12px;min-width:0;color:var(--ink)}
+.cmdbar input:focus{outline:none}
+.cmdbar input::placeholder{color:#b9b3a6}
+.cmdbar input.addr{flex:2.2}
+.cmdbar input.city{flex:1;border-left:1px solid var(--rule)}
+.cmdbar .btn{border-radius:7px;padding:0 24px}
+.combo{position:relative;display:flex;align-items:center;border-left:1px solid var(--rule);min-width:150px}
+.cmdbar .combo input{width:100%;font-size:14px;padding:8px 28px 8px 12px;position:relative;z-index:1}
+.combo .ghost{position:absolute;inset:0;display:flex;align-items:center;padding:8px 28px 8px 12px;
+              font-size:14px;white-space:pre;pointer-events:none;color:#b9b3a6;overflow:hidden}
+.combo .ghost .typed{visibility:hidden}
+.combo .chev{position:absolute;right:10px;top:50%;width:12px;height:8px;margin-top:-4px;pointer-events:none;
+  background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' fill='none' stroke='%235a6875' stroke-width='1.6'/></svg>") no-repeat center}
+.combo .list{position:absolute;top:calc(100% + 10px);left:-1px;min-width:190px;background:var(--panel);
+             border:1px solid var(--rule);border-radius:8px;box-shadow:0 6px 20px rgba(28,39,51,.10);
+             padding:4px 0;z-index:20;display:none;max-height:260px;overflow:auto}
+.combo .list.on{display:block}
+.combo .list div{padding:7px 12px;font-size:13.5px;cursor:pointer;white-space:nowrap}
+.combo .list div.hi{background:var(--accent-bg);color:var(--accent)}
+.combo .list div.sel{font-weight:600}
+.combo .list div.none{color:var(--ink-soft);cursor:default}
+.under{display:flex;justify-content:center;gap:14px;align-items:center;margin-top:12px;
+       font-size:12.5px;color:var(--ink-soft);flex-wrap:wrap}
+.under label{display:flex;gap:6px;align-items:center;cursor:pointer;color:var(--ink)}
+.under input{accent-color:var(--accent);margin:0}
+.under .sep{color:var(--rule)}
+.batchrow{display:none;gap:12px;align-items:center;margin-top:12px}
+.batchrow.on{display:flex}
+.batchrow .btn{padding:9px 20px}
+.drop{flex:1;border:1.5px dashed var(--rule);border-radius:8px;padding:12px 14px;color:var(--ink-soft);
+      background:#faf9f5;cursor:pointer;font-size:13.5px;line-height:1.5}
+.drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-bg)}
+.drop b{color:var(--accent)}
+.drop .h{font-size:12px;display:block}
+.drop.has{border-style:solid;color:var(--ink)}
+.banner{display:flex;align-items:flex-start;gap:12px;border:1px solid var(--flag-border);
+        background:var(--flag-bg);border-radius:8px;padding:11px 14px;margin-bottom:16px}
+.banner .tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;background:#fff;
+             border:1px solid var(--flag-border);color:var(--flag);flex-shrink:0;letter-spacing:.04em;margin-top:2px}
+.banner .txt{flex:1;font-size:13.5px;min-width:0}
+.banner .acts{display:flex;gap:6px;flex-shrink:0;align-items:center}
+.hand{margin:4px 0 6px}
+.bp-row{display:flex;gap:8px;align-items:center;margin:4px 0;flex-wrap:wrap}
+.bp-addr{flex-basis:100%;color:var(--ink-soft);font-size:12px}
+.bp-lbl{font-size:12px;color:var(--ink-soft)}
+button.bp{padding:3px 9px;min-width:52px;font-family:Consolas,"Courier New",monospace}
+.rh-steps{margin:8px 0 0;color:var(--ink-soft);font-size:12px;white-space:pre-line}
+.byhand{color:var(--verify);font-weight:600}
+td button.rh{margin-left:6px;padding:1px 7px;font-size:11px}
+#rhBody a{display:block;margin:4px 0 8px;word-break:break-all}
+#rodrows a{word-break:break-all}
+.ds-row{display:flex;gap:12px;align-items:center;margin:8px 0}
+.ds-addr{flex:0 0 220px}
+.ds-why{flex:1;color:var(--grey);font-size:11px;word-break:break-word}
+.live{min-width:0}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.head h2{font-size:22px;font-weight:600;letter-spacing:-.01em;margin:0}
+.head .addr-line{margin-top:3px;color:var(--ink-soft);font-size:13.5px;max-width:640px}
+.head .ids{margin-top:2px;font-size:12.5px;color:var(--ink-soft)}
+.head .ids:has(.mono:empty){display:none}   
+.head .side{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.statusline{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);
+            max-width:520px;text-align:right}
+.dot{width:8px;height:8px;border-radius:50%;background:#c9c6bd;flex-shrink:0;display:inline-block}
+.dot.busy{background:var(--accent);animation:pulse 1.2s ease-in-out infinite}
+.dot.done{background:var(--verify)} .dot.flag{background:var(--flag)} .dot.abort{background:var(--abort)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+.pill{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;
+      white-space:nowrap}
+.pill.verified{color:var(--verify);background:var(--verify-bg)}
+.pill.flagged{color:var(--flag);background:var(--flag-bg)}
+.pill.aborted{color:var(--abort);background:var(--abort-bg)}
+.pill.pending{color:var(--ink-soft);background:#f0efe9}
+.pill.you{color:var(--accent);background:var(--accent-bg)}
+.prov{font-size:12px;color:var(--ink-soft)}
+.stages{background:var(--panel);border:1px solid var(--rule);
+        border-radius:8px;display:flex;overflow:hidden}
+.stage{flex:1;padding:11px 13px;border-right:1px solid var(--rule);min-width:0}
+.stage:last-child{border-right:none}
+.stage .n{font-size:11px;font-weight:600;letter-spacing:.04em;
+          color:var(--ink-soft);display:flex;gap:8px;align-items:center}
+.stage .lbl{font-size:13.5px;font-weight:600;margin-top:2px}
+.stage .st{font-size:12px;color:var(--ink-soft);margin-top:1px;
+           white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stage .st a{font-weight:600;text-decoration:none}
+.stage.here{background:var(--accent-bg);box-shadow:inset 3px 0 0 var(--accent)}
+.stage.here .lbl{color:var(--accent)}
+.stage.done{background:var(--verify-bg);box-shadow:inset 3px 0 0 var(--verify)}
+.stage.done .lbl,.stage.done .st{color:var(--verify)}
+.stage.gate{background:var(--flag-bg);box-shadow:inset 3px 0 0 var(--flag)}
+.stage.gate .lbl{color:var(--flag)}
+.stage.stopped{background:var(--abort-bg);box-shadow:inset 3px 0 0 var(--abort)}
+.stage.stopped .lbl{color:var(--abort)}
+.stage.waiting .lbl{color:var(--ink-soft)}
+.stage.todo{background:#faf9f5}
+.stage.you{border-top:2px solid var(--accent)}
+.stagenote{font-size:12px;color:var(--ink-soft);margin-top:6px}
+.feed{background:var(--panel);border:1px solid var(--rule);border-radius:8px;
+      padding:6px 0;max-height:460px;overflow-y:auto}
+.ev{border-bottom:1px solid var(--rule)}
+.ev:last-child{border-bottom:none}
+.ev .line{display:flex;align-items:baseline;gap:12px;padding:8px 16px}
+.ev .t{color:var(--ink-soft);font-size:12px;flex-shrink:0;width:64px}
+.ev .msg{flex:1;word-break:break-word;font-size:13.5px}
+.ev .msg.rawline{font-family:Consolas,"Courier New",monospace;
+                 font-size:12.5px;color:var(--ink-soft)}
+.ev .tog{flex-shrink:0;font-size:11.5px;color:var(--ink-soft);
+         background:none;border:none;cursor:pointer;padding:0;
+         text-decoration:underline;white-space:nowrap}
+.ev .tog:hover{color:var(--accent)}
+.sev-info .msg{color:var(--ink)}
+.sev-retry .msg,.sev-flag .msg{color:var(--flag)}
+.sev-abort .msg{color:var(--abort)}
+.sev-done .msg{color:var(--verify);font-weight:600}
+.sev-abort .msg.rawline{color:var(--abort)}
+.sev-flag .msg.rawline{color:var(--flag)}
+.ev .tech{display:none;padding:2px 16px 10px 92px;color:var(--ink-soft);
+          font-size:12.5px}
+.ev.open .tech{display:block}
+.ev .tech .kv{margin-right:14px}
+.ev .tech .raw{display:block;margin-top:3px;color:var(--ink);
+               word-break:break-all}
+.ev.tech-only{display:none}
+.feed.tech .ev.tech-only{display:block}
+.empty{padding:22px 16px;font-size:13.5px;color:var(--ink-soft);
+       background:var(--panel);border:1px solid var(--rule);
+       border-radius:8px}
+.feedwrap.collapsed .feed{display:none}
+.results{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;align-items:center}
+.results:empty{display:none}
+.appfoot{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;
+         justify-content:space-between;align-items:center;gap:12px;
+         padding:8px 34px;background:#fbfaf7;border-top:1px solid #e3e1da;
+         font:12px "Segoe UI",system-ui,sans-serif;color:#5a6875}
+.tabwrap{overflow:auto;border:1px solid var(--line);background:#fff}
+table{width:100%;border-collapse:collapse;font:12px "Segoe UI"}
+th{background:var(--win);border-right:1px solid var(--line);
+   border-bottom:1px solid var(--line);font-weight:normal;text-align:left;
+   padding:4px 6px;white-space:nowrap;position:sticky;top:0}
+td{padding:3px 6px;border-bottom:1px solid #efefef;white-space:nowrap}
+tr.row{cursor:default}
+tr.row.on td{background:var(--sel)}
+tr.row.fail td{color:var(--histfail)}
+td.addr{white-space:normal;min-width:240px}
+th.sel,td.sel{width:34px;text-align:center}
+.histpad{padding:12px;display:flex;flex-direction:column;height:100%}
+.histtop{display:flex;align-items:center;margin-bottom:8px}
+.histbtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.blurb{color:var(--grey);max-width:780px;margin:0 16px 8px}
+.modal-back{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:50;
+            display:flex;align-items:center;justify-content:center}
+.modal-back.hide{display:none}
+.modal{background:var(--panel);width:900px;max-width:92vw;max-height:80vh;
+       display:flex;flex-direction:column;border:1px solid #999;
+       box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.modal-head{display:flex;align-items:center;gap:10px;padding:8px 12px;
+            border-bottom:1px solid var(--line);font-weight:bold}
+.modal-head button{margin-left:auto;padding:2px 9px}
+.modal-body{overflow:auto;padding:4px 16px 14px}
+.modal.ldv{width:1200px;max-width:96vw;height:88vh;max-height:88vh}
+.ldv-body{display:grid;grid-template-columns:1fr 390px;flex:1;min-height:0;
+          overflow:hidden}
+.ldv-body.confirm{grid-template-columns:1fr}
+.ldv-body.confirm .ldv-left{display:none}
+.ldv-body.confirm .ldv-frag{max-width:700px;margin:0 auto 16px}
+.ldv-body.confirm .ldv-frag textarea{height:440px}
+.ldv-left{display:flex;flex-direction:column;min-width:0;min-height:0;
+          border-right:1px solid var(--line)}
+.ldv-nav{display:flex;align-items:center;gap:8px;padding:8px 10px}
+.ldv-hint{color:var(--grey);margin-left:auto;font-size:11.5px}
+.ldv-canvas{position:relative;overflow:auto;flex:1;background:#8a8a8a}
+.ldv-canvas img{width:100%;display:block;cursor:crosshair;user-select:none;
+                border-bottom:3px solid #555;
+                aspect-ratio:auto 8.5/11}   
+.ldv-rect{position:absolute;border:2px dashed #b8860b;
+          background:rgba(184,134,11,.12);pointer-events:none}
+.ldv-right{display:flex;flex-direction:column;min-height:0;padding:10px}
+#ldvFrags{overflow:auto;flex:1;min-height:0}
+.ldv-frag{margin:0 0 12px}
+.ldv-frag canvas{max-width:100%;border:1px solid var(--line);display:block}
+.ldv-frag textarea{width:100%;height:76px;font:12px Consolas,monospace;
+                   border:1px solid var(--edge);margin-top:4px;
+                   box-sizing:border-box}
+.ldv-warn{color:var(--amber);font-size:11.5px;margin-top:2px}
+.ldv-loading{height:14px;border:1px solid var(--edge);background:#fff;
+             overflow:hidden;position:relative;margin:6px 0}
+.ldv-loading::before{content:"";position:absolute;top:0;bottom:0;width:35%;
+  background:linear-gradient(90deg,#cfe4f7,#0078d7,#cfe4f7);
+  animation:ldvslide 1.1s linear infinite}
+@keyframes ldvslide{from{left:-35%}to{left:100%}}
+.ldv-count{color:var(--grey);padding:6px 0}
+.ldv-btns{display:flex;gap:8px}
+.reason-row{display:flex;gap:6px;align-items:center;margin:4px 0}
+.ev h3{font:bold 12px "Segoe UI";margin:14px 0 4px}
+.ev .item{display:flex;gap:10px;align-items:center;padding:4px 0;
+          border-bottom:1px solid #efefef}
+.ev .lbl2{flex:1}
+.ev .fn{color:var(--grey);font:11px Consolas,monospace}
+a{color:#0066cc}
+.hide{display:none}
+</style></head><body>
+<script src="/demo/demo.js"></script>
+<header class="apphdr">
+  <span class="apphdr-brand">Fee&nbsp;Simple</span><span class="demo-pill">DEMO</span>
+  <nav class="apphdr-nav">
+    <a class="nav-link on" href="/demo/">Run</a>
+    <a class="nav-link" href="/demo/workbench/">Workbench</a>
+    <a class="nav-link" href="/demo/ld-capture/">LD capture</a>
+    <a class="nav-link" href="/demo/" id="navAdmin" hidden>Admin panel</a>
+    <a class="nav-link" href="/demo/" id="navUsers" hidden>Users</a>
+  </nav>
+  <span class="apphdr-who" id="who"></span>
+  <a class="apphdr-out" href="/demo/?fresh=1" title="Throw away everything you did here and start the demo over">Restart demo</a>
+</header>
+<div class="pane" id="tab-run">
+ <div class="main">
+  <div class="cmd">
+    <h1>Look up a property</h1>
+    <div class="lead">Tax card and recorded deed from the county's own sites</div>
+    <div class="cmdbar">
+      <input class="addr" id="address" placeholder="Property address" autocomplete="off">
+      <input class="city" id="city" placeholder="City" autocomplete="off">
+      <div class="combo" id="countyBox">
+        <div class="ghost" id="countyGhost"></div>
+        <input id="countyIn" autocomplete="off" spellcheck="false" role="combobox"
+               aria-autocomplete="both" aria-expanded="false" aria-label="County">
+        <span class="chev"></span>
+        <div class="list" id="countyList" role="listbox"></div>
+      </div>
+      <input type="hidden" id="county" value="durham">
+      <button class="btn" id="runBtn" type="button">Run</button>
+    </div>
+    <div class="under">
+      <label><input type="checkbox" id="deed" checked> Pull recorded deed</label>
+      <span class="sep">&middot;</span>
+      <button type="button" id="batchToggle">Batch CSV&#8230;</button>
+      <span>or press <kbd>Enter</kbd> in the form to run</span>
+      <button class="stop hide" id="stopBtn" type="button">Stop run</button>
+    </div>
+    <div class="batchrow" id="batchRow">
+      <div class="drop" id="drop"><b>Drop a CSV here</b> or click to browse<span class="h">header: address, city, county</span></div>
+      <input type="file" id="csv" accept=".csv" class="hide">
+      <button class="btn" id="batchBtn" type="button">Run batch</button>
+    </div>
+  </div>
+  <div class="sect-h">This run</div>
+  <div class="banner hide" id="gate"><span class="tag">WAITING ON YOU</span>
+    <span class="txt">Solve the CAPTCHA or accept the disclaimer in the gate
+      viewer. The run continues by itself once the page renders.</span>
+    <span class="acts"><button type="button" id="gateOpen"
+      title="Open the gate viewer in its own tab">Open the gate &#8599;</button></span></div>
+  <div class="banner hide" id="rodhand"><span class="tag">DEED BY HAND</span>
+    <div class="txt" id="rodrows"></div></div>
+  <div class="live" id="live">
+    <div class="head">
+      <div>
+        <h2 id="liveAddr">No run in progress</h2>
+        <div class="addr-line" id="liveProv">Start one above. The stages fill
+          in as the engine moves, and every step shows in plain words with
+          the raw line one click away.</div>
+        <div class="ids">run <span class="mono" id="liveRun"></span></div>
+      </div>
+      <div class="side"><span id="livePill"></span>
+        <div class="statusline"><span class="dot" id="statusDot"></span>
+          <span id="status">Ready</span></div></div>
+    </div>
+    <div class="sect">
+      <div class="stages" id="stages">
+        <div class="stage waiting" data-stages="pull_tax_card">
+          <div class="n">1</div><div class="lbl">Tax card</div>
+          <div class="st"></div></div>
+        <div class="stage waiting" data-stages="extract_book_page pull_deed">
+          <div class="n">2</div><div class="lbl">Deed</div>
+          <div class="st"></div></div>
+        <div class="stage waiting" data-stages="write_record">
+          <div class="n">3</div><div class="lbl">Record</div>
+          <div class="st"></div></div>
+        <div class="stage waiting you" data-stages="" data-you="ld">
+          <div class="n">4<span class="pill you">you</span></div><div class="lbl">Legal description</div>
+          <div class="st"></div></div>
+        <div class="stage waiting you" data-stages="land" data-you="tm">
+          <div class="n">5<span class="pill you">you</span></div><div class="lbl">Time Matters</div>
+          <div class="st"></div></div>
+      </div>
+      <div class="stagenote">Steps 4 and 5 are yours. Auto-landing in Time Matters is not built; the export is the row it imports.</div>
+    </div>
+    <div class="sect feedwrap collapsed" id="feedwrap">
+      <div class="sect-h">Run event feed<span class="prov" id="feedProv"></span>
+        <span class="right"><button type="button" id="btnFeed">Show the feed</button>
+          <button type="button" id="btnTech">Show technical detail</button></span></div>
+      <div class="feed" id="feed"></div>
+    </div>
+    <div class="results" id="results"></div>
+  </div>
+ </div>
+</div>
+<div class="hide" id="histActions">
+  <button id="btnExport" disabled>Export selected (0)</button>
+  <button id="btnLdv" disabled>Capture LD</button>
+  <button id="btnTax" disabled>Tax card</button>
+  <button id="btnDeed" disabled>Deed PDF</button>
+  <button id="btnTm" disabled>Export CSV (.xlsx)</button>
+  <button id="btnEv" disabled>Evidence…</button>
+  <button id="btnBundle" disabled>Send failure evidence…</button>
+</div>
+<div class="modal-back hide" id="rhBack">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head"><span id="rhTitle">Retrieve deed by hand</span>
+      <button type="button" id="rhClose">&#10005;</button></div>
+    <div class="modal-body" id="rhBody"></div>
+  </div>
+</div>
+<div class="modal-back hide" id="dsBack">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head"><span>Deeds not pulled automatically —
+      manual retrieval is available</span>
+      <button type="button" id="dsClose">&#10005;</button></div>
+    <div class="modal-body" id="dsBody"></div>
+  </div>
+</div>
+<div class="modal-back hide" id="evBack">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head"><span id="evRun">Evidence</span>
+      <button type="button" id="evClose">&#10005;</button></div>
+    <div class="modal-body ev" id="evBody"></div>
+  </div>
+</div>
+<div class="modal-back hide" id="ldvBack">
+  <div class="modal ldv">
+    <div class="modal-head"><span id="ldvTitle">Capture legal description</span>
+      <button type="button" id="ldvClose">&#10005;</button></div>
+    <div class="ldv-body">
+      <div class="ldv-left">
+        <div class="ldv-nav">
+          <span id="ldvPageLbl"></span>
+          <span class="ldv-hint">Drag a box over the legal description —
+            it is read automatically</span>
+        </div>
+        <div class="ldv-canvas" id="ldvCanvas">
+          <div class="ldv-rect hide" id="ldvRect"></div>
+        </div>
+      </div>
+      <div class="ldv-right">
+        <div class="blurb" style="margin:0 0 8px" id="ldvMsg"></div>
+        <div id="ldvFrags"></div>
+        <div class="ldv-count" id="ldvCount">0 fragments captured</div>
+        <div class="ldv-btns">
+          <button type="button" id="ldvUndo">Undo last</button>
+          <button type="button" id="ldvSkipBtn">Skip&#8230;</button>
+          <span style="flex:1"></span>
+          <button type="button" id="ldvBackBtn" class="hide">&#9664; Back</button>
+          <button type="button" id="ldvConfirmBtn">Confirm&#8230;</button>
+          <button type="button" id="ldvSave" class="hide">Save capture</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-back hide" id="ldvSkipBack">
+  <div class="modal" style="width:430px">
+    <div class="modal-head"><span>Why is this parcel not captured?</span>
+      <button type="button" id="ldvSkipClose">&#10005;</button></div>
+    <div class="modal-body">
+      <div id="ldvReasons"></div>
+      <span class="lbl" style="display:block;margin-top:10px">Note</span>
+      <input type="text" id="ldvSkipNote"
+             style="width:100%;font:12px 'Segoe UI';padding:4px 5px;
+                    border:1px solid var(--edge)">
+      <div style="display:flex;margin-top:12px"><span style="flex:1"></span>
+        <button type="button" id="ldvSkipOk">Record skip</button></div>
+    </div>
+  </div>
+</div>
+<div class="modal-back hide" id="ldTextBack">
+  <div class="modal" style="width:720px">
+    <div class="modal-head"><span id="ldTextTitle">Legal description</span>
+      <button type="button" id="ldTextClose">&#10005;</button></div>
+    <div class="modal-body"><pre id="ldTextBody"
+      style="white-space:pre-wrap;word-break:break-word;
+             font:12.5px/1.5 'Segoe UI';margin:8px 0"></pre></div>
+  </div>
+</div>
+<div class="appfoot"><span>FeeSimple is a workbench, always review each case file</span>
+  <span id="ver"></span></div>
+<script>
+const $=id=>document.getElementById(id);
+let poll=null, histRows=[], selectedRun=null, checked=new Set(), csvFile=null,
+    currentJob=null, IS_OPERATOR=false;
+function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,
+  c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function enc(s){return s.split('/').map(encodeURIComponent).join('/');}
+async function refreshActive(){
+  try{
+    const r=await (await fetch('/api/active')).json();
+    reattach(r.jobs||[]);
+  }catch(e){}
+}
+let reattached=false;
+function reattach(jobs){
+  if(reattached) return;
+  reattached=true;
+  if(currentJob||!jobs.length) return;
+  const j=jobs[0];
+  busy(true); $('results').innerHTML='';
+  $('status').textContent='Re-following: '+j.label;
+  $('liveAddr').textContent=j.label; $('liveProv').textContent='re-following';
+  currentJob=j.id;
+  follow(j.id);
+}
+setInterval(refreshActive,4000); refreshActive();
+const GATE_MARKER='=== ROD GATE', GATE_CLEARED='gate cleared by human';
+const GATE_VIEWER='#'+
+                  '';
+let GATE_ON=false;
+function gateShow(){
+  if(!IS_OPERATOR) return;
+  $('gate').classList.remove('hide'); GATE_ON=true; setDot('flag');
+}
+function gateHide(){
+  $('gate').classList.add('hide');
+  if(GATE_ON){ GATE_ON=false; setDot(currentJob?'busy':''); }
+}
+$('gateOpen').onclick=()=>window.open(GATE_VIEWER,'_blank');
+function scanGate(lines){
+  for(const line of lines){
+    if(line.includes(GATE_MARKER)) gateShow();
+    else if(line.includes(GATE_CLEARED)||line.startsWith('[FAIL] rod_gate')
+            ||line.startsWith('[FAIL] ccs_gate')) gateHide();
+  }
+}
+$('drop').onclick=()=>$('csv').click();
+$('drop').ondragover=e=>{e.preventDefault();$('drop').classList.add('over');};
+$('drop').ondragleave=()=>$('drop').classList.remove('over');
+$('drop').ondrop=e=>{
+  e.preventDefault(); $('drop').classList.remove('over');
+  if(e.dataTransfer.files.length) setCsv(e.dataTransfer.files[0]);
+};
+$('csv').onchange=e=>{ if(e.target.files.length) setCsv(e.target.files[0]); };
+function setCsv(f){
+  csvFile=f;
+  $('drop').innerHTML='<b>'+esc(f.name)+'</b>'+
+    '<span class="h">click to choose a different file</span>';
+  $('drop').classList.add('has');
+}
+$('batchToggle').onclick=()=>$('batchRow').classList.toggle('on');
+const COUNTY_LIST=["durham", "franklin", "granville", "harnett", "johnston", "moore", "wake"];
+function countyLabel(k){
+  return k.split('_').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+}
+const cIn=$('countyIn'), cGhost=$('countyGhost'), cList=$('countyList'),
+      cBox=$('countyBox');
+let cVal=$('county').value||COUNTY_LIST[0]||'', cHi=-1,
+    cMatches=COUNTY_LIST.slice(), cTyping=false, cJustFocused=false;
+$('county').value=cVal; cIn.value=countyLabel(cVal);
+const cCand=()=>(cHi>=0&&cMatches[cHi])?cMatches[cHi]:cMatches[0];
+function cMatch(){
+  const t=cIn.value.trim().toLowerCase();
+  cMatches=(cTyping&&t)
+    ?COUNTY_LIST.filter(k=>countyLabel(k).toLowerCase().startsWith(t))
+    :COUNTY_LIST.slice();
+}
+function cPaintGhost(){
+  const t=cIn.value, k=cCand(), m=k?countyLabel(k):'';
+  const show=document.activeElement===cIn && t && m
+    && m.toLowerCase().startsWith(t.toLowerCase()) && m.length>t.length
+    && cIn.selectionStart===cIn.selectionEnd;    
+  cGhost.innerHTML=show
+    ?'<span class="typed">'+esc(t)+'</span>'+esc(m.slice(t.length)):'';
+}
+function cPaintList(){
+  cList.innerHTML=cMatches.length
+    ?cMatches.map((k,i)=>'<div data-i="'+i+'" class="'+(i===cHi?'hi ':'')+
+       (k===cVal?'sel':'')+'">'+esc(countyLabel(k))+'</div>').join('')
+    :'<div class="none">No county starts with that</div>';
+}
+function cOpen(){ cMatch(); cPaintList(); cList.classList.add('on');
+  cIn.setAttribute('aria-expanded','true'); }
+function cClose(){ cList.classList.remove('on');
+  cIn.setAttribute('aria-expanded','false'); cHi=-1; }
+function cCommit(k){ cVal=k; $('county').value=k; cIn.value=countyLabel(k);
+  cGhost.innerHTML=''; cTyping=false; cClose(); }
+function cAccept(){
+  if(cHi>=0&&cMatches[cHi]) return cCommit(cMatches[cHi]);    
+  const t=cIn.value.trim(), k=cCand();
+  (k&&t&&countyLabel(k).toLowerCase().startsWith(t.toLowerCase()))
+    ?cCommit(k):cCommit(cVal);
+}
+cIn.addEventListener('focus',()=>{ cTyping=false; cJustFocused=true; cIn.select();
+  cHi=COUNTY_LIST.indexOf(cVal); cOpen(); cPaintGhost(); });
+cIn.addEventListener('mouseup',e=>{ if(cJustFocused){ e.preventDefault(); cJustFocused=false; } });
+cIn.addEventListener('input',()=>{ cTyping=true; cHi=-1; cMatch(); cPaintList();
+  cList.classList.add('on'); cPaintGhost(); });
+cIn.addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'){ e.preventDefault();
+    if(!cList.classList.contains('on')) cOpen();
+    cHi=Math.min(cHi+1,cMatches.length-1); cPaintList(); cPaintGhost(); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); cHi=Math.max(cHi-1,0);
+    cPaintList(); cPaintGhost(); }
+  else if(e.key==='Tab'){ cAccept(); }             
+  else if(e.key==='Escape'){ cCommit(cVal); }
+  else if(e.key==='ArrowRight'||e.key==='End'){
+    if(cGhost.textContent){ e.preventDefault(); cAccept(); } }
+  else if(e.key==='Enter'){ e.preventDefault();
+    const had=cGhost.textContent||cHi>=0; cAccept();
+    if(!had&&!$('runBtn').disabled) $('runBtn').click(); }
+});
+cIn.addEventListener('blur',()=>setTimeout(()=>{
+  if(!cBox.contains(document.activeElement)) cAccept(); },0));
+cList.addEventListener('mousedown',e=>{ const d=e.target.closest('[data-i]');
+  if(!d) return; e.preventDefault(); cCommit(cMatches[+d.dataset.i]); });
+document.addEventListener('mousedown',e=>{ if(!cBox.contains(e.target)) cClose(); });
+['address','city'].forEach(id=>$(id).addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!$('runBtn').disabled) $('runBtn').click(); }));
+$('btnFeed').onclick=()=>{
+  const w=$('feedwrap'); w.classList.toggle('collapsed');
+  $('btnFeed').textContent=w.classList.contains('collapsed')
+    ?'Show the feed':'Hide the feed';
+};
+function setDot(k){ $('statusDot').className='dot'+(k?' '+k:''); }
+function busy(on){
+  $('runBtn').disabled=on; $('batchBtn').disabled=on;
+  $('stopBtn').classList.toggle('hide',!on);
+  if(!on) currentJob=null;
+  $('status').textContent=on?'Working…':'Ready';
+  setDot(on?'busy':'');
+}
+$('stopBtn').onclick=async()=>{
+  if(!currentJob) return;
+  if(!confirm('Stop this run? It cannot be resumed — this cancels it. '+
+              'Evidence already captured stays in the run folder.')) return;
+  await fetch('/api/stop/'+currentJob,{method:'POST'});
+};
+$('runBtn').onclick=async()=>{
+  const county=$('county').value;   
+  const address=$('address').value.trim();
+  if(!address){ $('status').textContent='Enter a property address.'; return; }
+  const f=new FormData();
+  f.append('county',county); f.append('address',address);
+  f.append('city',$('city').value.trim());
+  if($('deed').checked) f.append('deed','1');
+  start('/api/run',f,address,county);
+  if(county==='harnett') showRodLink('harnett');
+};
+$('batchBtn').onclick=async()=>{
+  if(!csvFile){ $('status').textContent='Choose a batch CSV first.'; return; }
+  let hasHarnett=false;
+  try{ hasHarnett=csvHasHarnett(await csvFile.text()); }catch(e){}
+  const f=new FormData();
+  f.append('file',csvFile);
+  if($('deed').checked) f.append('deed','1');
+  start('/api/batch',f,csvFile.name,'');
+  if(hasHarnett) showRodLink('harnett');
+};
+async function start(url,body,label,county){
+  busy(true); $('results').innerHTML=''; gateHide();
+  $('rodhand').classList.add('hide');
+  $('liveAddr').textContent=label;
+  $('liveProv').textContent=(county?countyPretty(county)+' · ':'')+'starting';
+  $('liveRun').textContent=''; $('livePill').textContent='';
+  $('feedProv').textContent=''; paintStages(null,null,false);
+  $('status').textContent='Starting…';
+  const res=await fetch(url,{method:'POST',body});
+  if(!res.ok){
+    $('status').textContent='Could not start: '+await res.text();
+    busy(false); return;
+  }
+  currentJob=(await res.json()).job_id;
+  $('status').textContent='Run started — watch it in the feed';
+  follow(currentJob);
+  refreshActive();
+}
+const LIVE_POLL_MS=2000;
+const LIVE_ORDER=["pull_tax_card","extract_book_page","pull_deed",
+                  "write_record","land"];
+let LIVE_RUN=new URLSearchParams(location.search).get("run")||"";
+let LIVE_SEEN=0, LIVE_TECH=false, LIVE_TIMER=null;
+function countyPretty(k){
+  return k? k.charAt(0).toUpperCase()+k.slice(1)+" County" : "";
+}
+function livePill(status){
+  const s=document.createElement("span");
+  if(!status){ s.className="prov"; s.textContent="no event stream"; }
+  else{ s.className="pill "+status.toLowerCase(); s.textContent=status; }
+  return s;
+}
+function paintStages(stage,status,done){
+  const at=LIVE_ORDER.indexOf(stage);
+  const ok=done&&status!=="Aborted";
+  document.querySelectorAll("#stages .stage").forEach(el=>{
+    const you=el.dataset.you;
+    const cov=(el.dataset.stages||"").split(" ").filter(Boolean)
+                .map(s=>LIVE_ORDER.indexOf(s));
+    const st=el.querySelector(".st");
+    el.className="stage"+(you?" you":"");
+    if(you){
+      if(ok&&LIVE_RUN){
+        el.classList.add("todo");
+        const q=encodeURIComponent(LIVE_RUN);
+        st.innerHTML= you==="ld"
+          ? 'after the run · <a href="/demo/ld-capture/?run='+q+'">Capture</a>'
+          : '<a href="#" id="tmExport">Export .xlsx</a> and import';
+        const x=$("tmExport");
+        if(x) x.onclick=e=>{ e.preventDefault(); doExport([LIVE_RUN]); };
+      }else{ el.classList.add("waiting"); st.textContent=""; }
+      return;
+    }
+    if(cov.includes(LIVE_ORDER.indexOf("write_record"))){
+      if(done&&status==="Verified"){ el.classList.add("done");
+                                     st.textContent="written after the run"; }
+      else{ el.classList.add("waiting"); st.textContent=""; }
+      return;
+    }
+    if(at<0){ el.classList.add("waiting"); st.textContent=""; return; }
+    const last=Math.max(...cov);
+    if(last<at||(cov.includes(at)&&ok)){ el.classList.add("done"); st.textContent="done"; }
+    else if(cov.includes(at)){
+      if(status==="Aborted"){ el.classList.add("stopped");
+                              st.textContent="stopped here"; }
+      else if(GATE_ON){ el.classList.add("gate"); st.textContent="waiting on you"; }
+      else{ el.classList.add("here"); st.textContent="in progress"; }
+    }
+    else{ el.classList.add("waiting"); st.textContent=""; }
+  });
+}
+function addEvent(rec,d){
+  const row=document.createElement("div");
+  row.className="ev sev-"+(rec.severity||"info")+(d.hidden?" tech-only":"");
+  if(LIVE_TECH) row.classList.add("open");
+  const line=document.createElement("div"); line.className="line";
+  const t=document.createElement("span"); t.className="t mono";
+  t.textContent=(rec.ts||"").slice(11,19); line.appendChild(t);
+  const m=document.createElement("span");
+  m.className=d.plain?"msg":"msg rawline";
+  m.textContent=d.plain||rec.message||rec.raw||"";
+  m.title=rec.message||rec.raw||"";
+  line.appendChild(m);
+  const tog=document.createElement("button"); tog.className="tog";
+  tog.type="button"; tog.textContent="technical detail";
+  tog.onclick=()=>row.classList.toggle("open"); line.appendChild(tog);
+  row.appendChild(line);
+  const tech=document.createElement("div"); tech.className="tech";
+  if(rec.malformed){
+    const kv=document.createElement("span"); kv.className="kv";
+    kv.textContent="malformed line"; tech.appendChild(kv);
+    const raw=document.createElement("span"); raw.className="raw mono";
+    raw.textContent=rec.raw; tech.appendChild(raw);
+  }else{
+    [["stage",rec.stage],["step",rec.step],["status",rec.status],
+     ["severity",rec.severity]].forEach(([k,v])=>{
+      const kv=document.createElement("span"); kv.className="kv mono";
+      kv.textContent=k+"="+v; tech.appendChild(kv);
+    });
+    const raw=document.createElement("span"); raw.className="raw mono";
+    raw.textContent=rec.message; tech.appendChild(raw);
+  }
+  row.appendChild(tech);
+  $("feed").appendChild(row);
+}
+function startLive(run){
+  if(!run || run===LIVE_RUN) return;
+  LIVE_RUN=run; LIVE_SEEN=0;
+  $("feed").innerHTML='';
+  liveTick();
+}
+async function liveTick(){
+  if(!LIVE_RUN) return;
+  let d;
+  try{
+    d=await (await fetch("/api/live-run/"+encodeURIComponent(LIVE_RUN)+
+                         "?since="+LIVE_SEEN)).json();
+  }catch(e){ liveSchedule(); return; }   
+  $("liveRun").textContent=LIVE_RUN;
+  if(!d.present){ $("livePill").textContent=""; liveSchedule(); return; }
+  if(d.address) $("liveAddr").textContent=d.address;
+  $("liveProv").textContent=countyPretty(d.county)+
+    (d.started?" · run started "+d.started.slice(0,19).replace("T"," "):"");
+  const p=$("livePill"); p.textContent=""; p.appendChild(livePill(d.status));
+  paintStages(d.stage,d.status,d.done);
+  if(d.records.length){
+    const disp=new Map((d.display||[]).map(x=>[x.seq,x]));
+    d.records.forEach(rec=>addEvent(rec,disp.get(rec.seq)||{}));
+    LIVE_SEEN=d.total;
+  }
+  $("feedProv").textContent="run_events.jsonl · "+d.total+" events";
+  if(!d.done) liveSchedule();
+}
+function liveSchedule(){
+  clearTimeout(LIVE_TIMER);
+  LIVE_TIMER=setTimeout(liveTick,LIVE_POLL_MS);
+}
+$("btnTech").onclick=()=>{
+  LIVE_TECH=!LIVE_TECH;
+  $("feed").classList.toggle("tech",LIVE_TECH);
+  $("btnTech").classList.toggle("on",LIVE_TECH);
+  $("btnTech").textContent=LIVE_TECH?"Hide technical detail"
+                                    :"Show technical detail";
+  document.querySelectorAll("#feed .ev").forEach(
+    el=>el.classList.toggle("open",LIVE_TECH));
+};
+if(LIVE_RUN) liveTick();
+function follow(jobId){
+  let since=0, pollN=0;
+  clearInterval(poll);
+  poll=setInterval(async()=>{
+    let r;
+    try{ r=await (await fetch('/api/log/'+jobId+'?since='+since)).json(); }
+    catch(e){ return; }                     
+    if(!r.lines){                           
+      clearInterval(poll); poll=null;
+      $('status').textContent='The server no longer knows this run — it '+
+        'was restarted. Whatever it wrote is in the run folder.';
+      busy(false); refreshActive(); return;
+    }
+    if(r.dropped) $('status').textContent=r.dropped+' earlier log line(s) '+
+      'aged out of the server buffer — the run event feed beside this form '+
+      'and the run folder both carry the full run.';
+    if(r.lines.length) scanGate(r.lines);
+    if(r.live_run) startLive(r.live_run);
+    since=r.next;
+    pollN++;
+    if(r.status==='queued'){
+      const n=r.ahead||0;
+      $('status').textContent='Queued — '+n+' run'+(n===1?'':'s')+' ahead';
+      return;
+    }
+    if(r.status==='running'&&$('status').textContent.startsWith('Queued'))
+      $('status').textContent='Working…';
+    if(r.status==='running'&&pollN%5===0) rodHand(r.run_dirs||[]);
+    if(r.status!=='running'){
+      clearInterval(poll); poll=null;
+      gateHide();
+      showResults(r.run_dirs||[]);
+      rodHand(r.run_dirs||[],true);
+      deedSummary(r.run_dirs||[]);
+      busy(false); refreshActive();
+      $('status').textContent =
+        r.status==='cancelled' ? 'Cancelled before it started.' :
+        r.returncode===0 ? 'Finished.' : 'Finished with errors.';
+      setDot(r.status==='cancelled'?'flag':r.returncode===0?'done':'abort');
+    }
+  },900);
+}
+const ROD_URLS={"durham": "https://rodweb.dconc.gov/web/web/integration/search/", "granville": "https://granvillecountydeeds.org/External/LandRecords/protected/v4/SrchName.aspx", "harnett": "https://us6.courthousecomputersystems.com/HarnettNC/", "johnston": "https://erec.johnstonnc.com/recorder/eagleweb/customSearch.jsp?pageId=DeedRecords", "wake": "https://rodrecords.wake.gov/web/web/integration/search/"};
+const HAND_STEPS='1. Open the Register of Deeds link, pass its picture '
+  +'check, and search by Book and Page — the buttons copy them.\n'
+  +'2. Open the deed and save the PDF where the file lives, then click '
+  +'Mark retrieved so this row shows the deed is on file.';
+function needsHand(x,final){
+  return !!x.bookpage&&!!x.rod_url&&
+    (x.county==='harnett'||(final&&x.deed==='FAILED'));
+}
+function openRetrieve(row,after){
+  $('rhTitle').textContent='Retrieve deed by hand — '+row.address;
+  $('rhBody').innerHTML=handRowHtml(row,false)+
+    '<div class="rh-steps">'+esc(HAND_STEPS)+'</div>';
+  wireHand($('rhBody'),()=>{ $('rhBack').classList.add('hide');
+    if(after) after(); });
+  $('rhBack').classList.remove('hide');
+}
+async function deedSummary(runDirs){
+  if(!runDirs.length) return;
+  const r=await (await fetch('/api/history')).json();
+  const rows=r.rows.filter(x=>x.deed==='FAILED'&&
+    runDirs.some(n=>x.run===n||x.run.startsWith(n+'/')));
+  if(!rows.length){ $('dsBack').classList.add('hide'); return; }
+  $('dsBody').innerHTML=rows.map((x,i)=>'<div class="ds-row">'+
+    '<span class="ds-addr">'+esc(x.address)+'</span>'+
+    '<span class="ds-why">'+esc(x.deed_error||'deed not pulled')+'</span>'+
+    (x.deed_hand==='retrieved'?'<span class="byhand">Retrieved by hand</span>'
+      :(x.rod_url&&x.bookpage
+        ?'<button type="button" class="ds-rh" data-i="'+i+'">Retrieve deed</button>'
+        :''))+'</div>').join('');
+  document.querySelectorAll('.ds-rh').forEach(b=>{
+    b.onclick=()=>openRetrieve(rows[b.dataset.i],()=>deedSummary(runDirs));
+  });
+  $('dsBack').classList.remove('hide');
+}
+function handRowHtml(x,withAddr){
+  const m=x.bookpage.split('/');
+  let b=(m[0]||'').trim(), p=(m[1]||'').trim();
+  if(!isNaN(parseInt(b,10))) b=String(parseInt(b,10));
+  if(!isNaN(parseInt(p,10))) p=String(parseInt(p,10));
+  const tax=x.taxcard_url||(x.taxcard_pdf
+    ?DEMO.fileUrl(x.run,x.taxcard_pdf):'');
+  const host=x.rod_url.replace(/^https?:\/\//,'');
+  return '<div class="hand" data-run="'+esc(x.run)+'">'+
+    (withAddr?'<div class="bp-addr">'+esc(x.address)+'</div>':'')+
+    (tax?'<a href="'+esc(tax)+'" target="_blank" rel="noopener">Tax card — '
+      +esc(x.address)+'</a>':'')+
+    '<div class="bp-row"><span class="bp-lbl">Book</span>'+
+    '<button type="button" class="bp" data-c="'+esc(b)+'">'+esc(b)+'</button>'+
+    '<span class="bp-lbl">Page</span>'+
+    '<button type="button" class="bp" data-c="'+esc(p)+'">'+esc(p)+'</button>'+
+    '</div>'+
+    '<a href="'+esc(x.rod_url)+'" target="_blank" rel="noopener">'+esc(host)+'</a>'+
+    (x.deed==='FAILED'?(x.deed_hand==='retrieved'
+      ?'<div class="byhand">Retrieved by hand</div>'
+      :'<button type="button" class="rhmark" data-run="'+esc(x.run)+'">'
+        +'Mark retrieved</button>'):'')+
+    '</div>';
+}
+function wireHand(root,after){
+  root.querySelectorAll('.bp').forEach(btn=>{
+    btn.onclick=()=>navigator.clipboard.writeText(btn.dataset.c).then(()=>{
+      $('status').textContent='Copied '+btn.dataset.c+
+        ' — paste it into the Register of Deeds search.';});
+  });
+  root.querySelectorAll('.rhmark').forEach(btn=>{
+    btn.onclick=async()=>{
+      const f=new FormData(); f.append('run',btn.dataset.run);
+      const res=await fetch('/api/deed/retrieved',{method:'POST',body:f});
+      if(!res.ok){ $('status').textContent='Could not mark: '+await res.text();
+        return; }
+      $('status').textContent='Marked retrieved by hand — '+btn.dataset.run;
+      if(after) after();
+    };
+  });
+}
+async function rodHand(runDirs,final){
+  if(!runDirs.length) return;
+  const r=await (await fetch('/api/history')).json();
+  const rows=r.rows.filter(x=>needsHand(x,final)&&
+    runDirs.some(n=>x.run===n||x.run.startsWith(n+'/')));
+  if(!rows.length) return;
+  $('rodrows').innerHTML=rows.map(x=>handRowHtml(x,rows.length>1)).join('')+
+    '<div class="rh-steps">'+esc(HAND_STEPS)+'</div>';
+  wireHand($('rodrows'),()=>rodHand(runDirs,final));
+  $('rodhand').classList.remove('hide');
+}
+function showRodLink(county){
+  const u=ROD_URLS[county]||'';
+  $('rodrows').innerHTML=u?'<a href="'+esc(u)+'" target="_blank" rel="noopener">'
+    +esc(u.replace(/^https?:\/\//,''))+'</a>':'';
+  $('rodhand').classList.remove('hide');
+}
+function csvHasHarnett(txt){
+  try{
+    const lines=txt.split(/\r?\n/).filter(l=>l.trim());
+    const head=lines[0].toLowerCase().split(',').map(s=>s.trim());
+    const ci=head.indexOf('county');
+    if(ci<0) return /(^|,)\s*harnett\s*(,|$)/im.test(txt);
+    return lines.slice(1).some(l=>(l.split(',')[ci]||'')
+      .trim().toLowerCase()==='harnett');
+  }catch(e){ return false; }
+}
+async function showResults(runDirs){
+  const box=$('results'); box.innerHTML='';
+  for(const name of runDirs){
+    const b=document.createElement('button');
+    b.className='btn'; b.type='button';
+    b.textContent='Open '+name+' in workbench';
+    b.onclick=()=>gotoRun(name);
+    box.appendChild(b);
+    let st=null;
+    try{ st=await (await fetch('/api/ldv/state/'+enc(name))).json(); }
+    catch(e){ st=null; }
+    if(st && !st.ldv_error && st.pages>0 && st.state!=='captured'){
+      const l=document.createElement('button');
+      l.type='button';
+      l.textContent='Capture LD';
+      l.onclick=()=>location.href='/demo/ld-capture/?run='+encodeURIComponent(name);
+      box.appendChild(l);
+    }
+  }
+}
+function gotoRun(name){
+  location.href='/demo/workbench/?run='+encodeURIComponent(name);
+}
+function selectRow(i){
+  selectedRun=histRows[i];
+  document.querySelectorAll('#histBody tr').forEach(tr=>
+    tr.classList.toggle('on',+tr.dataset.i===i));
+  updateButtons();
+}
+function updateExport(){
+  $('btnExport').textContent='Export selected ('+checked.size+')';
+  $('btnExport').disabled=checked.size===0;
+  updateLdvBtn();
+}
+function updateButtons(){
+  const has=!!selectedRun;
+  updateLdvBtn();
+  $('btnEv').disabled=!has;
+  $('btnBundle').disabled=!has;
+  $('btnTm').disabled=!(has&&selectedRun.has_csv);
+  $('btnTax').disabled=!has;
+  $('btnDeed').disabled=!(has&&selectedRun.deed==='green');
+}
+$('btnEv').onclick=async()=>{
+  const r=await (await fetch('/api/evidence/'+enc(selectedRun.run))).json();
+  $('evRun').textContent='Evidence — '+r.run;
+  $('evBody').innerHTML=r.groups.map(g=>
+    '<h3>'+esc(g.group)+'</h3>'+g.items.map(it=>
+      '<div class="item"><span class="lbl2">'+esc(it.label)+'</span>'+
+      '<span class="fn">'+esc(it.file)+'</span>'+
+      '<a href="'+DEMO.fileUrl(r.run,it.file)+
+        '" target="_blank">view</a>'+
+      '<a href="'+DEMO.fileUrl(r.run,it.file)+
+        '">save</a></div>').join('')).join('');
+  $('evBack').classList.remove('hide');
+};
+$('evClose').onclick=()=>$('evBack').classList.add('hide');
+$('ldTextClose').onclick=()=>$('ldTextBack').classList.add('hide');
+$('rhClose').onclick=()=>$('rhBack').classList.add('hide');
+$('dsClose').onclick=()=>$('dsBack').classList.add('hide');
+$('dsBack').onclick=e=>{
+  if(e.target===$('dsBack')) $('dsBack').classList.add('hide'); };
+$('rhBack').onclick=e=>{
+  if(e.target===$('rhBack')) $('rhBack').classList.add('hide'); };
+$('ldTextBack').onclick=e=>{
+  if(e.target===$('ldTextBack')) $('ldTextBack').classList.add('hide'); };
+$('evBack').onclick=e=>{
+  if(e.target===$('evBack')) $('evBack').classList.add('hide'); };
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') $('evBack').classList.add('hide'); });
+function openFile(match){
+  fetch('/api/evidence/'+enc(selectedRun.run)).then(r=>r.json()).then(r=>{
+    for(const g of r.groups) for(const it of g.items)
+      if(match(it)){ window.open(DEMO.fileUrl(r.run,it.file),'_blank'); return; }
+    $('status').textContent='Not present in this run.';
+  });
+}
+$('btnTax').onclick=()=>openFile(it=>it.label==='Tax card PDF');
+$('btnDeed').onclick=()=>openFile(it=>it.label==='Deed PDF');
+function doExport(names){
+  const f=new FormData(); f.append('runs',names.join(','));
+  fetch('/api/export',{method:'POST',body:f}).then(async res=>{
+    if(!res.ok){ $('status').textContent='Export failed: '+await res.text();
+      return; }
+    const blob=await res.blob();
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download='tm_import.zip'; a.click();
+  });
+}
+$('btnTm').onclick=()=>doExport([selectedRun.run]);
+$('btnBundle').onclick=()=>
+  window.open('/api/bundle/'+enc(selectedRun.run),'_blank');
+$('btnExport').onclick=()=>doExport([...checked]);
+let LDV=null;
+function updateLdvBtn(){
+  $('btnLdv').disabled=!(checked.size>=1||selectedRun);
+}
+$('btnLdv').onclick=()=>{
+  const name=checked.size===1?[...checked][0]
+    :(selectedRun?selectedRun.run:null);
+  location.href='/demo/ld-capture/'+(name?'?run='+encodeURIComponent(name):'');
+};
+function ldvSummary(){
+  const remaining=LDV?Math.max(0,LDV.queue.length-LDV.idx):0;
+  const multi=LDV&&LDV.queue.length>1, nodeed=LDV?LDV.nodeed:0;
+  let msg=LDV.cap+' captured, '+LDV.skip+' skipped, '+LDV.nodeed+' no deed.';
+  if(remaining>0) msg+=' '+remaining+
+    ' run(s) were not visited and have no record either way.';
+  $('ldvBack').classList.add('hide');
+  $('ldvSkipBack').classList.add('hide');
+  LDV=null;
+  $('status').textContent=msg;
+  if(multi&&nodeed>0)
+    alert(msg+'\n\nThe '+nodeed+' "no deed" run(s) never pulled a deed '
+      +'\u2014 there is no document to capture from.');
+}
+async function ldvAdvance(){
+  LDV.idx++;
+  if(LDV.idx>=LDV.queue.length){ ldvSummary(); return; }
+  const run=LDV.queue[LDV.idx];
+  let st;
+  try{ st=await (await fetch('/api/ldv/state/'+enc(run))).json(); }
+  catch(e){ alert('Could not read '+run); ldvSummary(); return; }
+  if(st.ldv_error){ alert('Legal-description capture is unavailable:\n'
+    +st.ldv_error); ldvSummary(); return; }
+  if(!st.deed_pdf){
+    LDV.nodeed++;
+    if(LDV.queue.length===1)
+      alert('No deed on file for '+run+' \u2014 this run never pulled '
+        +'a deed, so there is no document to capture the legal '
+        +'description from.');
+    ldvAdvance(); return;
+  }
+  LDV.state=st; LDV.frags=[];
+  const n=LDV.queue.length;
+  $('ldvTitle').textContent='Capture legal description — '+run
+    +(n>1?' ('+(LDV.idx+1)+' of '+n+')':'');
+  LDV.baseMsg = st.state==='captured'
+    ? 'This parcel already has a saved capture — saving again keeps the '
+      +'old one under a .superseded stamp.'
+    : (st.state==='skipped'
+       ? 'Recorded as skipped ('+((st.detail||{}).reason_code||'')+') — a '
+         +'capture will supersede the skip.'
+       : '');
+  ldvStage('capture');
+  ldvLoadAll();
+  $('ldvBack').classList.remove('hide');
+}
+function ldvLoadAll(){
+  const canvas=$('ldvCanvas');
+  [...canvas.querySelectorAll('img')].forEach(im=>im.remove());
+  const rect=$('ldvRect');
+  for(let p=0;p<LDV.state.pages;p++){
+    const im=document.createElement('img');
+    im.src=DEMO.pageUrl(LDV.queue[LDV.idx],LDV.state.deed_pdf,p);
+    im.dataset.page=p;
+    im.draggable=false;
+    im.loading='lazy';
+    im.alt='deed page '+(p+1);
+    canvas.insertBefore(im,rect);
+  }
+  canvas.scrollTop=0;
+  $('ldvPageLbl').textContent=LDV.state.pages+' page(s)';
+  rect.classList.add('hide');
+}
+let dragStart=null, dragImg=null;
+const ldvRect=$('ldvRect'), ldvCanvas=$('ldvCanvas');
+function imgPos(e){
+  const r=dragImg.getBoundingClientRect();
+  return {x:Math.min(Math.max(e.clientX-r.left,0),r.width),
+          y:Math.min(Math.max(e.clientY-r.top,0),r.height)};
+}
+ldvCanvas.addEventListener('mousedown',e=>{
+  if(!LDV||LDV.busy||e.target.tagName!=='IMG') return;
+  e.preventDefault();
+  dragImg=e.target;
+  dragStart=imgPos(e);
+});
+ldvCanvas.addEventListener('mousemove',e=>{
+  if(!dragStart) return;
+  const p=imgPos(e);
+  const x=Math.min(dragStart.x,p.x), y=Math.min(dragStart.y,p.y);
+  ldvRect.style.left=(x+dragImg.offsetLeft)+'px';
+  ldvRect.style.top=(y+dragImg.offsetTop)+'px';
+  ldvRect.style.width=Math.abs(p.x-dragStart.x)+'px';
+  ldvRect.style.height=Math.abs(p.y-dragStart.y)+'px';
+  ldvRect.classList.remove('hide');
+});
+window.addEventListener('mouseup',async e=>{
+  if(!dragStart) return;
+  const start=dragStart, im=dragImg;
+  dragStart=null; dragImg=null;
+  const r=im.getBoundingClientRect();
+  const p={x:Math.min(Math.max(e.clientX-r.left,0),r.width),
+           y:Math.min(Math.max(e.clientY-r.top,0),r.height)};
+  ldvRect.classList.add('hide');
+  if(Math.abs(p.x-start.x)<8||Math.abs(p.y-start.y)<8) return;
+  const k=im.naturalWidth/im.clientWidth;
+  const page=+im.dataset.page;
+  const px={x0:Math.round(Math.min(start.x,p.x)*k),
+            y0:Math.round(Math.min(start.y,p.y)*k),
+            x1:Math.round(Math.max(start.x,p.x)*k),
+            y1:Math.round(Math.max(start.y,p.y)*k)};
+  LDV.busy=true; $('status').textContent='Reading the selection\u2026';
+  const box=$('ldvFrags');
+  const ph=document.createElement('div'); ph.className='ldv-frag';
+  ph.innerHTML='<div class="blurb" style="margin:0">Reading the '
+    +'selection\u2026</div><div class="ldv-loading"></div>';
+  box.appendChild(ph); box.scrollTop=box.scrollHeight;
+  const f=new FormData();
+  f.append('run',LDV.queue[LDV.idx]); f.append('page',page);
+  for(const kk of ['x0','y0','x1','y1']) f.append(kk,px[kk]);
+  try{
+    const res=await fetch('/api/ldv/ocr',{method:'POST',body:f});
+    if(!res.ok) throw new Error(await res.text());
+    const r=await res.json();
+    LDV.frags.push({page:page,px:px,raw:r.text,
+                    markers:r.redirect_markers||[]});
+    ldvRenderFrags(true);      
+    $('status').textContent = (r.text.trim()
+      ? 'Fragment read \u2014 check the text beside its picture.'
+      : 'Nothing machine-readable in that box \u2014 type the text in '
+        +'by hand.');
+  }catch(err){
+    ph.remove();
+    $('status').textContent='OCR failed: '+err.message;
+  }
+  LDV.busy=false;
+});
+function ldvStage(st){
+  LDV.stage=st;
+  const conf=st==='confirm';
+  document.querySelector('.ldv-body').classList.toggle('confirm',conf);
+  $('ldvUndo').classList.toggle('hide',conf);
+  $('ldvSkipBtn').classList.toggle('hide',conf);
+  $('ldvConfirmBtn').classList.toggle('hide',conf);
+  $('ldvBackBtn').classList.toggle('hide',!conf);
+  $('ldvSave').classList.toggle('hide',!conf);
+  $('ldvMsg').textContent = conf
+    ? 'Check each text against its picture, fix what the reader got '
+      +'wrong, then Save capture.'
+    : LDV.baseMsg;
+  ldvRenderFrags();
+}
+function ldvRenderFrags(scrollEnd){
+  const box=$('ldvFrags');
+  const conf=LDV.stage==='confirm';
+  box.innerHTML='';
+  LDV.frags.forEach((fr,i)=>{
+    const d=document.createElement('div'); d.className='ldv-frag';
+    const c=document.createElement('canvas');
+    const w=fr.px.x1-fr.px.x0, h=fr.px.y1-fr.px.y0;
+    const cw=Math.min(conf?660:360,w);
+    c.width=cw; c.height=Math.round(h*cw/w);
+    d.appendChild(c);
+    if(fr.markers.length){
+      const wn=document.createElement('div'); wn.className='ldv-warn';
+      wn.textContent='Mentions '+fr.markers.join(', ')
+        +' \u2014 the description may continue on an exhibit page.';
+      d.appendChild(wn);
+    }
+    if(conf){
+      const t=document.createElement('textarea');
+      t.value=(fr.final!==undefined)?fr.final:fr.raw;
+      t.oninput=()=>{ fr.final=t.value; };
+      d.appendChild(t);
+    }
+    box.appendChild(d);
+    const img=new Image();
+    img.onload=()=>c.getContext('2d')
+      .drawImage(img,fr.px.x0,fr.px.y0,w,h,0,0,c.width,c.height);
+    img.src=DEMO.pageUrl(LDV.queue[LDV.idx],LDV.state.deed_pdf,fr.page);
+  });
+  $('ldvCount').textContent=LDV.frags.length+' fragments captured';
+  $('ldvUndo').disabled=!LDV.frags.length;
+  if(scrollEnd) box.scrollTop=box.scrollHeight;
+}
+$('ldvUndo').onclick=()=>{ if(LDV&&LDV.frags.length){
+  LDV.frags.pop(); ldvRenderFrags(); } };
+$('ldvConfirmBtn').onclick=()=>{
+  if(!LDV) return;
+  if(!LDV.frags.length){
+    $('status').textContent='Drag a box over the description first.'; return; }
+  ldvStage('confirm');
+};
+$('ldvBackBtn').onclick=()=>{ if(LDV) ldvStage('capture'); };
+$('ldvSave').onclick=async()=>{
+  if(!LDV||LDV.stage!=='confirm') return;
+  if(!LDV.frags.length){
+    $('status').textContent='Drag a box over the description first.'; return; }
+  const finals=LDV.frags.map(fr=>
+    ((fr.final!==undefined)?fr.final:fr.raw).trim());
+  const body={run:LDV.queue[LDV.idx],supersede:false,
+    fragments:LDV.frags.map((fr,i)=>({page:fr.page,x0:fr.px.x0,y0:fr.px.y0,
+      x1:fr.px.x1,y1:fr.px.y1,raw_ocr_text:fr.raw,final_text:finals[i]}))};
+  let res=await fetch('/api/ldv/save',{method:'POST',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(res.status===409){
+    if(!confirm((await res.json()).detail)) return;
+    body.supersede=true;
+    res=await fetch('/api/ldv/save',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)});
+  }
+  if(!res.ok){ alert('Save failed: '+await res.text()); return; }
+  LDV.cap++; ldvAdvance();
+};
+$('ldvSkipBtn').onclick=()=>{
+  if(!LDV) return;
+  if(LDV.state.skip_blocked){ alert(LDV.state.skip_blocked); return; }
+  if(LDV.frags.length&&!confirm(LDV.frags.length+' captured fragment(s) '
+    +'will be discarded.\n\nRecord this parcel as skipped anyway?'))
+    return;
+  $('ldvReasons').innerHTML=LDV.state.reasons.map((r,i)=>
+    '<label class="reason-row"><input type="radio" name="ldvReason" '
+    +'value="'+esc(r.code)+'"'+(i===0?' checked':'')+'> '
+    +esc(r.label)+'</label>').join('');
+  $('ldvSkipNote').value='';
+  $('ldvSkipBack').classList.remove('hide');
+};
+$('ldvSkipOk').onclick=async()=>{
+  const code=(document.querySelector('input[name=ldvReason]:checked')
+              ||{}).value;
+  const note=$('ldvSkipNote').value.trim();
+  if(code==='other'&&!note){
+    alert("'Other' needs a note saying what was wrong."); return; }
+  const f=new FormData();
+  f.append('run',LDV.queue[LDV.idx]);
+  f.append('code',code); f.append('note',note);
+  const res=await fetch('/api/ldv/skip',{method:'POST',body:f});
+  if(!res.ok){ alert('Skip failed: '+await res.text()); return; }
+  $('ldvSkipBack').classList.add('hide');
+  LDV.skip++; ldvAdvance();
+};
+$('ldvSkipClose').onclick=()=>$('ldvSkipBack').classList.add('hide');
+$('ldvClose').onclick=()=>{ if(LDV) ldvSummary(); };
+async function refreshWho(){
+  try{
+    const w=await (await fetch('/api/whoami')).json();
+    IS_OPERATOR=!!w.operator;
+    $('navUsers').hidden=!IS_OPERATOR;
+    $('navAdmin').hidden=!IS_OPERATOR;
+    $('ver').textContent='Fee Simple '+w.version;
+    const others=w.active.filter(e=>e!==w.me);
+    const firmLabel=w.firm_name||w.firm;
+    $('who').textContent='Signed in: '+w.me+
+      (firmLabel?' ('+firmLabel+')':'')+
+      (others.length?' · also here: '+others.join(', '):'');
+  }catch(e){}
+}
+setInterval(refreshWho,60000); refreshWho();
+</script></body></html>

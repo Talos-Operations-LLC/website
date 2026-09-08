@@ -1,0 +1,1143 @@
+<!doctype html>
+<html lang="en"><head><meta name="robots" content="noindex,nofollow"><meta name="description" content="Fee Simple demo - sample data only"><meta charset="utf-8">
+<title>Fee Simple — Verification workbench</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{
+  --paper:#fbfaf7;        
+  --panel:#ffffff;        
+  --ink:#1c2733;          
+  --ink-soft:#5a6875;     
+  --rule:#e3e1da;         
+  --verify:#1e7a4d;       
+  --verify-bg:#e9f4ee;
+  --flag:#9a6b00;         
+  --flag-bg:#fdf6e3;
+  --flag-border:#e8cf8a;
+  --abort:#a8322a;        
+  --abort-bg:#faeceb;
+  --accent:#2b4a6f;       
+  --accent-bg:#eef2f7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:"Segoe UI", system-ui, -apple-system, sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  font-size:14px;
+  line-height:1.45;
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.app{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:300px minmax(0,1.15fr) minmax(400px,1fr)}
+.mono{font-family:Consolas,"Courier New",monospace;font-size:13px}
+a.plain{color:var(--accent);text-decoration:none}
+.rail{border-right:1px solid var(--rule);background:var(--panel);
+      padding:20px 16px 52px;display:flex;flex-direction:column;
+      min-height:0;overflow:hidden}
+.rail-top,.rail-bottom{flex:0 0 auto}
+#runList{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;margin:0 -16px;padding:0 16px}
+.rail-head{display:flex;justify-content:space-between;align-items:baseline;
+           margin-bottom:4px}
+.rail-head h2{font-size:13px;font-weight:600;letter-spacing:.02em;
+              color:var(--ink-soft)}
+.rail-sub{font-size:12px;color:var(--ink-soft);margin-bottom:14px}
+.rail-scope{display:flex;gap:6px;margin-bottom:10px}
+.rail-scope button{flex:1;background:#fff;border:1px solid var(--rule);
+                   border-radius:7px;padding:5px 8px;font-size:12px;
+                   font-weight:600;color:var(--ink-soft);cursor:pointer}
+.rail-scope button.on{background:var(--accent-bg);border-color:var(--accent);
+                      color:var(--accent)}
+.sharebtn{font:600 12.5px "Segoe UI",system-ui,sans-serif;padding:5px 12px;
+          border:1px solid var(--rule);border-radius:7px;background:#fff;
+          color:var(--ink);cursor:pointer;white-space:nowrap}
+.sharebtn:hover:not(:disabled){border-color:var(--ink-soft)}
+.sharebtn:disabled{opacity:.5;cursor:default}
+.sharebtn.on{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
+.pcard{border:1px solid var(--rule);border-radius:8px;
+       padding:12px 12px 10px;margin-bottom:10px;cursor:pointer;
+       background:var(--panel)}
+.pcard:hover{border-color:#c9c6bd}
+.pcard.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.pcard .owner{font-weight:600;font-size:14px}
+.pcard .pill.sect{background:var(--accent-bg);color:var(--accent);margin-right:6px}
+.pcard .addr{font-size:12.5px;color:var(--ink-soft);margin-top:1px;
+             word-break:break-word}
+.pcard .meta{display:flex;justify-content:space-between;align-items:center;
+             margin-top:8px}
+.pcard .pin{font-size:11.5px;color:var(--ink-soft)}
+.rail-foot{margin-top:10px;padding-top:10px;border-top:1px solid var(--rule);
+           font-size:12px;color:var(--ink-soft)}
+.rail-foot .row.total{color:var(--ink);font-weight:600}
+.rail-foot .row{display:flex;justify-content:space-between;padding:2px 0}
+.rail-search{width:100%;font:inherit;font-size:13.5px;padding:8px 12px;margin:2px 0 8px;
+             border:1px solid var(--rule);border-radius:7px;background:#fff;color:var(--ink)}
+.rail-search:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+.rail-search::placeholder{color:#b9b3a6}
+.rail-pick{display:flex;margin-bottom:10px}
+.rail-pick .pickbtn{flex:1;font-family:inherit;font-size:12px;font-weight:600;
+                    height:26px;line-height:24px;padding:0 8px;border:1px solid var(--rule);
+                    border-radius:7px;background:#fff;color:var(--ink);cursor:pointer}
+.rail-pick .pickbtn.on{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
+.pcard .titlerow{display:flex;align-items:center}
+.pcard .pick{display:none;margin:0 8px 0 0;accent-color:var(--accent);flex-shrink:0}
+.rail.picking .pcard .pick{display:inline-block}
+.pcard.picked{border-color:var(--accent);background:var(--accent-bg)}
+.pickbar{display:none;border-top:1px solid var(--rule);margin-top:10px;padding-top:10px}
+.rail.picking .pickbar{display:block}
+.pickbar .row{display:flex;gap:8px;align-items:center}
+.pickbar .btn{flex:1;font:600 13px "Segoe UI",system-ui,sans-serif;padding:8px 12px;
+              border:1px solid var(--accent);border-radius:7px;background:var(--accent);
+              color:#fff;cursor:pointer}
+.pickbar .btn:disabled{opacity:.45;cursor:default}
+.pickbar .ghost{font:600 12px "Segoe UI",system-ui,sans-serif;padding:6px 10px;
+                border:1px solid var(--rule);border-radius:7px;background:#fff;
+                color:var(--ink);cursor:pointer;white-space:nowrap}
+.pickbar .note{font-size:12px;color:var(--ink-soft);margin-top:6px;min-height:16px}
+.pill{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;
+      white-space:nowrap}
+.pill.verified{color:var(--verify);background:var(--verify-bg)}
+.pill.flagged{color:var(--flag);background:var(--flag-bg)}
+.pill.aborted{color:var(--abort);background:var(--abort-bg)}
+.pill.pending{color:var(--ink-soft);background:#f0efe9}
+.pill.imported{color:var(--accent);background:var(--accent-bg)}
+.pill.resolved{color:var(--verify);background:var(--verify-bg)}
+.pill.captured{color:var(--verify);background:var(--verify-bg)}
+.pill.skipped{color:var(--flag);background:var(--flag-bg)}
+.main{padding:26px 30px 66px;overflow-y:scroll;min-height:0;border-right:1px solid var(--rule)}
+.head{display:flex;justify-content:space-between;align-items:flex-start;
+      margin-bottom:6px}
+.head h1{font-family:Georgia,"Times New Roman",serif;font-size:26px;
+         font-weight:600;letter-spacing:-.01em}
+.head .addr-line{margin-top:4px;color:var(--ink-soft);font-size:14px}
+.head .addr-line b{color:var(--ink);font-weight:600}
+.head .pills{display:flex;gap:8px;margin-top:6px;align-items:center;flex-wrap:wrap;
+             justify-content:flex-end;flex-shrink:0}
+.head .danger{background:#fff;border:1px solid #dfa39e;color:var(--abort);border-radius:7px;
+              padding:5px 12px;cursor:pointer;font:600 12.5px "Segoe UI",system-ui,sans-serif;white-space:nowrap}
+.head .danger:hover{background:var(--abort-bg);border-color:var(--abort)}
+.banner{display:flex;align-items:center;gap:12px;
+        border:1px solid var(--flag-border);background:var(--flag-bg);
+        border-radius:8px;padding:8px 14px;margin-top:18px;min-height:47px}
+.banner.abort{border-color:#dfa39e;background:var(--abort-bg)}
+.banner .tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;
+             background:#fff;border:1px solid var(--flag-border);
+             color:var(--flag);flex-shrink:0}
+.banner.abort .tag{color:var(--abort);border-color:#dfa39e}
+.banner .txt{flex:1;font-size:13.5px}
+.banner button.btn{font-family:inherit;line-height:inherit;cursor:pointer}
+.docs button.btn{font-family:inherit;line-height:normal;cursor:pointer}   
+.banner a.btn,.banner button.btn,.docs a.btn,.docs button.btn{border:1px solid var(--rule);background:#fff;
+  border-radius:6px;padding:6px 14px;font-size:13px;font-weight:600;
+  cursor:pointer;color:var(--ink);text-decoration:none;white-space:nowrap}
+.banner a.btn:hover,.banner button.btn:hover,.docs a.btn:hover,.docs button.btn:hover{border-color:var(--ink-soft)}
+.banner a.btn,.banner button.btn{padding:4px 12px;line-height:1.3}   
+.sect{margin-top:28px}
+.sect > h3{font-size:13px;font-weight:600;color:var(--ink-soft);
+           letter-spacing:.02em;margin-bottom:10px}
+.prov{font-size:12px;color:var(--ink-soft)}
+.prov.byline{white-space:nowrap}   
+.sect > h3 .prov{font-weight:400;margin-left:10px}
+.sect.stream > h3{cursor:pointer;user-select:none}
+.sect.stream > h3 .caret{display:inline-block;width:11px;font-size:10px;
+                         color:var(--ink-soft)}
+.sect.stream:not(.open) .feed,
+.sect.stream:not(.open) .empty{display:none}
+.feed{background:var(--panel);border:1px solid var(--rule);border-radius:8px;
+      max-height:420px;overflow-y:auto}
+.evt{display:grid;grid-template-columns:88px 150px 1fr;gap:14px;
+     padding:7px 14px;border-bottom:1px solid var(--rule);
+     font-size:13px;align-items:baseline}
+.evt:last-child{border-bottom:none}
+.evt .ts{font-family:Consolas,"Courier New",monospace;font-size:12px;
+         color:var(--ink-soft)}
+.evt .stage{font-size:11.5px;color:var(--ink-soft)}
+.evt .msg{font-family:Consolas,"Courier New",monospace;font-size:12.5px;
+          white-space:pre-wrap;word-break:break-word}
+.evt.info .msg{color:var(--ink)}
+.evt.flag .msg{color:var(--flag)}
+.evt.retry .msg{color:var(--flag)}
+.evt.abort .msg{color:var(--abort)}
+.evt.done .msg{color:var(--verify);font-weight:600}
+.check{background:var(--panel);border:1px solid var(--rule);border-radius:8px;
+       padding:6px 0}
+.check .item{display:flex;align-items:center;gap:12px;padding:9px 16px;
+             border-bottom:1px solid var(--rule);font-size:13.5px}
+.check .item:last-child{border-bottom:none}
+.dot{width:18px;height:18px;border-radius:50%;flex-shrink:0;display:flex;
+     align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.dot.ok{background:var(--verify);color:#fff}
+.dot.warn{background:var(--flag);color:#fff}
+.dot.bad{background:var(--abort);color:#fff}
+.dot.wait{background:#e6e4dd;color:var(--ink-soft)}
+.check .what{flex:1}
+.progcheck{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:12px 16px 14px}
+.progcheck .step{display:grid;grid-template-columns:18px max-content minmax(0,1fr);gap:12px;align-items:center;
+                 padding:7px 0;font-size:13.5px;position:relative}
+.progcheck .step+.step::before{content:"";position:absolute;left:8px;top:-9px;height:14px;border-left:2px solid var(--rule)}
+.progcheck .step .dot{position:relative;z-index:1}
+.progcheck .step .prov{font-size:12px;color:var(--ink-soft);text-align:right}
+.progcheck .pct{margin-top:10px;height:6px;background:#eceae4;border-radius:3px;overflow:hidden}
+.progcheck .pct i{display:block;height:100%;background:var(--verify)}
+.progcheck .left{font-size:11.5px;color:var(--ink-soft);margin-top:6px}
+.progcheck .acts{display:flex;gap:8px;margin-top:12px}
+.progcheck .acts>*{flex:1;text-align:center;justify-content:center}
+.progcheck .acts .primary{background:var(--accent);color:#fff;border:1px solid var(--accent);border-radius:7px;
+                          padding:8px 14px;font:600 13px "Segoe UI",system-ui,sans-serif;cursor:pointer}
+.progcheck .acts .primary:disabled{background:#b9c3ce;border-color:#b9c3ce;cursor:not-allowed}
+.progcheck .acts a.ghost,.progcheck .acts .sharebtn{display:inline-block;background:#fff;border:1px solid var(--rule);
+                          border-radius:7px;padding:8px 14px;font:600 13px "Segoe UI",system-ui,sans-serif;
+                          color:var(--ink);text-decoration:none;cursor:pointer}
+.progcheck .acts .sharebtn.on{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
+.progcheck .note{font-size:12px;color:var(--abort);margin-top:6px;min-height:0}
+.docs{background:var(--panel);border:1px solid var(--rule);border-radius:8px;
+      overflow:hidden}
+.docs table{width:100%;border-collapse:collapse}
+.docs th{text-align:left;font-size:11.5px;font-weight:600;
+         color:var(--ink-soft);letter-spacing:.03em;padding:9px 16px;
+         border-bottom:1px solid var(--rule);background:#faf9f5}
+.docs td{padding:11px 16px;border-bottom:1px solid var(--rule);
+         font-size:13.5px;vertical-align:middle}
+.docs tr:last-child td{border-bottom:none}
+.docs .docname{font-weight:600}
+.docs td.acts{white-space:nowrap;text-align:right}   
+.docs a.srclink{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-bg)}
+.docs a.srclink:hover{border-bottom-color:var(--accent)}
+.hide{display:none !important}
+.doccol{background:#eeece6;display:flex;flex-direction:column;min-height:0;min-width:0}
+.doctabs{display:flex;gap:6px;padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--rule);
+         align-items:center;flex-wrap:wrap;flex:0 0 auto}
+.doctabs .tab{padding:6px 12px;border:1px solid var(--rule);border-radius:7px;background:#fff;
+              font:600 12.5px "Segoe UI",system-ui,sans-serif;cursor:pointer;color:var(--ink)}
+.doctabs .tab.on{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
+.doctabs .tab.missing{color:var(--flag);border-color:var(--flag-border)}
+.doctabs .right{margin-left:auto;display:flex;gap:6px}
+.doctabs .right a.btn{border:1px solid var(--rule);background:#fff;border-radius:6px;padding:5px 11px;
+                      font-size:12.5px;font-weight:600;color:var(--ink);text-decoration:none}
+.paper{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;padding:14px 14px 54px}
+.paper iframe{flex:1 1 auto;width:100%;min-height:0;border:1px solid var(--rule);border-radius:6px;background:#fff}
+.paper pre{flex:1 1 auto;min-height:0;overflow:auto;background:#fff;border:1px solid var(--rule);border-radius:6px;
+           padding:14px;font-family:Consolas,"Courier New",monospace;font-size:12px;white-space:pre}
+.paper.pdf{padding:0 0 40px;background:#525659}
+.pdfview{display:flex;flex-direction:column;min-height:0;flex:1 1 auto}
+.pdftool{display:flex;align-items:center;padding:0 12px;height:56px;background:#323639;
+         color:#f1f3f4;font-size:13px;flex:0 0 auto;gap:4px}
+.pdftool .title{flex:1 1 0;min-width:40px;overflow:hidden;text-overflow:ellipsis;
+                white-space:nowrap;font-weight:600;font-size:14.5px;margin-right:8px}
+.pdftool .mid{display:flex;align-items:center;gap:2px;flex:0 0 auto}
+.pdftool .rt{flex:1 1 0;display:flex;align-items:center;justify-content:flex-end;gap:2px;min-width:0}
+.pdftool .box{background:#191b1c;color:#f1f3f4;font:12.5px "Segoe UI",system-ui,sans-serif;
+              padding:4px 6px;border-radius:2px;border:none;text-align:center}
+.pdftool input.box{width:30px}
+.pdftool .of{font-size:12.5px;padding:0 6px 0 4px;color:#f1f3f4}
+.pdftool button,.pdftool .vlink{background:none;border:none;color:#f1f3f4;width:30px;height:30px;
+       border-radius:50%;cursor:pointer;display:inline-flex;align-items:center;
+       justify-content:center;padding:0}
+.pdftool svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;
+             stroke-linecap:round;stroke-linejoin:round}
+.pdftool button:hover,.pdftool .vlink:hover{background:rgba(255,255,255,.1)}
+.pdftool .sep{width:1px;height:24px;background:rgba(255,255,255,.22);margin:0 5px}
+.pdfview .pages-scroll{position:relative;overflow:auto;background:#525659;flex:1 1 auto;padding:12px 0;min-height:0}
+.pdfview .pages-scroll img.page{display:block;width:var(--vz,82%);margin:0 auto 12px;
+                                box-shadow:0 1px 4px rgba(0,0,0,.5);background:#fff;aspect-ratio:auto 8.5/11}
+.docmissing{margin:40px auto;max-width:460px;background:var(--flag-bg);border:1px solid var(--flag-border);
+            border-radius:10px;padding:18px 20px;text-align:center;font-size:13.5px}
+.docmissing.quiet{background:var(--panel);border-color:var(--rule);color:var(--ink-soft)}
+.docmissing .btn{margin-top:10px;display:inline-block;border:1px solid var(--rule);background:#fff;border-radius:6px;
+                 padding:6px 14px;font:600 13px "Segoe UI",system-ui,sans-serif;cursor:pointer;color:var(--ink)}
+.vdim{position:fixed;inset:0;background:rgba(28,39,51,.55);z-index:50;
+      display:flex;align-items:center;justify-content:center;padding:3vh 3vw}
+.viewer{background:var(--panel);border:1px solid var(--rule);border-radius:10px;
+        width:min(1200px,94vw);height:92vh;display:flex;flex-direction:column;
+        padding:12px 16px 16px;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.viewer .vhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex:0 0 auto}
+.viewer.fix{width:min(640px,94vw);height:auto;max-height:90vh;overflow:auto}
+.fix p{font-size:13.5px;margin-bottom:12px}
+.fix .f{margin-bottom:10px}
+.fix label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:3px}
+.fix input[type=text]{width:100%;font:inherit;font-size:14px;padding:7px 10px;
+                      border:1px solid var(--rule);border-radius:6px;background:#fff;color:var(--ink)}
+.fix input[type=text]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+.fix .row3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px}
+.fix .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fix .links{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;font-size:13px}
+.fix .links .k{font-size:12px;color:var(--ink-soft)}
+.fix .drop{border:1.5px dashed var(--rule);border-radius:8px;padding:16px 14px;text-align:center;
+           color:var(--ink-soft);background:#faf9f5;cursor:pointer;font-size:13.5px;margin-bottom:10px}
+.fix .drop:hover,.fix .drop.over{border-color:var(--accent);background:var(--accent-bg)}
+.fix .drop b{color:var(--accent)}
+.fix .drop.has{border-style:solid;color:var(--ink)}
+.fix .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;align-items:center}
+.fix .acts .note{margin-right:auto;font-size:12px;color:var(--ink-soft)}
+.fix .primary{background:var(--accent);color:#fff;border:1px solid var(--accent);border-radius:7px;
+              padding:8px 16px;font:600 13.5px "Segoe UI",system-ui,sans-serif;cursor:pointer}
+.viewer.fix .btn,.viewer.fix .ghost,.viewer.fix .copy{display:inline-block;
+  font:600 12.5px "Segoe UI",system-ui,sans-serif;padding:5px 11px;border:1px solid var(--rule);
+  border-radius:7px;background:#fff;color:var(--ink);cursor:pointer;text-decoration:none;line-height:1.3}
+.viewer.fix .btn:hover,.viewer.fix .ghost:hover,.viewer.fix .copy:hover{border-color:var(--ink-soft)}
+.viewer.fix .copy{font-family:Consolas,"Courier New",monospace;padding:3px 9px}
+.fix .primary:disabled{opacity:.45;cursor:default}
+.viewer iframe{flex:1 1 auto;width:100%;min-height:0;border:1px solid var(--rule);border-radius:6px;background:#fff}
+.viewer pre{flex:1 1 auto;min-height:0;overflow:auto;font-family:Consolas,"Courier New",monospace;
+            font-size:12.5px;padding:12px;border:1px solid var(--rule);border-radius:6px;background:#fff;white-space:pre}
+.docs .src{font-size:12px;color:var(--ink-soft);margin-top:1px}
+.pagecount{font-size:12.5px;color:var(--ink-soft)}
+.versus{background:var(--panel);border:1px solid var(--rule);
+        border-radius:8px;overflow:hidden}
+.versus table{width:100%;border-collapse:collapse;table-layout:fixed}
+.versus th{text-align:left;font-size:12px;font-weight:600;padding:10px 16px;
+           border-bottom:2px solid var(--ink);background:#faf9f5}
+.versus th:first-child{width:170px;color:var(--ink-soft)}
+.versus th:last-child{width:110px}
+.versus td{padding:11px 16px;border-bottom:1px solid var(--rule);
+           font-size:13.5px;vertical-align:top;overflow-wrap:break-word}
+.versus tr:last-child td{border-bottom:none}
+.versus .fieldname{color:var(--ink-soft);font-size:12.5px}
+.verdict{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:4px;
+         display:inline-block}
+.verdict.match{color:var(--verify);background:var(--verify-bg)}
+.verdict.diff{color:var(--flag);background:var(--flag-bg)}
+.verdict.bad{color:var(--abort);background:var(--abort-bg)}
+.versus .joinrow td{background:var(--accent-bg)}
+.versus .joinrow .fieldname{color:var(--accent);font-weight:700}
+.legal-box{background:var(--panel);border:1px solid var(--rule);
+           border-radius:8px;padding:14px 16px}
+.legal-box .status{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.legal-box .body{font-family:Georgia,serif;font-size:13.5px;color:var(--ink);
+                 background:#faf9f5;border:1px dashed var(--rule);
+                 border-radius:6px;padding:12px 14px;line-height:1.6;
+                 white-space:pre-wrap;word-break:break-word}
+.actions{display:flex;gap:12px;align-items:center;margin-top:30px;
+         padding-top:18px;border-top:1px solid var(--rule)}
+.actions .primary{background:var(--accent);color:#fff;border:none;
+  border-radius:7px;padding:10px 22px;font-size:14px;font-weight:600;
+  cursor:pointer}
+.actions .primary:disabled{background:#b9c3ce;cursor:not-allowed}
+.actions a.ghost{background:#fff;border:1px solid var(--rule);
+  border-radius:7px;padding:10px 18px;font-size:14px;font-weight:600;
+  cursor:pointer;color:var(--ink);text-decoration:none}
+.actions .note{font-size:12.5px;color:var(--ink-soft);margin-left:auto}
+.actions .danger{background:#fff;border:1px solid #dfa39e;color:var(--abort);
+                 border-radius:7px;padding:8px 14px;cursor:pointer;
+                 font:600 13px "Segoe UI",system-ui,sans-serif;white-space:nowrap}
+.actions .danger:hover{background:var(--abort-bg);border-color:var(--abort)}
+.fix .danger{background:var(--abort);color:#fff;border:1px solid var(--abort);border-radius:7px;
+             padding:8px 16px;font:600 13.5px "Segoe UI",system-ui,sans-serif;cursor:pointer}
+.fix .danger:disabled{opacity:.45;cursor:default}
+.empty{background:var(--panel);border:1px solid var(--rule);border-radius:8px;
+       padding:24px 26px;color:var(--ink-soft);font-size:13.5px}
+.apphdr{display:flex;align-items:center;gap:14px;flex:0 0 auto;
+        padding:7px 14px;background:#fbfaf7;border-bottom:1px solid #e3e1da;
+        white-space:nowrap;overflow-x:auto;
+        position:sticky;top:0;z-index:10}   
+.apphdr-brand{color:#1c2733;font:700 13px "Segoe UI",system-ui,sans-serif;flex:0 0 auto}
+.apphdr-nav{display:flex;gap:6px;flex:0 0 auto}
+.apphdr .nav-link{flex:0 0 auto;color:#2b4a6f;text-decoration:none;
+     padding:5px 12px;border:1px solid #e3e1da;border-radius:7px;background:#fff;
+     font:12.5px "Segoe UI",system-ui,sans-serif}
+.apphdr .nav-link:hover{border-color:#2b4a6f}
+.apphdr .nav-link.on{background:#2b4a6f;color:#fff;border-color:#2b4a6f;font-weight:600}
+.apphdr-who{margin-left:auto;flex:0 0 auto;color:#5a6875;font-size:11.5px;padding-left:10px}
+.appfoot{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;
+         justify-content:space-between;align-items:center;gap:12px;
+         padding:8px 34px;background:#fbfaf7;border-top:1px solid #e3e1da;
+         font:12px "Segoe UI",system-ui,sans-serif;color:#5a6875}
+.apphdr-out{flex:0 0 auto;color:#5a6875;font-size:11.5px;text-decoration:none;
+     padding:4px 10px;border:1px solid #e3e1da;border-radius:7px;background:#fff}
+.apphdr-out:hover{border-color:#2b4a6f;color:#2b4a6f}
+</style></head><body>
+<script src="/demo/demo.js"></script>
+<header class="apphdr">
+  <span class="apphdr-brand">Fee&nbsp;Simple</span><span class="demo-pill">DEMO</span>
+  <nav class="apphdr-nav">
+    <a class="nav-link" href="/demo/">Run</a>
+    <a class="nav-link on" href="/demo/workbench/">Workbench</a>
+    <a class="nav-link" href="/demo/ld-capture/">LD capture</a>
+    <a class="nav-link" href="/demo/" id="navAdmin" hidden>Admin panel</a>
+    <a class="nav-link" href="/demo/" id="navUsers" hidden>Users</a>
+  </nav>
+  <span class="apphdr-who" id="who"></span>
+  <a class="apphdr-out" href="/demo/?fresh=1" title="Throw away everything you did here and start the demo over">Restart demo</a>
+</header>
+<div class="app">
+  <aside class="rail">
+    <div class="rail-top">
+      <div class="rail-head"><h2>Run queue</h2></div>
+      <input type="search" class="rail-search" id="railSearch" placeholder="Find a run" autocomplete="off">
+      <div class="rail-scope">
+        <button type="button" class="on" id="scopeMine">Mine</button>
+        <button type="button" id="scopeFirm">Firm shared</button>
+      </div>
+      <div class="rail-pick"><button type="button" class="pickbtn" id="pickBtn"
+                title="Tick runs to export them together">Export multiple</button></div>
+    </div>
+    <div id="runList"><div class="empty">Loading…</div></div>
+    <div class="rail-bottom">
+    <div class="rail-foot" id="railFoot">
+      <div class="row total"><span>Runs</span><span id="nRuns">0</span></div>
+      <div class="row"><span>Verified</span><span id="nVerified">0</span></div>
+      <div class="row"><span>Resolved</span><span id="nResolved">0</span></div>
+      <div class="row"><span>Flagged</span><span id="nFlagged">0</span></div>
+      <div class="row"><span>Aborted</span><span id="nAborted">0</span></div>
+      <div class="row"><span>Imported</span><span id="nImported">0</span></div>
+    </div>
+    <div class="pickbar" id="pickBar">
+      <div class="row">
+        <button type="button" class="btn" id="exportPicked" disabled>Export 0 selected</button>
+        <button type="button" class="ghost" id="pickAll" title="Tick every verified run in this list">Select all</button>
+      </div>
+      <div class="note" id="pickNote">Verified or resolved runs only — one workbook, one row per run.</div>
+    </div>
+    </div>
+  </aside>
+  <div class="vdim hide" id="fixBack">
+    <div class="viewer fix" role="dialog" aria-label="Resolve" id="fixBox"></div>
+  </div>
+  <main class="main">
+    <div id="detail">
+      <div class="empty">Select a run from the queue. Every value shown is
+        the pipeline's own retrieved data with its source beside it —
+        this page renders conclusions, it never re-derives them.</div>
+    </div>
+  </main>
+  <aside class="doccol" id="docPane">
+    <div class="doctabs" id="docTabs"></div>
+    <div class="paper" id="docPaper"><div class="docmissing quiet">Pick a run to read its documents.</div></div>
+  </aside>
+</div>
+<div class="appfoot"><span>FeeSimple is a workbench, always review each case file</span>
+  <span id="ver"></span></div>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+let ROWS=[], ACTIVE=null;
+let SCOPE="mine";
+let DEEP=new URLSearchParams(location.search).get("run");
+function inScope(row){ return SCOPE==="mine" ? row.mine!==false
+                                             : row.mine===false; }
+let Q="";
+function matchesQ(row){
+  const q=Q.trim().toLowerCase(); if(!q) return true;
+  return [cardTitle(row),cardSub(row),row.bookpage||"",row.county||"",
+          row.owner||"",row.address||""].join(" ").toLowerCase().includes(q);
+}
+function esc(s){ const d=document.createElement("div");
+  d.textContent=s==null?"":String(s); return d.innerHTML; }
+function prettyCounty(k){ return k? k.charAt(0).toUpperCase()+k.slice(1):""; }
+function placeLine(row){
+  const county=prettyCounty(row.county);
+  return (row.city?row.city+", ":"")+(county?county+" County":"");
+}
+function cardTitle(row){
+  return row.deed==="imported" ? "Imported deed" : (row.address||row.run);
+}
+function cardSub(row){
+  return row.deed==="imported"
+    ? (row.address||placeLine(row))
+    : placeLine(row);
+}
+function statusOf(r){
+  if(r.deed==="imported") return "Imported";
+  if(r.ok) return "Verified";
+  if(r.resolved) return "Resolved";
+  if(r.final==="abort") return "Aborted";
+  if(r.finished===false
+     && Date.now()-Date.parse(r.started)<30*60*1000) return "Pending";
+  return "Flagged";
+}
+async function load(){
+  const r=await (await fetch('/api/history')).json();
+  ROWS=r.rows;
+  paint();
+}
+function paint(){
+  const shown=ROWS.filter(inScope).filter(matchesQ);
+  const counts={Verified:0,Resolved:0,Flagged:0,Aborted:0,Pending:0,Imported:0};
+  for(const row of shown) counts[statusOf(row)]++;
+  $('scopeMine').classList.toggle('on', SCOPE==="mine");
+  $('scopeFirm').classList.toggle('on', SCOPE!=="mine");
+  $('nRuns').textContent=shown.length;
+  $('nVerified').textContent=counts.Verified;
+  $('nResolved').textContent=counts.Resolved;
+  $('nFlagged').textContent=counts.Flagged;
+  $('nAborted').textContent=counts.Aborted;
+  $('nImported').textContent=counts.Imported;
+  const list=$('runList'); list.innerHTML="";
+  if(!shown.length){
+    list.innerHTML='<div class="empty">'+(SCOPE==="mine"
+      ? 'No runs of your own yet.'
+      : 'Nobody at your firm has shared a run with you yet.')+'</div>';
+  }
+  for(const row of shown){
+    const st=statusOf(row);
+    const card=document.createElement("div");
+    const pickable=canPick(row), picked=PICKED.has(row.run);
+    card.className="pcard"+(picked?" picked":""); card.dataset.run=row.run;
+    card.title=row.run;
+    card.innerHTML =
+      '<div class="titlerow"><input type="checkbox" class="pick"'
+      +(picked?' checked':'')+(pickable?'':' disabled')+' title="'
+      +(pickable?'Tick to include in the export'
+                :'No record — only verified or resolved runs export')+'">'
+      +'<div class="owner">'+esc(cardTitle(row))+'</div></div>'
+      +'<div class="addr">'+esc(cardSub(row))+'</div>'
+      +'<div class="meta"><span class="pin mono">'+esc(row.bookpage||'')+'</span>'
+      +'<span>'+(row.section?'<span class="pill sect">'+esc(row.section)+'</span>':'')
+      +'<span class="pill '+st.toLowerCase()+'">'+st+'</span></span></div>';
+    const box=card.querySelector('.pick');
+    const toggle=()=>{ const on=!PICKED.has(row.run);
+      if(on) PICKED.add(row.run); else PICKED.delete(row.run);
+      box.checked=on; card.classList.toggle('picked',on); drawPickBar(); };
+    card.onclick=()=>{ if(PICKING&&pickable) toggle(); else select(row.run); };
+    box.onclick=e=>{ e.stopPropagation(); toggle(); };
+    list.appendChild(card);
+  }
+  if(PICKING) drawPickBar();
+  if(ACTIVE && shown.some(x=>x.run===ACTIVE)){ select(ACTIVE); return; }
+  if(DEEP){
+    const row=ROWS.find(x=>x.run===DEEP);
+    if(row){
+      if(!inScope(row)){ SCOPE = row.mine===false ? "firm" : "mine";
+                         paint(); return; }
+      const run=DEEP; DEEP=null; select(run); return;
+    }
+    DEEP=null;                          
+  }
+  if(shown.length) select(shown[0].run);
+  else{ ACTIVE=null; $('detail').innerHTML='<div class="empty">Nothing to '
+    +'review in this view.</div>'; docPaneReset(); }
+}
+$('scopeMine').onclick=()=>{ SCOPE="mine"; paint(); };
+$('scopeFirm').onclick=()=>{ SCOPE="firm"; paint(); };
+$('railSearch').oninput=e=>{ Q=e.target.value; paint(); };
+let PICKING=false, PICKED=new Set();
+function canPick(row){ const s=statusOf(row);
+  return (s==="Verified"||s==="Resolved") && !!row.has_csv; }
+function drawPickBar(){
+  const n=PICKED.size;
+  $('exportPicked').disabled=n===0;
+  $('exportPicked').textContent='Export '+n+' selected';
+}
+$('pickBtn').onclick=()=>{
+  PICKING=!PICKING;
+  document.querySelector('.rail').classList.toggle('picking',PICKING);
+  $('pickBtn').classList.toggle('on',PICKING);
+  $('pickBtn').textContent=PICKING?'Done':'Export multiple';
+  $('pickNote').textContent='Verified or resolved runs only — one workbook, one row per run.';
+  if(!PICKING) PICKED.clear();
+  paint();
+};
+$('pickAll').onclick=()=>{
+  for(const row of ROWS.filter(inScope)) if(canPick(row)) PICKED.add(row.run);
+  paint();
+};
+async function exportRuns(names, note){
+  const body=new FormData(); body.append('runs',names.join(','));
+  let res;
+  try{ res=await fetch('/api/export',{method:'POST',body}); }
+  catch(e){ res=null; }
+  if(!res||!res.ok){
+    note('Export failed: '+(res?await res.text():'no answer from the server'));
+    return false;
+  }
+  const blob=await res.blob();
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download='tm_import.zip'; a.click();
+  return true;
+}
+$('exportPicked').onclick=async()=>{
+  const names=[...PICKED]; if(!names.length) return;
+  $('exportPicked').disabled=true;
+  $('pickNote').textContent='Building the workbook…';
+  const ok=await exportRuns(names, msg=>{ $('pickNote').textContent=msg; });
+  if(!ok){ drawPickBar(); return; }
+  $('pickNote').textContent='Exported '+names.length+' run'
+    +(names.length===1?'':'s')+' — one workbook, one row each.';
+  PICKED.clear(); paint();
+  if(ACTIVE&&names.includes(ACTIVE)){ const a=ACTIVE; ACTIVE=null; select(a); }
+};
+async function setShare(run, shared){
+  const body=new URLSearchParams(); body.set("private", shared?"0":"1");
+  const res=await fetch('/api/private/'+encodeURIComponent(run),
+                        {method:'POST', body});
+  if(!res.ok) return;                
+  const row=ROWS.find(x=>x.run===run);
+  if(row) row.private=!shared;
+  drawShare(null, shared);
+}
+function shareTitle(shared){
+  return shared?'Shared with your firm — click to make it private again'
+               :'Only you can see this run — click to share it with your firm';
+}
+function drawShare(btn, shared){
+  document.querySelectorAll('.sharebtn').forEach(b=>{
+    b.classList.toggle('on', shared); b.dataset.shared=shared?'1':'0';
+    b.textContent=shared?'Shared with firm':'Share with firm';
+    b.title=shareTitle(shared);
+  });
+}
+function dot(kind){ return '<span class="dot '+kind+'">'
+  +(kind==='ok'?'✓':kind==='wait'?'○':'!')+'</span>'; }
+function checkItem(kind, what, prov){
+  return '<div class="item">'+dot(kind)+'<span class="what">'+what
+    +'</span><span class="prov">'+prov+'</span></div>';
+}
+function vsRow(join, field, left, right, verdict, vclass){
+  return '<tr'+(join?' class="joinrow"':'')+'><td class="fieldname">'+field
+    +'</td><td>'+left+'</td><td>'+right+'</td><td>'
+    +(verdict?'<span class="verdict '+vclass+'">'+verdict+'</span>':'')
+    +'</td></tr>';
+}
+function joinAddr(a,c,s,z){ return esc([a,c,s,z].filter(Boolean).join(", ")); }
+let DOCS={}, DOCTAB="tax", CUR=null;
+const DOC_KIND=label=>label==='Tax card PDF'||label==='Tax card (image)'?'tax'
+                     :label.startsWith('Deed PDF')?'deed'
+                     :label==='Record (CSV)'?'record':null;
+function docPaneReset(){
+  DOCS={}; CUR=null;
+  $('docTabs').innerHTML='';
+  $('docPaper').innerHTML='<div class="docmissing quiet">Pick a run to read its documents.</div>';
+}
+async function showDoc(kind){
+  DOCTAB=kind;
+  const names={tax:'Tax card',deed:'Deed',record:'Record'};
+  const tab=k=>'<span class="tab'+(DOCTAB===k?' on':'')+(DOCS[k]?'':' missing')+'" data-doc="'+k+'">'
+    +names[k]+(DOCS[k]?'':' — missing')+'</span>';
+  const cur=DOCS[kind];
+  $('docTabs').innerHTML=tab('tax')+tab('deed')+tab('record')
+    +'<span class="right">'+(cur?'<a class="btn" href="'+cur.download+'">Download</a>'
+    +'<a class="btn" href="'+cur.view+'" target="_blank" rel="noopener">Open &#8599;</a>':'')+'</span>';
+  document.querySelectorAll('#docTabs [data-doc]').forEach(t=>t.onclick=()=>showDoc(t.dataset.doc));
+  const paper=$('docPaper');
+  paper.classList.remove('pdf');
+  if(!cur){
+    const d0=CUR?CUR.d:{};
+    const why=kind==='tax'?(d0.success?'No tax card file in this run folder.':'No tax card — the run matched no parcel.')
+      :kind==='deed'?'Deed not retrieved.'
+      :(d0.has_csv?'No record file in this run folder.':'No record — the run did not verify.');
+    const canFix=kind==='deed'&&CUR&&CUR.deedFlag;
+    paper.innerHTML='<div class="docmissing"><b>'+esc(names[kind])+' — missing</b>'
+      +'<div style="margin-top:4px;color:var(--ink-soft)">'+esc(why)+'</div>'
+      +(canFix?'<button type="button" class="btn" data-fix="deed">Resolve</button>':'')+'</div>';
+    const b=paper.querySelector('[data-fix]');
+    if(b) b.onclick=()=>openFix('deed', CUR.run, CUR.d);
+    return;
+  }
+  if(/\.(csv|txt|json|html)$/i.test(cur.view)){
+    paper.innerHTML='<pre>Loading…</pre>';
+    const rel=cur.view.replace(/^\/view\//,'');
+    try{ paper.querySelector('pre').textContent=await (await fetch('/view/'+rel)).text(); }
+    catch(err){ paper.querySelector('pre').textContent='Could not load.'; }
+  }else if(cur.pages||/\.(png|jpe?g)$/i.test(cur.view)){
+    paper.classList.add('pdf');
+    paper.innerHTML=viewerHtml(cur);
+    wireViewer(paper);
+  }else{
+    paper.innerHTML='<iframe title="'+esc(cur.label)+'" src="'+esc(cur.view)+'"></iframe>';
+  }
+}
+let VZ=82;
+const VICO={minus:'<path d="M5 12h14"/>',plus:'<path d="M12 5v14M5 12h14"/>',
+  fit:'<rect x="6" y="3" width="12" height="18" rx="1"/><path d="M9 8h6M9 12h6"/>',
+  download:'<path d="M12 4v11M7 11l5 5 5-5M4 20h16"/>',
+  print:'<rect x="6" y="3" width="12" height="6"/><rect x="4" y="9" width="16" height="8" rx="1"/><rect x="7" y="14" width="10" height="7"/>'};
+const vsvg=n=>'<svg viewBox="0 0 24 24">'+VICO[n]+'</svg>';
+function viewerHtml(cur){
+  const image=!cur.pages, n=image?1:cur.pages;
+  const pages=image?'<img class="page" src="'+esc(cur.view)+'" data-page="0" alt="">'
+    :[...Array(n).keys()].map(i=>'<img class="page" src="'+esc(DEMO.pageUrlFromView(cur.view,i))
+      +'" data-page="'+i+'" loading="lazy" alt="page '+(i+1)+'">').join('');
+  return '<div class="pdfview" style="--vz:'+VZ+'%"><div class="pdftool">'
+    +'<span class="title">'+esc(cur.name||cur.label)+'</span>'
+    +'<span class="mid"><input class="box" value="1" readonly data-vpage><span class="of">/ '+n+'</span><span class="sep"></span>'
+    +'<button type="button" data-vz="-1" title="Zoom out">'+vsvg('minus')+'</button><span class="box" data-vpct>'+Math.round(VZ/82*100)+'%</span>'
+    +'<button type="button" data-vz="1" title="Zoom in">'+vsvg('plus')+'</button><span class="sep"></span>'
+    +'<button type="button" data-vz="fit" title="Fit to width">'+vsvg('fit')+'</button></span>'
+    +'<span class="rt"><a class="vlink" href="'+cur.download+'" title="Download">'+vsvg('download')+'</a>'
+    +'<a class="vlink" href="'+esc(cur.view)+'" target="_blank" rel="noopener" title="Open to print">'+vsvg('print')+'</a></span>'
+    +'</div><div class="pages-scroll" data-vscroll>'+pages+'</div></div>';
+}
+function wireViewer(paper){
+  const view=paper.querySelector('.pdfview'), sc=paper.querySelector('[data-vscroll]');
+  paper.querySelectorAll('[data-vz]').forEach(b=>b.onclick=()=>{
+    VZ=b.dataset.vz==='fit'?82:Math.max(46,Math.min(130,VZ+(+b.dataset.vz)*12));
+    view.style.setProperty('--vz',VZ+'%');
+    paper.querySelector('[data-vpct]').textContent=Math.round(VZ/82*100)+'%';
+  });
+  sc.onscroll=()=>{
+    const mid=sc.scrollTop+sc.clientHeight/3; let p=1;
+    sc.querySelectorAll('img.page').forEach(im=>{ if(im.offsetTop<=mid) p=+im.dataset.page+1; });
+    paper.querySelector('[data-vpage]').value=p;
+  };
+}
+document.addEventListener('click',e=>{
+  const v=e.target.closest('.btn.view'); if(!v) return;
+  e.preventDefault(); showDoc(v.dataset.doc);
+});
+function nameOf(email){
+  const local=String(email||'').split('@')[0];
+  return local?local.charAt(0).toUpperCase()+local.slice(1):'a colleague';
+}
+function shareControl(row, id){
+  id=id||'shareFirm';
+  if(!row) return "";
+  if(row.mine===false)
+    return '<span class="prov byline">shared by '+esc(nameOf(row.owner))+'</span>';
+  if(row.private===null || row.private===undefined)
+    return '<button type="button" class="sharebtn" id="'+id+'" disabled '
+      +'title="No firm to share with on this machine (single-tenant mode)">'
+      +'Share with firm</button>';
+  const shared=!row.private;
+  return '<button type="button" class="sharebtn'+(shared?' on':'')
+    +'" id="'+id+'" data-shared="'+(shared?'1':'0')+'" title="'
+    +esc(shareTitle(shared))+'">'
+    +(shared?'Shared with firm':'Share with firm')+'</button>';
+}
+function toggleStream(){
+  const s=document.getElementById('stream');
+  if(!s) return;
+  s.classList.toggle('open');
+  s.querySelector('.caret').innerHTML=
+    s.classList.contains('open')?'&#9660;':'&#9654;';
+}
+function openStream(e){
+  e.preventDefault();
+  const s=document.getElementById('stream');
+  if(!s) return;
+  if(!s.classList.contains('open')) toggleStream();
+  s.scrollIntoView({behavior:'smooth', block:'start'});
+}
+async function select(run){
+  const same=(ACTIVE===run);
+  ACTIVE=run;
+  for(const c of document.querySelectorAll(".pcard"))
+    c.classList.toggle("active", c.dataset.run===run);
+  if(same) return;
+  const row=ROWS.find(x=>x.run===run);
+  const st=statusOf(row);
+  const d=await (await fetch('/api/run-detail/'
+                             +encodeURIComponent(run))).json();
+  let ldv={state:"none", final_text:"", captured_at:null, source_pdf:null,
+           pages:0};
+  try{ ldv=await (await fetch('/api/ldv/state/'
+                              +encodeURIComponent(run))).json(); }catch(e){}
+  let ev={events:null};
+  try{ ev=await (await fetch('/api/run-events/'
+                             +encodeURIComponent(run))).json(); }catch(e){}
+  const county=prettyCounty(d.county), runTs=esc(d.time);
+  const prov="run "+runTs;
+  const imported=(st==="Imported");
+  const imp=d.import||{};
+  const impWhen=imp.imported_at
+    ?esc(imp.imported_at.slice(0,16).replace('T',' ')):'';
+  const impBy=nameOf(imp.imported_by);
+  const fixes=d.fixes||[];
+  const fixRec=fixes.filter(f=>f.what==='record').pop()||null;
+  const fixDeed=fixes.filter(f=>f.what==='deed').pop()||null;
+  const fixWhen=f=>f&&f.at?esc(f.at.slice(0,16).replace('T',' ')):'';
+  let flags=[];
+  if(!d.success && !imported && !fixRec)
+    flags.push({abort:true, txt:"Run aborted — "+esc(d.deed_error||
+      "no parcel matched; no record emitted. Look the parcel up on the "+
+      "county's tax portal and type the record by hand")+".",
+      btn:null, fix:'record'});
+  else if(d.deed_label==="FAILED" && d.deed_hand!=="retrieved")
+    flags.push({abort:false, txt:"Deed not retrieved — "+esc(d.deed_error||
+      "the deed stage failed")+". Pull it from the county's Register of "+
+      "Deeds and drop it in here.", btn:null, fix:'deed'});
+  if(ldv.state==="none" && d.deed_label!=="FAILED" && d.has_deed_pdf)
+    flags.push({abort:false, txt:imported
+      ? "Legal description not captured — this deed was imported to be "+
+        "transcribed."
+      : "Legal description not captured — manual transcription required "+
+        "before this record can land.",
+      btn:['Resolve','/demo/ld-capture/?run='+encodeURIComponent(run)]});
+  if(ldv.state==="conflict")
+    flags.push({abort:true, txt:"Legal-description CONFLICT — a capture and "+
+      "a live skip coexist (only producible by outside editing). Hard stop: "+
+      "the record cannot land until resolved.",
+      btn:['Resolve','/demo/ld-capture/?run='+encodeURIComponent(run)]});
+  if(d.notice_mode==="DOUBLE")
+    flags.push({abort:false, txt:"Mailing address differs from property "+
+      "address — notice goes to both addresses (two notices).", btn:null});
+  const place=joinAddr(d.property.PropAdd||d.address,
+                       d.property.PropCity||d.city, d.property.PropSt,
+                       d.property.PropZip);
+  const countyBit=county?esc(county)+' County':'';
+  const impStem=(imp.original_filename||'').replace(/\.pdf$/i,'');
+  const typedAddr=(d.address&&d.address!==impStem)?d.address:'';
+  const impLine='<span class="mono">'+esc(imp.original_filename||d.address||'')
+    +'</span> · imported by '+esc(impBy)+(impWhen?' · '+impWhen:'')
+    +(typedAddr?' · <b>'+esc(typedAddr)+'</b>':'')
+    +(countyBit?' · '+countyBit:'');
+  let h='<div class="head"><div>'
+    +'<h1>'+(imported?'Imported deed':esc(d.deed_grantee||d.address||run))
+    +'</h1>'
+    +'<div class="addr-line">'
+    +(imported ? impLine
+      : '<b>'+place+'</b>'+(countyBit?' · '+countyBit:''))
+    +'</div></div>'
+    +'<div class="pills"><span class="pill '+st.toLowerCase()+'">'
+    +(st==="Flagged"&&flags.length
+      ? flags.length+' flag'+(flags.length>1?'s':'')+' — review required'
+      : st)+'</span>'+shareControl(row)
+    +(row&&row.mine!==false
+      ?'<button type="button" class="danger" id="btnDelete">Delete run</button>':'')
+    +'</div></div>';
+  for(const f of flags){
+    h+='<div class="banner'+(f.abort?' abort':'')+'">'
+      +'<span class="tag">'+(f.abort?'ABORT':'FLAG')+'</span>'
+      +'<span class="txt">'+f.txt+'</span>'
+      +(f.btn?'<a class="btn" href="'+f.btn[1]+'"'
+        +(f.btn[1]==="#stream"?' onclick="openStream(event)"':'')
+        +'>'+f.btn[0]+'</a>':'')
+      +(f.fix?'<button type="button" class="btn" data-fix="'+f.fix+'">Resolve</button>':'')
+      +'</div>';
+  }
+  const items=[];
+  const ldItem=[ldv.state==='captured'?'ok'
+      :ldv.state==='skipped'?'warn'
+      :ldv.state==='conflict'?'bad':'warn',
+    'Legal description captured',
+    ldv.state==='captured'
+      ? 'Transcribed by a person'+(ldv.captured_at?' · '
+         +esc(ldv.captured_at):'')
+      : ldv.state==='skipped'?'Deliberately skipped (one-way)'
+      : ldv.state==='conflict'?'CONFLICT — hard stop'
+      : 'Not captured'];
+  if(imported){
+    items.push(['wait','Tax card pulled',
+      'Not pulled — the deed was imported; no portal was visited']);
+    items.push(['ok','Deed PDF imported',
+      esc(imp.original_filename||'')+' · by '+esc(impBy)
+      +(impWhen?' · '+impWhen:'')+' · nothing verified by the pipeline']);
+    items.push(['wait','Deed verified against book/page',
+      'Nothing to verify against — no tax card']);
+    items.push(ldItem);
+    items.push(['wait','Record written (record.csv)',
+      'No record — an imported deed never lands; nothing to export']);
+  }else{
+    if(fixRec)
+      items.push(['ok','Parcel resolved by hand',
+        'No tax card matched — record typed by '+esc(nameOf(fixRec.by))
+        +(fixWhen(fixRec)?' · '+fixWhen(fixRec):'')]);
+    else
+      items.push([d.success?'ok':'bad', 'Tax card pulled',
+        esc(county)+' County tax portal · '+prov]);
+    if(d.deed_label==='-'){
+      items.push(['wait','Deed PDF pulled','Not requested for this run']);
+      items.push(['wait','Deed verified against book/page','No deed requested']);
+    }else if(d.deed_label==='n/a'){
+      items.push(['wait','Deed PDF pulled',
+        'This county has no deed source wired']);
+      items.push(['wait','Deed verified against book/page','No deed source']);
+    }else{
+      const dl=d.deed_label;
+      items.push([dl==='green'?'ok':(d.deed_hand==='retrieved'?'ok':'bad'),
+        'Deed PDF pulled'+(d.deed_hand==='retrieved'?' by hand':''),
+        (d.bookpage?'BK/PG '+esc(d.bookpage)+' · ':'')
+        +esc(county)+' County ROD · '+prov]);
+      items.push([dl==='green'?'ok':(fixDeed?'ok':'wait'),
+        'Deed verified against book/page',
+        dl==='green'?'Pipeline-verified — document matches the tax card’s '
+                    +'book/page'
+        :fixDeed?'Pulled by book/page by '+esc(nameOf(fixDeed.by))
+                 +(fixWhen(fixDeed)?' · '+fixWhen(fixDeed):'')
+                 +' — matched by a person, not the pipeline'
+        :'Blocked until the deed is retrieved']);
+    }
+    items.push(ldItem);
+    items.push([d.has_csv?'ok':'wait','Record written (record.csv)',
+      fixRec?'Typed by hand · '+esc(nameOf(fixRec.by))
+             +(fixWhen(fixRec)?' · '+fixWhen(fixRec):'')
+      :d.has_csv?prov:'No record — the run did not verify']);
+  }
+  const exs=(d.exported&&d.exported.exports)||[];
+  const exLast=exs.length?exs[exs.length-1]:null;
+  items.push([exLast?'ok':'wait','CSV exported',
+    exLast?'Exported by '+esc(nameOf(exLast.by))+(fixWhen(exLast)?' · '+fixWhen(exLast):'')
+        +(exLast.workbook?' · '+esc(exLast.workbook):'')
+      :'Not yet — Export CSV below, or Export multiple in the rail']);
+  const done=items.filter(x=>x[0]==='ok').length;
+  const canExport=(st==='Verified'||st==='Resolved')&&!!d.has_csv;
+  h+='<div class="sect"><h3>Case progress</h3><div class="progcheck">';
+  for(const x of items)
+    h+='<div class="step">'+dot(x[0])+'<span class="what">'+x[1]
+      +'</span><span class="prov">'+x[2]+'</span></div>';
+  h+='<div class="pct"><i style="width:'+Math.round(done/items.length*100)+'%"></i></div>'
+    +'<div class="left">'+(items.length-done)+' of '+items.length+' steps left</div>'
+    +'<div class="acts">'
+    +'<button type="button" class="primary" id="btnExportOne"'+(canExport?'':' disabled')
+    +' title="'+(canExport?'One workbook for this run':'Only a verified or resolved run with a record exports')+'">Export CSV</button>'
+    +'<a class="ghost" href="/demo/ld-capture/?run='+encodeURIComponent(run)+'">LD capture</a>'
+    +shareControl(row,'shareFirm2')
+    +'</div><div class="note" id="cpNote"></div></div></div>';
+  if(imported){
+    h+='<div class="sect"><h3>Side-by-side verification — human eyes on '
+      +'every field</h3><div class="empty">Nothing to compare — the deed '
+      +'was imported; no tax card was pulled and no record will be '
+      +'written.</div></div>';
+  }else{
+  const tf=fixRec?fixRec.fields||{}:null;
+  const p=tf?{PropAdd:tf.prop_add,PropCity:tf.prop_city,PropSt:tf.prop_st,
+              PropZip:tf.prop_zip}:(d.property||{});
+  const m=tf?{MailingAdd:tf.mailing_add,MailCity:tf.mail_city,
+              MailState:tf.mail_state,MZip:tf.mzip}:(d.mailing||{});
+  let rows='';
+  rows+=vsRow(true,'Referral address',esc(d.address||''),
+    joinAddr(p.PropAdd,p.PropCity,p.PropSt,p.PropZip),
+    tf?'BY HAND':d.success?'MATCH':'ABORTED',
+    tf?'match':d.success?'match':'bad');
+  if(m.MailingAdd||p.PropAdd)
+    rows+=vsRow(false,'Mailing address',
+      joinAddr(p.PropAdd,p.PropCity,p.PropSt,p.PropZip)||'—',
+      joinAddr(m.MailingAdd,m.MailCity,m.MailState,m.MZip)||'—',
+      d.notice_mode==='DOUBLE'?'DIFFERS':(d.notice_mode==='SINGLE'
+        ?'MATCH':''), d.notice_mode==='DOUBLE'?'diff':'match');
+  const handGrantee=fixDeed&&fixDeed.fields?fixDeed.fields.grantee:'';
+  if(d.bookpage)
+    rows+=vsRow(false,'Deed book / page','<span class="mono">'
+      +esc(d.bookpage)+'</span> (tax card)',
+      d.deed_label==='green'?'<span class="mono">'+esc(d.bookpage)
+        +'</span> (deed document)'
+      :fixDeed?'<span class="mono">'+esc(d.bookpage)+'</span> (deed pulled by hand)'
+      :'Deed not retrieved',
+      d.deed_label==='green'?'MATCH':fixDeed?'BY HAND':'REVIEW',
+      (d.deed_label==='green'||fixDeed)?'match':'diff');
+  if(d.deed_grantee||handGrantee)
+    rows+=vsRow(false,'Deed grantee',esc(d.deed_grantee||handGrantee),
+      'Shown as it will land: '+esc(d.deed_name||d.deed_grantee||handGrantee)
+      +(!d.deed_grantee&&handGrantee?' (typed by hand)':''),'','');
+  h+='<div class="sect"><h3>Side-by-side verification — human eyes on '
+    +'every field</h3><div class="versus"><table>'
+    +'<tr><th></th><th>Referral / tax card</th><th>Retrieved record</th>'
+    +'<th></th></tr>'+rows+'</table></div>'
+    +'<div class="prov" style="margin-top:8px">Verdicts are the '
+    +'pipeline’s own conclusions, shown for review — this page never '
+    +'re-derives them. Full audit trail: '
+    +'<a class="plain" href="#stream" onclick="openStream(event)">'
+    +'run event stream</a>.</div></div>';
+  }
+  const SHOW_ALL_DOCS=false;
+  const reviewDoc=ev=>ev.label==='Tax card PDF'
+                    ||ev.label==='Tax card (image)'
+                    ||ev.label.startsWith('Deed PDF')
+                    ||ev.label==='Record (CSV)';
+  const docs=SHOW_ALL_DOCS?d.evidence:d.evidence.filter(reviewDoc);
+  const docsByKind={};
+  if(docs.length){
+    h+='<div class="sect"><h3>Retrieved documents</h3><div class="docs">'
+      +'<table><tr><th>Document</th><th>Source</th><th>Pages</th>'
+      +'<th>Retrieved</th><th></th></tr>';
+    for(const ev of docs){
+      const pages=((ev.label==="Deed PDF"||ev.label==="Deed PDF (imported)")
+                   &&ldv.pages)
+        ?'<span class="pagecount">'+ldv.pages+'</span>':'';
+      const isImp=(ev.label==="Deed PDF (imported)");
+      const kind=DOC_KIND(ev.label)||'record';
+      if(!docsByKind[kind]) docsByKind[kind]={label:ev.label,view:ev.view,download:ev.download,name:ev.name,pages:ev.pages};
+      h+='<tr><td><div class="docname">'+esc(ev.label)+'</div></td>'
+        +'<td>'+(isImp?'Imported by '+esc(impBy):(ev.source_url
+            ?'<a class="srclink" href="'+esc(ev.source_url)+'" target="_blank" rel="noopener">'+esc(ev.source)+'</a>'
+            :esc(ev.source)))+'</td><td>'+pages+'</td>'
+        +'<td class="prov">'+((isImp&&impWhen)?impWhen:prov)+'</td>'
+        +'<td class="acts"><button type="button" class="btn view" data-doc="'+kind+'">View</button> '
+        +'<a class="btn" href="'+ev.download+'">Download</a></td></tr>';
+    }
+    h+='</table></div></div>';
+  }
+  h+='<div class="sect"><h3>Legal description</h3><div class="legal-box">'
+    +'<div class="status"><span class="pill '
+    +(ldv.state==='captured'?'captured':ldv.state==='skipped'?'skipped'
+      :ldv.state==='conflict'?'aborted':'pending')+'">'
+    +(ldv.state==='captured'?'Captured':ldv.state==='skipped'?'Skipped'
+      :ldv.state==='conflict'?'Conflict':'Pending')+'</span>'
+    +'<span class="prov">'
+    +(ldv.state==='captured'
+      ?'Transcribed by a person from the deed — shown verbatim.'
+        +(ldv.source_pdf?' · from '+esc(ldv.source_pdf):'')
+      :ldv.state==='skipped'?'Deliberately not captured (one-way).'
+      :ldv.state==='conflict'?'Capture and live skip coexist — hard stop.'
+      :'Not yet reviewed.')+'</span></div>'
+    +(ldv.state==='captured'&&ldv.final_text
+      ?'<div class="body">'+esc(ldv.final_text)+'</div>'
+      :'<div class="body">'+(ldv.state==='skipped'
+        ?'Skipped — no text will land for this record.'
+        :'No captured text. Open LD capture to transcribe from the deed.')
+      +'</div>')
+    +'</div></div>';
+  h+='<div class="sect stream" id="stream">'
+    +'<h3 onclick="toggleStream()"><span class="caret">&#9654;</span> '
+    +'Run event stream';
+  if(ev.events===null){
+    h+='</h3><div class="empty">No event stream on file — this run '
+      +'predates the event log. Its audit JSON on disk remains the '
+      +'record.</div></div>';
+  }else if(ev.events.length===0){
+    h+='</h3><div class="empty">Event stream is empty.</div></div>';
+  }else{
+    h+='<span class="prov">'+ev.events.length+' records · append-only · '
+      +'the feed IS the audit log</span></h3><div class="feed">';
+    for(const e of ev.events){
+      h+='<div class="evt '+esc(e.severity)+'">'
+        +'<span class="ts">'+esc((e.ts||"").slice(11,19))+'</span>'
+        +'<span class="stage">'+esc(e.stage)+'</span>'
+        +'<span class="msg">'+esc(e.message)+'</span></div>';
+    }
+    h+='</div></div>';
+  }
+  if(ACTIVE!==run) return;
+  $('detail').innerHTML=h;
+  document.querySelectorAll('#detail .sharebtn').forEach(sb=>
+    sb.onclick=()=>setShare(run, sb.dataset.shared!=='1'));
+  document.querySelectorAll('#detail [data-fix]').forEach(b=>
+    b.onclick=()=>openFix(b.dataset.fix, run, d));
+  const del=$('btnDelete');
+  if(del) del.onclick=()=>openFix('delete', run, d);
+  const ex=$('btnExportOne');
+  if(ex) ex.onclick=async()=>{
+    ex.disabled=true; ex.textContent='Exporting…';
+    const ok=await exportRuns([run], msg=>{ $('cpNote').textContent=msg; });
+    ex.textContent=ok?'Exported':'Export CSV'; ex.disabled=false;
+    if(ok){ ACTIVE=null; select(run); }
+  };
+  DOCS=docsByKind; CUR={run:run, d:d, deedFlag:flags.some(f=>f.fix==='deed')};
+  showDoc(DOCS.tax?'tax':DOCS.deed?'deed':DOCS.record?'record':'tax');
+}
+function fixField(id,label,val,ph){
+  return '<div class="f"><label for="'+id+'">'+label+'</label>'
+    +'<input type="text" id="'+id+'" value="'+esc(val||'')+'"'
+    +(ph?' placeholder="'+esc(ph)+'"':'')+' autocomplete="off"></div>';
+}
+function openFix(kind, run, d){
+  const box=$('fixBox'), back=$('fixBack');
+  const bp=(d.bookpage||'').split('/').map(s=>s.trim());
+  let h='';
+  if(kind==='deed'){
+    h+='<div class="vhead"><span class="docname">Resolve — deed by hand</span>'
+      +'<a class="btn" href="#" id="fixClose">Close</a></div>'
+      +'<div class="fix" id="fixBody">'
+      +'<p>Pull the deed from the county\'s Register of Deeds and drop it '
+      +'here. It lands in this run as a document a person pulled — nothing '
+      +'is vouched by the pipeline, and the run says so.</p>'
+      +'<div class="links">'
+      +(d.rod_url?'<a class="btn" href="'+esc(d.rod_url)+'" target="_blank" rel="noopener">Open county ROD ↗</a>':'')
+      +(bp[0]?'<span class="k">Book</span><button type="button" class="btn copy" data-c="'+esc(bp[0])+'">'+esc(bp[0])+'</button>':'')
+      +(bp[1]?'<span class="k">Page</span><button type="button" class="btn copy" data-c="'+esc(bp[1])+'">'+esc(bp[1])+'</button>':'')
+      +'</div>'
+      +'<div class="drop" id="fixDrop"><b>Drop the deed PDF here</b> or click to browse</div>'
+      +'<input type="file" id="fixFile" accept="application/pdf,.pdf" class="hide">'
+      +fixField('fixGrantee','Grantee, as it should land (optional)','', 'DOE, JOHN')
+      +'<div class="acts"><span class="note" id="fixNote"></span>'
+      +'<button type="button" class="ghost" id="fixCancel">Cancel</button>'
+      +'<button type="button" class="primary" id="fixSave" disabled>Save</button></div>'
+      +'</div>';
+  }else if(kind==='record'){
+    const pr=d.property||{}, ml=d.mailing||{};
+    h+='<div class="vhead"><span class="docname">Resolve — record by hand</span>'
+      +'<a class="btn" href="#" id="fixClose">Close</a></div>'
+      +'<div class="fix" id="fixBody">'
+      +'<p>No parcel was matched on the county\'s tax portal. Look it up '
+      +'there and type the record; it lands exactly like a pipeline '
+      +'record, in the same columns.</p>'
+      +'<div class="links"><span class="k">Referral</span><b>'+esc(d.address||'')+'</b>'
+      +(d.taxcard_url?'<a class="btn" href="'+esc(d.taxcard_url)+'" target="_blank" rel="noopener">Open county tax portal ↗</a>':'')
+      +'</div>'
+      +fixField('fxDeedName','Deed name (grantee)','', 'DOE, JOHN')
+      +'<div class="row3">'+fixField('fxPropAdd','Property address',pr.PropAdd||d.address||'')
+      +fixField('fxPropCity','City',pr.PropCity||d.city||'')
+      +fixField('fxPropSt','State',pr.PropSt||'NC')+'</div>'
+      +'<div class="row3">'+fixField('fxPropZip','Property ZIP',pr.PropZip||'')
+      +fixField('fxBook','Deed book',bp[0]||'')+fixField('fxPage','Deed page',bp[1]||'')+'</div>'
+      +'<div class="row3">'+fixField('fxMailAdd','Mailing address',ml.MailingAdd||'')
+      +fixField('fxMailCity','City',ml.MailCity||'')
+      +fixField('fxMailSt','State',ml.MailState||'NC')+'</div>'
+      +'<div class="row2">'+fixField('fxMZip','Mailing ZIP',ml.MZip||'')+'<div></div></div>'
+      +'<div class="acts"><span class="note" id="fixNote">Legal description stays with LD capture.</span>'
+      +'<button type="button" class="ghost" id="fixCancel">Cancel</button>'
+      +'<button type="button" class="primary" id="fixSave">Save</button></div>'
+      +'</div>';
+  }else if(kind==='delete'){
+    h+='<div class="vhead"><span class="docname">Delete this run?</span>'
+      +'<a class="btn" href="#" id="fixClose">Close</a></div>'
+      +'<div class="fix" id="fixBody">'
+      +'<p><b>'+esc(d.address||run)+'</b><br><span class="mono">'+esc(run)+'</span></p>'
+      +'<p>This cannot be undone. The run folder — tax card, deed, record '
+      +'and audit trail — is removed from the firm\'s files.</p>'
+      +'<div class="acts"><span class="note" id="fixNote"></span>'
+      +'<button type="button" class="ghost" id="fixCancel">Cancel</button>'
+      +'<button type="button" class="danger" id="fixDelete">Delete run</button></div>'
+      +'</div>';
+  }else return;
+  box.innerHTML=h; back.classList.remove('hide');
+  const close=()=>back.classList.add('hide');
+  if(kind==='delete'){
+    $('fixClose').onclick=e=>{ e.preventDefault(); close(); };
+    $('fixCancel').onclick=close;
+    $('fixDelete').onclick=async()=>{
+      $('fixDelete').disabled=true; $('fixNote').textContent='Deleting…';
+      const res=await fetch('/api/run/delete/'+encodeURIComponent(run),{method:'POST'});
+      if(!res.ok){ $('fixNote').textContent='Could not delete: '+await res.text();
+        $('fixDelete').disabled=false; return; }
+      close(); ACTIVE=null; DEEP=null; PICKED.delete(run); await load();
+    };
+    return;
+  }
+  $('fixClose').onclick=e=>{ e.preventDefault(); close(); };
+  $('fixCancel').onclick=close;
+  box.querySelectorAll('.copy').forEach(b=>b.onclick=()=>
+    navigator.clipboard.writeText(b.dataset.c).then(()=>{ $('fixNote').textContent='Copied '+b.dataset.c; }));
+  const done=async()=>{ close(); await load(); ACTIVE=null; select(run); };
+  if(kind==='deed'){
+    let file=null;
+    const drop=$('fixDrop'), input=$('fixFile');
+    const setFile=f=>{ file=f; drop.classList.add('has');
+      drop.innerHTML='<b>'+esc(f.name)+'</b> · click to choose a different file';
+      $('fixSave').disabled=false; };
+    drop.onclick=()=>input.click();
+    input.onchange=e=>{ if(e.target.files.length) setFile(e.target.files[0]); };
+    drop.ondragover=e=>{ e.preventDefault(); drop.classList.add('over'); };
+    drop.ondragleave=()=>drop.classList.remove('over');
+    drop.ondrop=e=>{ e.preventDefault(); drop.classList.remove('over');
+      if(e.dataTransfer.files.length) setFile(e.dataTransfer.files[0]); };
+    $('fixSave').onclick=async()=>{
+      if(!file) return;
+      $('fixSave').disabled=true; $('fixNote').textContent='Saving…';
+      const body=new FormData(); body.append('file',file);
+      body.append('grantee',$('fixGrantee').value);
+      const res=await fetch('/api/resolve/deed/'+encodeURIComponent(run),{method:'POST',body});
+      if(!res.ok){ $('fixNote').textContent='Could not save: '+await res.text(); $('fixSave').disabled=false; return; }
+      done();
+    };
+  }else{
+    $('fixSave').onclick=async()=>{
+      $('fixSave').disabled=true; $('fixNote').textContent='Saving…';
+      const body=new URLSearchParams();
+      const v=id=>$(id).value;
+      body.set('deed_name',v('fxDeedName')); body.set('prop_add',v('fxPropAdd'));
+      body.set('prop_city',v('fxPropCity')); body.set('prop_st',v('fxPropSt'));
+      body.set('prop_zip',v('fxPropZip')); body.set('book',v('fxBook')); body.set('page',v('fxPage'));
+      body.set('mailing_add',v('fxMailAdd')); body.set('mail_city',v('fxMailCity'));
+      body.set('mail_state',v('fxMailSt')); body.set('mzip',v('fxMZip'));
+      const res=await fetch('/api/resolve/record/'+encodeURIComponent(run),{method:'POST',body});
+      if(!res.ok){ $('fixNote').textContent='Could not save: '+await res.text(); $('fixSave').disabled=false; return; }
+      done();
+    };
+  }
+}
+$('fixBack').onclick=e=>{ if(e.target===$('fixBack')) $('fixBack').classList.add('hide'); };
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') $('fixBack').classList.add('hide'); });
+load();
+</script>
+<script>
+(async()=>{try{
+  const w=await (await fetch('/api/whoami')).json();
+  const firmLabel=w.firm_name||w.firm;
+  document.getElementById('who').textContent='Signed in: '+w.me+
+    (firmLabel?' ('+firmLabel+')':'');
+  document.getElementById('navUsers').hidden=!w.operator;
+  document.getElementById('navAdmin').hidden=!w.operator;
+  document.getElementById('ver').textContent='Fee Simple '+w.version;
+}catch(e){}})();
+</script>
+</body></html>

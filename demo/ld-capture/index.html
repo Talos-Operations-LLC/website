@@ -1,0 +1,902 @@
+<!doctype html>
+<html lang="en"><head><meta name="robots" content="noindex,nofollow"><meta name="description" content="Fee Simple demo - sample data only"><meta charset="utf-8">
+<title>Fee Simple — LD capture</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{
+  --paper:#fbfaf7;        
+  --panel:#ffffff;        
+  --ink:#1c2733;          
+  --ink-soft:#5a6875;     
+  --rule:#e3e1da;         
+  --verify:#1e7a4d;       
+  --verify-bg:#e9f4ee;
+  --flag:#9a6b00;         
+  --flag-bg:#fdf6e3;
+  --flag-border:#e8cf8a;
+  --abort:#a8322a;        
+  --abort-bg:#faeceb;
+  --accent:#2b4a6f;       
+  --accent-bg:#eef2f7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:"Segoe UI", system-ui, -apple-system, sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  font-size:14px;
+  line-height:1.45;
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.app{flex:1 1 auto;min-height:0;display:grid;
+     grid-template-columns:300px minmax(430px,1fr) minmax(540px,1.3fr)}
+.app.check{grid-template-columns:300px 1fr}
+.app.check .docpane{display:none}
+.app > *{min-height:0;min-width:0}
+.mono{font-family:Consolas,"Courier New",monospace;font-size:13px}
+.hide{display:none !important}
+.rail{border-right:1px solid var(--rule);background:var(--panel);
+      padding:16px 16px 52px;display:flex;flex-direction:column;
+      min-height:0;overflow:hidden}
+.rail-top,.rail-bottom{flex:0 0 auto}
+#queueCards{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;margin:0 -16px;padding:0 16px}
+.rail .empty{font-size:12.5px;color:var(--ink-soft);padding:8px 0}
+.rail-head{display:flex;justify-content:space-between;align-items:center;
+           margin-bottom:10px}
+.rail-head h2{font-size:13px;font-weight:600;letter-spacing:.02em;
+              color:var(--ink-soft)}
+.rail-sub{font-size:12px;color:var(--ink-soft);margin-bottom:8px;min-height:0}
+.rail input[type=search]{width:100%;font:inherit;font-size:13.5px;padding:8px 12px;
+      border:1px solid var(--rule);border-radius:7px;background:#fff;color:var(--ink);
+      margin-bottom:8px}
+.rail input[type=search]:focus{outline:none;border-color:var(--accent);
+      box-shadow:0 0 0 2px var(--accent-bg)}
+.seg{display:flex;gap:6px;margin-bottom:10px}
+.seg .ghost{flex:1;justify-content:center;text-align:center}
+.ghost.small{padding:5px 10px;font-size:12px}
+.ghost.on{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
+.actions a.ghost{text-decoration:none;display:inline-block}
+.pcard{border:1px solid var(--rule);border-radius:8px;
+       padding:12px 12px 10px;margin-bottom:10px;cursor:pointer;
+       background:var(--panel)}
+.pcard:hover{border-color:#c9c6bd}
+.pcard.active{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.pcard .addr{font-weight:600;font-size:14px}
+.pcard .sub{font-size:12.5px;color:var(--ink-soft);margin-top:1px;word-break:break-word}
+.pcard .meta{display:flex;justify-content:space-between;align-items:center;
+             margin-top:8px}
+.pcard .bp{font-size:11.5px;color:var(--ink-soft)}
+.rail-foot{margin-top:10px;padding-top:10px;border-top:1px solid var(--rule);
+           font-size:12px;color:var(--ink-soft)}
+.rail-foot .row.total{color:var(--ink);font-weight:600}
+.rail-foot .row{display:flex;justify-content:space-between;padding:2px 0}
+.pill{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;
+      white-space:nowrap;display:inline-block}
+.pill.captured{color:var(--verify);background:var(--verify-bg)}
+.pill.skipped{color:var(--flag);background:var(--flag-bg)}
+.pill.conflict{color:var(--abort);background:var(--abort-bg)}
+.pill.pending{color:var(--ink-soft);background:#f0efe9}
+.pill.imported{color:var(--accent);background:var(--accent-bg)}
+.case{padding:22px 26px 66px;overflow-y:scroll;min-height:0}
+.head{display:flex;justify-content:space-between;align-items:flex-start;
+      margin-bottom:6px;gap:14px}
+.head h1{font-family:Georgia,"Times New Roman",serif;font-size:26px;
+         font-weight:600;letter-spacing:-.01em}
+.head .addr-line{margin-top:4px;color:var(--ink-soft);font-size:14px}
+.head .ids{margin-top:2px;font-size:12.5px;color:var(--ink-soft)}
+.head > div:first-child{min-width:0;flex:1 1 auto}
+.head > div:last-child{flex:0 0 auto}
+.head .ids span{margin-right:16px;display:inline-block;max-width:100%;overflow-wrap:anywhere}
+.banner{display:flex;align-items:center;gap:12px;
+        border:1px solid var(--flag-border);background:var(--flag-bg);
+        border-radius:8px;padding:11px 14px;margin-top:12px}
+.banner.abort{border-color:#dfa39e;background:var(--abort-bg)}
+.banner .tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;
+             background:#fff;border:1px solid var(--flag-border);
+             color:var(--flag);flex-shrink:0}
+.banner.abort .tag{color:var(--abort);border-color:#dfa39e}
+.banner .txt{flex:1;font-size:13.5px}
+.sect{margin-top:22px}
+.sect > h3{font-size:13px;font-weight:600;color:var(--ink-soft);
+           letter-spacing:.02em;margin-bottom:10px}
+.sect > h3 .prov{font-weight:400;margin-left:10px}
+.prov{font-size:12px;color:var(--ink-soft)}
+.check{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:4px 0}
+.check .item{display:flex;align-items:center;gap:12px;padding:8px 16px;
+             border-bottom:1px solid var(--rule);font-size:13.5px}
+.check .item:last-child{border-bottom:none}
+.check .what{flex:1;white-space:nowrap}
+.check .prov{text-align:right;max-width:58%}
+.dot{width:18px;height:18px;border-radius:50%;flex-shrink:0;display:flex;
+     align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.dot.ok{background:var(--verify);color:#fff}
+.dot.now{background:var(--accent);color:#fff}
+.dot.wait{background:#e6e4dd;color:var(--ink-soft)}
+.bar{height:6px;background:#e6e4dd;border-radius:3px;overflow:hidden;margin:10px 16px 4px}
+.bar i{display:block;height:100%;background:var(--verify)}
+.left{font-size:12px;color:var(--ink-soft);padding:0 16px 8px}
+.frow{display:flex;gap:10px;align-items:center;padding:8px 0;
+      border-bottom:1px solid var(--rule);font-size:13px;cursor:pointer}
+.frow:hover .txt{color:var(--accent)}
+.frow .num{width:20px;height:20px;border-radius:50%;background:var(--verify);
+           color:#fff;font-size:11px;font-weight:700;display:flex;
+           align-items:center;justify-content:center;flex-shrink:0}
+.frow .num.wait{background:#e6e4dd}
+.frow .pg{color:var(--ink-soft);font-size:12px;white-space:nowrap}
+.frow .txt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;
+           white-space:nowrap;font-family:Georgia,"Times New Roman",serif}
+.frow .warn{color:var(--flag);font-size:11px;white-space:nowrap}
+.frag-count{color:var(--ink-soft);font-size:12.5px;padding:6px 0 0}
+.working{height:12px;border:1px solid var(--rule);background:#fff;
+         border-radius:6px;overflow:hidden;position:relative;margin:6px 0;flex:1}
+.working::before{content:"";position:absolute;top:0;bottom:0;width:35%;
+  background:linear-gradient(90deg,var(--accent-bg),var(--accent),var(--accent-bg));
+  animation:slide 1.1s linear infinite}
+@keyframes slide{from{left:-35%}to{left:100%}}
+.legal-box{background:var(--panel);border:1px solid var(--rule);
+           border-radius:8px;padding:14px 16px}
+.legal-box .status{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.legal-box .body{font-family:Georgia,serif;font-size:13.5px;color:var(--ink);
+                 background:#faf9f5;border:1px dashed var(--rule);
+                 border-radius:6px;padding:12px 14px;line-height:1.6;
+                 white-space:pre-wrap;word-break:break-word}
+.skip-panel{background:var(--panel);border:1px solid var(--flag-border);
+            border-radius:8px;padding:14px 16px;margin-top:14px}
+.skip-panel h4{font-size:13px;font-weight:600;color:var(--ink-soft);
+               margin-bottom:8px}
+.reason-row{display:flex;gap:8px;align-items:center;margin:5px 0;
+            font-size:13.5px}
+.skip-panel input[type=text]{width:100%;font:13.5px "Segoe UI",system-ui,sans-serif;
+            border:1px solid var(--rule);border-radius:6px;padding:7px 10px;
+            margin-top:4px}
+.skip-panel .row2{display:flex;gap:10px;margin-top:12px;align-items:center}
+.actions{display:flex;gap:10px;align-items:center;margin-top:16px;
+         padding-top:14px;border-top:1px solid var(--rule);flex-wrap:wrap}
+.primary{background:var(--accent);color:#fff;border:1px solid var(--accent);
+         border-radius:7px;padding:8px 16px;font-size:13.5px;
+         font-weight:600;cursor:pointer}
+.primary:disabled{background:#b9c3ce;border-color:#b9c3ce;cursor:not-allowed}
+.primary.lg{font-size:14px;padding:10px 22px}
+.ghost{background:#fff;border:1px solid var(--rule);border-radius:7px;
+       padding:8px 16px;font-size:13.5px;font-weight:600;cursor:pointer;
+       color:var(--ink)}
+.ghost:hover:not(:disabled){border-color:var(--ink-soft)}
+.ghost:disabled{color:#b0b0b0;cursor:not-allowed}
+.actions .note{font-size:12.5px;color:var(--ink-soft);margin-left:auto;
+               text-align:right}
+.blurb{background:var(--panel);border:1px solid var(--rule);border-radius:8px;
+       padding:24px;color:var(--ink-soft)}
+.steps{display:flex;align-items:stretch;margin:18px 0 16px;border:1px solid var(--rule);
+       border-radius:8px;background:var(--panel);overflow:hidden}
+.step{flex:1;display:flex;align-items:center;gap:10px;padding:10px 14px;
+      border-right:1px solid var(--rule);font-size:13px;color:var(--ink-soft)}
+.step:last-child{border-right:none}
+.step.done{background:var(--verify-bg);color:var(--verify)}
+.step.now{background:var(--accent-bg);color:var(--accent);font-weight:600}
+.step .n{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;
+         justify-content:center;font-size:11px;font-weight:700;background:#e6e4dd;
+         color:var(--ink-soft);flex-shrink:0}
+.step.done .n{background:var(--verify);color:#fff}
+.step.now .n{background:var(--accent);color:#fff}
+.checkhead{font-size:15px;font-weight:600;margin:4px 0 14px}
+.checkhead .prov{font-weight:400;margin-left:10px}
+.frag{max-width:920px;margin:0 auto 22px}
+.frag .tag{font-size:11px;font-weight:700;color:var(--ink-soft);letter-spacing:.04em;
+           margin-bottom:4px}
+.frag .tag span{font-weight:400}
+canvas.crop{max-width:100%;height:auto;border:1px solid var(--rule);display:block;
+            border-radius:6px;background:#fff}
+.frag .warn{color:var(--flag);font-size:12px;margin-top:3px}
+.frag textarea{width:100%;font:14px/1.5 Consolas,"Courier New",monospace;
+               border:1px solid var(--rule);border-radius:6px;
+               margin-top:6px;padding:8px 10px;min-height:64px;
+               resize:vertical;overflow:hidden;color:var(--ink);background:#fff}
+.frag textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+.steprow{display:flex;gap:10px;align-items:center;margin:14px auto 0;max-width:920px}
+.steprow .keys{margin-left:auto;font-size:12px;color:var(--ink-soft)}
+.steprow kbd{font:11px Consolas,"Courier New",monospace;border:1px solid var(--rule);
+             border-bottom-width:2px;border-radius:4px;padding:1px 5px;background:#fff}
+.steprow .note{font-size:12.5px;color:var(--ink-soft)}
+.docpane{border-left:1px solid var(--rule);display:flex;flex-direction:column;
+         min-height:0;background:#525659;padding-bottom:40px}
+.docpane .paneempty{margin:auto;color:#e8eaed;font-size:13px;opacity:.8;text-align:center;padding:20px}
+.pdfview{display:flex;flex-direction:column;min-height:0;flex:1 1 auto}
+.pdftool{display:flex;align-items:center;padding:0 12px;height:56px;background:#323639;
+         color:#f1f3f4;font-size:13px;flex:0 0 auto;gap:4px}
+.pdftool .title{flex:1 1 0;min-width:40px;overflow:hidden;text-overflow:ellipsis;
+                white-space:nowrap;font-weight:600;font-size:14.5px;margin-right:8px}
+.pdftool .mid{display:flex;align-items:center;gap:2px;flex:0 0 auto}
+.pdftool .rt{flex:1 1 0;display:flex;align-items:center;justify-content:flex-end;gap:2px;min-width:0}
+.pdftool .box{background:#191b1c;color:#f1f3f4;font:12.5px "Segoe UI",system-ui,sans-serif;
+              padding:4px 6px;border-radius:2px;border:none;text-align:center}
+.pdftool input.box{width:30px}
+.pdftool .of{font-size:12.5px;padding:0 6px 0 4px;color:#f1f3f4}
+.pdftool button,.pdftool .vlink{background:none;border:none;color:#f1f3f4;width:30px;height:30px;
+       border-radius:50%;cursor:pointer;display:inline-flex;align-items:center;
+       justify-content:center;padding:0}
+.pdftool svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;
+             stroke-linecap:round;stroke-linejoin:round}
+.pdftool button:hover,.pdftool .vlink:hover{background:rgba(255,255,255,.1)}
+.pdftool .sep{width:1px;height:24px;background:rgba(255,255,255,.22);margin:0 5px}
+.pages-scroll{position:relative;overflow:auto;background:#525659;flex:1 1 auto;padding:12px 0;min-height:0}
+.pages-scroll img.page{display:block;cursor:crosshair;user-select:none;
+                       width:var(--vz,82%);margin:0 auto 12px;
+                       box-shadow:0 1px 4px rgba(0,0,0,.5);background:#fff;
+                       aspect-ratio:auto 8.5/11}
+.drag-rect{position:absolute;border:2px dashed var(--flag);
+           background:rgba(154,107,0,.12);pointer-events:none}
+.fragbox{position:absolute;border:2px solid var(--verify);
+         background:rgba(30,122,77,.10);pointer-events:none}
+.fragbox b{position:absolute;left:-2px;top:-20px;background:var(--verify);color:#fff;
+           font-size:11px;padding:1px 6px;border-radius:4px 4px 0 0}
+.apphdr{display:flex;align-items:center;gap:14px;flex:0 0 auto;
+        padding:7px 14px;background:#fbfaf7;border-bottom:1px solid #e3e1da;
+        white-space:nowrap;overflow-x:auto;
+        position:sticky;top:0;z-index:10}   
+.apphdr-brand{color:#1c2733;font:700 13px "Segoe UI",system-ui,sans-serif;flex:0 0 auto}
+.apphdr-nav{display:flex;gap:6px;flex:0 0 auto}
+.apphdr .nav-link{flex:0 0 auto;color:#2b4a6f;text-decoration:none;
+     padding:5px 12px;border:1px solid #e3e1da;border-radius:7px;background:#fff;
+     font:12.5px "Segoe UI",system-ui,sans-serif}
+.apphdr .nav-link:hover{border-color:#2b4a6f}
+.apphdr .nav-link.on{background:#2b4a6f;color:#fff;border-color:#2b4a6f;font-weight:600}
+.apphdr-who{margin-left:auto;flex:0 0 auto;color:#5a6875;font-size:11.5px;padding-left:10px}
+.appfoot{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;
+         justify-content:space-between;align-items:center;gap:12px;
+         padding:8px 34px;background:#fbfaf7;border-top:1px solid #e3e1da;
+         font:12px "Segoe UI",system-ui,sans-serif;color:#5a6875}
+.apphdr-out{flex:0 0 auto;color:#5a6875;font-size:11.5px;text-decoration:none;
+     padding:4px 10px;border:1px solid #e3e1da;border-radius:7px;background:#fff}
+.apphdr-out:hover{border-color:#2b4a6f;color:#2b4a6f}
+</style></head><body>
+<script src="/demo/demo.js"></script>
+<header class="apphdr">
+  <span class="apphdr-brand">Fee&nbsp;Simple</span><span class="demo-pill">DEMO</span>
+  <nav class="apphdr-nav">
+    <a class="nav-link" href="/demo/">Run</a>
+    <a class="nav-link" href="/demo/workbench/">Workbench</a>
+    <a class="nav-link on" href="/demo/ld-capture/">LD capture</a>
+    <a class="nav-link" href="/demo/" id="navAdmin" hidden>Admin panel</a>
+    <a class="nav-link" href="/demo/" id="navUsers" hidden>Users</a>
+  </nav>
+  <span class="apphdr-who" id="who"></span>
+  <a class="apphdr-out" href="/demo/?fresh=1" title="Throw away everything you did here and start the demo over">Restart demo</a>
+</header>
+<div class="app" id="app">
+  <aside class="rail">
+    <div class="rail-top">
+      <div class="rail-head"><h2>LD capture queue</h2>
+        <button type="button" class="ghost small" id="btnUpload"
+                title="Bring in a deed PDF this tool never pulled, to capture its legal description">Upload deed</button>
+        <input type="file" id="uploadFile" accept="application/pdf,.pdf" class="hide">
+      </div>
+      <div class="rail-sub hide" id="railNote"></div>
+      <input type="search" id="q" placeholder="Find a run — address, book/page" autocomplete="off">
+      <div class="seg">
+        <button type="button" class="ghost small on" data-filt="all">All</button>
+        <button type="button" class="ghost small" data-filt="pending">Pending</button>
+        <button type="button" class="ghost small" data-filt="done">Done</button>
+      </div>
+    </div>
+    <div id="queueCards"><div class="empty">Loading runs&#8230;</div></div>
+    <div class="rail-bottom"><div class="rail-foot" id="railFoot"></div></div>
+  </aside>
+  <main class="case" id="case">
+    <div class="blurb" id="empty">Select a run from the queue to transcribe
+      its legal description. Runs without a pulled deed are not listed
+      &#8212; there is no document to transcribe from.</div>
+    <div id="runView" class="hide">
+      <div class="head">
+        <div>
+          <h1 id="hAddr"></h1>
+          <div class="addr-line" id="hLine"></div>
+          <div class="ids" id="hIds"></div>
+        </div>
+        <div><span class="pill" id="hPill"></span></div>
+      </div>
+      <div id="banners"></div>
+      <div class="sect hide" id="capturedSect">
+        <h3>Legal description<span class="prov" id="capProv"></span></h3>
+        <div class="legal-box">
+          <div class="status"><span class="pill captured">Captured</span>
+            <span class="prov">Transcribed by a person from the deed
+              &#8212; shown verbatim.</span></div>
+          <div class="body" id="capBody"></div>
+        </div>
+        <div class="actions">
+          <button type="button" class="ghost" id="btnRecap">Capture
+            again&#8230;</button>
+          <button type="button" class="ghost" id="btnTitleExport">Title
+            export</button>
+          <span class="note">Capturing again keeps the earlier record,
+            renamed with a .superseded stamp &#8212; it is never
+            deleted.</span>
+        </div>
+        <div class="sect hide" id="titlePanel">
+          <h3>Title export<span class="prov" id="titleProv"></span></h3>
+          <div class="legal-box">
+            <div class="status"><span class="pill captured" id="titlePill">Captured</span>
+              <span class="prov">The captured text, verbatim &#8212; paste
+                into ProForm PROPDES.</span></div>
+            <div class="body" id="titleBody"></div>
+          </div>
+          <div class="actions">
+            <button type="button" class="ghost" id="btnTitleCopy">Copy</button>
+            <a class="ghost hide" id="lnkTitleDownload" href="#" download="title_export.json">Download title_export.json</a>
+            <span class="note" id="titleNote"></span>
+          </div>
+        </div>
+      </div>
+      <div class="hide" id="capSect">
+        <div class="sect" style="margin-top:14px"><h3>Capture progress</h3>
+          <div class="check" id="progress"></div></div>
+        <div class="sect"><h3>Fragments<span class="prov" id="fragMsg"></span></h3>
+          <div id="fragRows"></div>
+          <div class="frag-count" id="fragCount">0 fragments captured</div>
+          <div class="skip-panel hide" id="skipPanel">
+            <h4>Why is this parcel not captured?</h4>
+            <div id="skipReasons"></div>
+            <input type="text" id="skipNote" placeholder="Note">
+            <div class="row2">
+              <button type="button" class="ghost" id="btnSkipOk">Record
+                skip</button>
+              <button type="button" class="ghost" id="btnSkipCancel">Cancel</button>
+            </div>
+          </div>
+          <div class="actions">
+            <button type="button" class="primary" id="btnReview"
+                    disabled>Check the text &#8594;</button>
+            <button type="button" class="ghost" id="btnUndo"
+                    disabled>Undo last</button>
+            <button type="button" class="ghost" id="btnSkip">Record
+              skip&#8230;</button>
+            <span class="note" id="note"></span>
+          </div>
+        </div>
+      </div>
+      <div class="hide" id="checkSect">
+        <div class="steps">
+          <div class="step done"><span class="n">&#10003;</span>Deed on file</div>
+          <div class="step done"><span class="n">&#10003;</span>Box the legal description</div>
+          <div class="step now"><span class="n">3</span>Check the text</div>
+          <div class="step"><span class="n">4</span>Saved</div>
+        </div>
+        <div class="checkhead">Check each text against its picture &#8212;
+          fix what the reader got wrong<span class="prov" id="checkProv"></span></div>
+        <div id="fragList"></div>
+        <div class="steprow">
+          <button type="button" class="primary lg" id="btnSave">Looks right
+            &#8212; Save capture</button>
+          <button type="button" class="ghost" id="btnBack">&#8592; Back to boxing</button>
+          <span class="note" id="checkNote"></span>
+          <span class="keys"><kbd>Enter</kbd> save &#183; <kbd>Backspace</kbd> back</span>
+        </div>
+      </div>
+    </div>
+  </main>
+  <section class="docpane" id="docpane">
+    <div class="paneempty" id="paneEmpty">No deed open.</div>
+    <div class="pdfview hide" id="pdfview">
+      <div class="pdftool">
+        <span class="title" id="vTitle"></span>
+        <span class="mid">
+          <input class="box" id="vPage" value="1" readonly><span class="of" id="vOf">/ 0</span>
+          <span class="sep"></span>
+          <button type="button" id="vOut" title="Zoom out"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+          <span class="box" id="vPct">100%</span>
+          <button type="button" id="vIn" title="Zoom in"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+          <span class="sep"></span>
+          <button type="button" id="vFit" title="Fit to width"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="1"/><path d="M9 8h6M9 12h6"/></svg></button>
+        </span>
+        <span class="rt">
+          <a class="vlink" id="vDownload" href="#" title="Download"><svg viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M4 20h16"/></svg></a>
+          <a class="vlink" id="vPrint" href="#" target="_blank" rel="noopener" title="Open to print"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="6"/><rect x="4" y="9" width="16" height="8" rx="1"/><rect x="7" y="14" width="10" height="7"/></svg></a>
+        </span>
+      </div>
+      <div class="pages-scroll" id="pagesScroll">
+        <div class="drag-rect hide" id="dragRect"></div>
+      </div>
+    </div>
+  </section>
+</div>
+<div class="appfoot"><span>FeeSimple is a workbench, always review each case file</span>
+  <span id="ver"></span></div>
+<script>
+const $=id=>document.getElementById(id);
+function esc(s){return (s==null?'':String(s)).replace(/[&<>"]/g,
+  c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function enc(s){return s.split('/').map(encodeURIComponent).join('/');}
+function capWord(s){return s?s.charAt(0).toUpperCase()+s.slice(1):s;}
+const PILL={none:['pending','Pending'],captured:['captured','Captured'],
+            skipped:['skipped','Skipped'],conflict:['conflict','Conflict']};
+let rows=[], nodeed=0, row=null, st=null, frags=[], stage='capture',
+    busyOcr=false, recap=false, Q='', FILT='all', vzoom=82, vpage=1;
+const PAGE_IMG={};           
+const done=()=>frags.filter(f=>!f.pending);
+const firstLine=f=>((f.final!==undefined?f.final:f.raw).split('\n')[0]||'').trim();
+async function loadQueue(sel){
+  const r=await (await fetch('/api/history')).json();
+  rows=r.rows.filter(x=>x.deed==='green'||x.deed==='imported'
+    ||x.deed_hand==='retrieved'||x.ldv!=='none');    
+  nodeed=r.rows.length-rows.length;
+  drawQueue();
+  if(sel!=null){
+    const i=rows.findIndex(x=>x.run===sel);
+    if(i>=0) selectRun(i);
+  }
+}
+function drawQueue(){
+  const q=Q.trim().toLowerCase();
+  const vis=rows.map((x,i)=>({x,i})).filter(({x})=>{
+    if(FILT==='pending'&&x.ldv!=='none') return false;
+    if(FILT==='done'&&(x.ldv==='none'||x.ldv==='conflict')) return false;
+    if(!q) return true;
+    return [x.address,x.city,x.county,x.bookpage].join(' ').toLowerCase().includes(q);
+  });
+  const n=s=>rows.filter(x=>x.ldv===s).length;
+  $('queueCards').innerHTML=(rows.length?'':
+    '<div class="empty">No runs with a deed on file.</div>')
+    +(rows.length&&!vis.length?'<div class="empty">Nothing matches.</div>':'')
+    +vis.map(({x,i})=>{
+    const p=PILL[x.ldv]||PILL.none;
+    const imported=(x.deed==='imported');
+    const place=esc(x.city)+(x.city&&x.county?' · ':'')
+      +(x.county?esc(capWord(x.county))+' County':'');
+    return '<div class="pcard'+(row&&row.run===x.run?' active':'')+'" data-i="'+i+'" id="card'+i+'" title="'+esc(x.run)+'">'
+      +'<div class="addr">'+(imported?'Imported deed':esc(x.address))+'</div>'
+      +'<div class="sub">'+(imported?esc(x.address):place)+'</div>'
+      +'<div class="meta"><span class="bp mono">'+esc(x.bookpage||'')+'</span>'
+      +(imported&&x.ldv==='none'?'<span class="pill imported">Imported</span>'
+        :'<span class="pill '+p[0]+'">'+p[1]+'</span>')+'</div></div>';
+  }).join('');
+  document.querySelectorAll('.pcard').forEach(c=>{
+    c.onclick=()=>selectRun(+c.dataset.i);
+  });
+  $('railFoot').innerHTML=
+    '<div class="row total"><span>Runs</span><span>'+rows.length+'</span></div>'
+    +'<div class="row"><span>Pending</span><span>'+n('none')+'</span></div>'
+    +'<div class="row"><span>Captured</span><span>'+n('captured')+'</span></div>'
+    +'<div class="row"><span>Skipped</span><span>'+n('skipped')+'</span></div>'
+    +(n('conflict')?'<div class="row"><span>Conflict</span><span>'+n('conflict')+'</span></div>':'')
+    +'<div class="row"><span>No deed pulled (not listed)</span><span>'
+    +nodeed+'</span></div>';
+}
+$('q').oninput=e=>{ Q=e.target.value; drawQueue(); };
+document.querySelectorAll('[data-filt]').forEach(b=>b.onclick=()=>{
+  FILT=b.dataset.filt;
+  document.querySelectorAll('[data-filt]').forEach(x=>x.classList.toggle('on',x===b));
+  drawQueue();
+});
+async function selectRun(i){
+  row=rows[i];
+  document.querySelectorAll('.pcard').forEach(c=>
+    c.classList.toggle('active',+c.dataset.i===i));
+  frags=[]; stage='capture'; recap=false; st=null; vpage=1;
+  for(const k in PAGE_IMG) delete PAGE_IMG[k];
+  try{ st=await (await fetch('/api/ldv/state/'+enc(row.run))).json(); }
+  catch(e){
+    st={ldv_error:'Could not read '+row.run+': '+e, state:'none',
+        pages:0, deed_pdf:null, reasons:[], skip_blocked:''};
+  }
+  renderRun();
+}
+function banner(kind,tag,txt){
+  return '<div class="banner '+kind+'"><span class="tag">'+tag
+    +'</span><span class="txt">'+esc(txt)+'</span></div>';
+}
+function renderRun(){
+  $('empty').classList.add('hide');
+  $('runView').classList.remove('hide');
+  $('hAddr').textContent=row.deed==='imported'?'Imported deed':(row.address||row.run);
+  const imported=row.deed==='imported';
+  $('hLine').innerHTML=imported
+    ? esc(row.address)+' · not a pipeline run'
+    : '<b>'+esc(row.city)+(row.city?', ':'')+'NC</b>'
+      +' · '+esc(capWord(row.county))+' County';
+  let ids='';
+  if(row.bookpage) ids+='<span>Deed BK/PG <span class="mono">'
+    +esc(row.bookpage)+'</span></span>';
+  if(st.deed_pdf) ids+='<span>'+esc(st.deed_pdf)+' · '
+    +st.pages+' page'+(st.pages===1?'':'s')+'</span>';
+  ids+='<span>'+esc(imported?'uploaded '+row.time
+    :capWord(row.county)+' County ROD · run '+row.time)+'</span>';
+  $('hIds').innerHTML=ids;
+  const p=PILL[st.state]||PILL.none;
+  $('hPill').className='pill '+p[0];
+  $('hPill').textContent=p[1];
+  let b='';
+  if(imported)
+    b+=banner('flag','FLAG','This deed was uploaded by a person. No tax '
+      +'card was pulled and nothing was verified — capture the legal '
+      +'description from it, then Title export.');
+  if(st.ldv_error)
+    b+=banner('abort','ABORT','Legal-description capture is unavailable: '
+      +st.ldv_error);
+  if(st.state==='conflict')
+    b+=banner('abort','ABORT','This run carries BOTH a capture and a live '
+      +'skip — the directory was edited outside the tool. This parcel '
+      +'is aborted from export until a person resolves the files on disk.');
+  if(st.state==='skipped'){
+    const d=st.detail||{};
+    b+=banner('flag','FLAG','Recorded as skipped ('+(d.reason_code||'')
+      +(d.reason_text?': '+d.reason_text:'')+') — a new capture '
+      +'supersedes the skip.');
+  }
+  if(!st.deed_pdf&&!st.ldv_error&&st.state!=='captured'
+     &&st.state!=='skipped')
+    b+=banner('flag','FLAG','No deed PDF in this run folder — there '
+      +'is no document to transcribe from.');
+  $('banners').innerHTML=b;
+  const showCaptured=st.state==='captured'&&!recap;
+  $('titlePanel').classList.add('hide');
+  $('lnkTitleDownload').classList.add('hide');
+  $('capturedSect').classList.toggle('hide',!showCaptured);
+  if(showCaptured){
+    let prov=[];
+    if(st.captured_at) prov.push('Captured '+st.captured_at);
+    if(st.source_pdf) prov.push('from '+st.source_pdf);
+    $('capProv').textContent=prov.length?'· '+prov.join(' · '):'';
+    $('capBody').textContent=st.final_text||'(empty)';
+  }
+  const canCapture=!!st.deed_pdf&&!st.ldv_error&&st.state!=='conflict'
+    &&(st.state!=='captured'||recap);
+  $('capSect').classList.toggle('hide',!canCapture);
+  $('skipPanel').classList.add('hide');
+  if(canCapture) setStage('capture'); else { stage='capture'; $('app').classList.remove('check'); $('checkSect').classList.add('hide'); }
+  const havePdf=!!st.deed_pdf&&st.pages>0;
+  $('pdfview').classList.toggle('hide',!havePdf);
+  $('paneEmpty').classList.toggle('hide',havePdf);
+  $('paneEmpty').textContent=st.deed_pdf?'The deed could not be opened.':'No deed PDF in this run folder.';
+  if(havePdf){
+    $('vTitle').textContent=st.deed_pdf;
+    $('vOf').textContent='/ '+st.pages;
+    $('vPage').value='1';
+    $('vDownload').href=DEMO.fileUrl(row.run,st.deed_pdf);
+    $('vPrint').href=DEMO.fileUrl(row.run,st.deed_pdf);
+    loadPages();
+  }
+}
+function loadPages(){
+  const scroll=$('pagesScroll');
+  [...scroll.querySelectorAll('img,.fragbox')].forEach(im=>im.remove());
+  for(let p=0;p<st.pages;p++){
+    const im=document.createElement('img');
+    im.src=DEMO.pageUrl(row.run,st.deed_pdf,p);
+    im.className='page';
+    im.dataset.page=p;
+    im.draggable=false;
+    im.loading='lazy';
+    im.alt='deed page '+(p+1);
+    im.onload=drawBoxes;
+    scroll.insertBefore(im,$('dragRect'));
+  }
+  scroll.scrollTop=0;
+}
+function setZoom(z){
+  vzoom=Math.max(46,Math.min(130,z));
+  $('pdfview').style.setProperty('--vz',vzoom+'%');
+  $('vPct').textContent=Math.round(vzoom/82*100)+'%';
+  drawBoxes();
+}
+$('vOut').onclick=()=>setZoom(vzoom-12);
+$('vIn').onclick=()=>setZoom(vzoom+12);
+$('vFit').onclick=()=>setZoom(82);
+$('pagesScroll').addEventListener('scroll',()=>{
+  const sc=$('pagesScroll'), mid=sc.scrollTop+sc.clientHeight/3; let p=1;
+  sc.querySelectorAll('img.page').forEach(im=>{ if(im.offsetTop<=mid) p=+im.dataset.page+1; });
+  if(p!==vpage){ vpage=p; $('vPage').value=p; }
+});
+function pageImg(p){
+  if(!PAGE_IMG[p]){ const im=new Image(); im.src=DEMO.pageUrl(row.run,st.deed_pdf,p); PAGE_IMG[p]=im; }
+  return PAGE_IMG[p];
+}
+let dragStart=null, dragImg=null;
+function imgPos(e){
+  const r=dragImg.getBoundingClientRect();
+  return {x:Math.min(Math.max(e.clientX-r.left,0),r.width),
+          y:Math.min(Math.max(e.clientY-r.top,0),r.height)};
+}
+$('pagesScroll').addEventListener('mousedown',e=>{
+  if(busyOcr||stage!=='capture'||e.target.tagName!=='IMG') return;
+  if($('capSect').classList.contains('hide')) return;    
+  e.preventDefault();
+  dragImg=e.target;
+  dragStart=imgPos(e);
+});
+$('pagesScroll').addEventListener('mousemove',e=>{
+  if(!dragStart) return;
+  const p=imgPos(e), rect=$('dragRect');
+  rect.style.left=(Math.min(dragStart.x,p.x)+dragImg.offsetLeft)+'px';
+  rect.style.top=(Math.min(dragStart.y,p.y)+dragImg.offsetTop)+'px';
+  rect.style.width=Math.abs(p.x-dragStart.x)+'px';
+  rect.style.height=Math.abs(p.y-dragStart.y)+'px';
+  rect.classList.remove('hide');
+});
+window.addEventListener('mouseup',async e=>{
+  if(!dragStart) return;
+  const start=dragStart, im=dragImg;
+  dragStart=null; dragImg=null;
+  $('dragRect').classList.add('hide');
+  const r=im.getBoundingClientRect();
+  const p={x:Math.min(Math.max(e.clientX-r.left,0),r.width),
+           y:Math.min(Math.max(e.clientY-r.top,0),r.height)};
+  if(Math.abs(p.x-start.x)<8||Math.abs(p.y-start.y)<8) return;
+  const k=im.naturalWidth/im.clientWidth;
+  const page=+im.dataset.page;
+  const px={x0:Math.round(Math.min(start.x,p.x)*k),
+            y0:Math.round(Math.min(start.y,p.y)*k),
+            x1:Math.round(Math.max(start.x,p.x)*k),
+            y1:Math.round(Math.max(start.y,p.y)*k)};
+  busyOcr=true;
+  note('Reading the selection…');
+  const ph={pending:true,page:page,px:px};
+  frags.push(ph); drawFrags();
+  const f=new FormData();
+  f.append('run',row.run); f.append('page',page);
+  for(const kk of ['x0','y0','x1','y1']) f.append(kk,px[kk]);
+  let rr=null, failed=null;
+  try{
+    const res=await fetch('/api/ldv/ocr',{method:'POST',body:f});
+    if(!res.ok) throw new Error(await res.text());
+    rr=await res.json();
+  }catch(err){ failed=err.message; }
+  busyOcr=false;
+  if(rr){
+    frags[frags.indexOf(ph)]={page:page,px:px,raw:rr.text,
+                markers:rr.redirect_markers||[]};
+    drawFrags(); drawBoxes();
+    note(rr.text.trim()
+      ? 'Fragment read — check the text against its picture at the next step.'
+      : 'Nothing machine-readable in that box — type the text in '
+        +'by hand at the check step.');
+  }else{
+    frags.splice(frags.indexOf(ph),1); drawFrags();
+    note('OCR failed: '+failed);
+  }
+});
+function setStage(s){
+  stage=s;
+  const rev=s==='review';
+  $('app').classList.toggle('check',rev);
+  $('capSect').classList.toggle('hide',rev);
+  $('checkSect').classList.toggle('hide',!rev);
+  $('btnSkip').disabled=!!st.skip_blocked;
+  if(rev){ drawCheck(); $('case').scrollTop=0; }
+  else { note(st.skip_blocked||''); drawFrags(); drawBoxes(); }
+}
+function drawProgress(){
+  const n=done().length;
+  const imported=row.deed==='imported';
+  const items=[
+    ['ok','Deed on file',(row.bookpage?'BK/PG '+row.bookpage+' · ':'')
+      +(imported?'uploaded '+row.time:capWord(row.county)+' County ROD')],
+    [n?'ok':'now','Legal description boxed',
+      n?n+' fragment'+(n>1?'s':''):'drag a box on the deed'],
+    ['wait','Text checked against the picture','after boxing'],
+    ['wait','Capture saved','not yet']];
+  const ok=items.filter(x=>x[0]==='ok').length;
+  $('progress').innerHTML=items.map(x=>'<div class="item"><span class="dot '+x[0]+'">'
+    +(x[0]==='ok'?'✓':(x[0]==='now'?'›':''))+'</span><span class="what">'+x[1]
+    +'</span><span class="prov">'+esc(x[2])+'</span></div>').join('')
+    +'<div class="bar"><i style="width:'+Math.round(ok/items.length*100)+'%"></i></div>'
+    +'<div class="left">'+(items.length-ok)+' of '+items.length+' steps left</div>';
+}
+function drawFrags(){
+  drawProgress();
+  const n=done().length;
+  $('fragMsg').textContent='· '+(
+    st.state==='captured'
+      ? 'This parcel already has a saved capture — saving again keeps the old one under a .superseded stamp.'
+      : st.state==='skipped'
+        ? 'Recorded as skipped — a capture will supersede the skip.'
+        : n ? 'click a row to find its box on the deed; the pictures come at the check step'
+            : 'Drag a box over the legal description on the deed — it is read automatically. A description crossing pages is two fragments.');
+  $('fragRows').innerHTML=frags.map((f,i)=>f.pending
+    ?'<div class="frow"><span class="num wait"></span><span class="pg">p.'+(f.page+1)+'</span><div class="working"></div></div>'
+    :'<div class="frow" data-jump="'+i+'"><span class="num">'+(i+1)+'</span>'
+      +'<span class="pg">p.'+(f.page+1)+'</span><span class="txt">'+esc(firstLine(f)||'(nothing read — type it at the check step)')+'</span>'
+      +(f.markers.length?'<span class="warn">mentions '+esc(f.markers[0])+'</span>':'')+'</div>').join('');
+  $('fragRows').querySelectorAll('[data-jump]').forEach(r=>r.onclick=()=>{
+    const sc=$('pagesScroll'), bx=sc.querySelectorAll('.fragbox')[+r.dataset.jump];
+    if(bx) sc.scrollTo({top:bx.offsetTop-60,behavior:'smooth'});
+  });
+  $('fragCount').textContent=n+' fragment'+(n===1?'':'s')+' captured';
+  $('btnUndo').disabled=!frags.length||busyOcr;
+  $('btnReview').disabled=!n||busyOcr;
+}
+function drawBoxes(){
+  const sc=$('pagesScroll');
+  [...sc.querySelectorAll('.fragbox')].forEach(e=>e.remove());
+  frags.forEach((f,i)=>{
+    const im=sc.querySelector('img.page[data-page="'+f.page+'"]');
+    if(!im||!im.naturalWidth||!im.clientWidth) return;
+    const k=im.clientWidth/im.naturalWidth, d=document.createElement('div');
+    d.className='fragbox';
+    d.style.left=(im.offsetLeft+f.px.x0*k)+'px'; d.style.top=(im.offsetTop+f.px.y0*k)+'px';
+    d.style.width=((f.px.x1-f.px.x0)*k)+'px'; d.style.height=((f.px.y1-f.px.y0)*k)+'px';
+    d.innerHTML='<b>'+(i+1)+'</b>';
+    sc.insertBefore(d,$('dragRect'));
+  });
+}
+function autosize(t){ t.style.height='auto'; t.style.height=(t.scrollHeight+6)+'px'; }
+function drawCheck(){
+  const box=$('fragList');
+  box.innerHTML='';
+  $('checkProv').textContent=done().length+' fragment'+(done().length===1?'':'s')+' · '+(st.deed_pdf||'');
+  $('checkNote').textContent='';
+  frags.forEach((fr,i)=>{
+    if(fr.pending) return;
+    const d=document.createElement('div'); d.className='frag';
+    const tg=document.createElement('div'); tg.className='tag';
+    tg.innerHTML='FRAGMENT '+(i+1)+' <span>· deed page '+(fr.page+1)+' of '+st.pages+' · '+esc(st.deed_pdf||'')+'</span>';
+    d.appendChild(tg);
+    const c=document.createElement('canvas'); c.className='crop';
+    const w=fr.px.x1-fr.px.x0, h=fr.px.y1-fr.px.y0;
+    const cw=Math.min(920,w), k=Math.min(2,w/cw);
+    c.width=Math.round(cw*k); c.height=Math.round(h*cw/w*k); c.style.width=cw+'px';
+    d.appendChild(c);
+    if(fr.markers.length){
+      const wn=document.createElement('div'); wn.className='warn';
+      wn.textContent='Mentions '+fr.markers.join(', ')
+        +' — the description may continue on an exhibit page.';
+      d.appendChild(wn);
+    }
+    const t=document.createElement('textarea');
+    t.value=(fr.final!==undefined)?fr.final:fr.raw;
+    t.oninput=()=>{ fr.final=t.value; autosize(t); };
+    d.appendChild(t);
+    box.appendChild(d);
+    autosize(t);
+    const img=pageImg(fr.page);
+    const go=()=>c.getContext('2d').drawImage(img,fr.px.x0,fr.px.y0,w,h,0,0,c.width,c.height);
+    if(img.complete&&img.naturalWidth) go(); else img.addEventListener('load',go,{once:true});
+  });
+}
+function note(t){ $('note').textContent=t||''; }
+$('btnUndo').onclick=()=>{ if(frags.length&&!busyOcr){ frags.pop(); drawFrags(); drawBoxes(); } };
+$('btnReview').onclick=()=>{ if(done().length) setStage('review'); };
+$('btnBack').onclick=()=>setStage('capture');
+$('btnRecap').onclick=()=>{ recap=true; frags=[]; renderRun(); };
+document.addEventListener('keydown',e=>{
+  if(e.target.matches('input,textarea')) return;
+  if(!row||stage!=='review') return;
+  if(e.key==='Enter'){ e.preventDefault(); $('btnSave').click(); }
+  if(e.key==='Backspace'){ e.preventDefault(); setStage('capture'); }
+});
+$('btnUpload').onclick=()=>$('uploadFile').click();
+function railNote(t){ $('railNote').textContent=t||''; $('railNote').classList.toggle('hide',!t); }
+$('uploadFile').onchange=async()=>{
+  const f=$('uploadFile').files[0];
+  if(!f) return;
+  $('btnUpload').disabled=true;
+  railNote('Importing '+f.name+'…');
+  const fd=new FormData(); fd.append('file',f,f.name);
+  let res;
+  try{ res=await fetch('/api/ldv/import',{method:'POST',body:fd}); }
+  catch(e){ railNote('Import failed: '+e); $('btnUpload').disabled=false; return; }
+  $('uploadFile').value='';
+  $('btnUpload').disabled=false;
+  if(!res.ok){
+    let d=''; try{ d=(await res.json()).detail||''; }catch(e){}
+    railNote('Import failed: '+(d||('HTTP '+res.status)));
+    return;
+  }
+  railNote('');
+  const out=await res.json();
+  await loadQueue(out.run);
+};
+$('btnTitleExport').onclick=async()=>{
+  $('titlePanel').classList.remove('hide');
+  $('titleNote').textContent='Exporting…';
+  let res;
+  try{ res=await fetch('/api/ldv/title-export/'+enc(row.run),{method:'POST'}); }
+  catch(e){ $('titleNote').textContent='Not exported: '+e; return; }
+  if(!res.ok){
+    let d=''; try{ d=(await res.json()).detail||''; }catch(e){}
+    $('titleBody').textContent='';
+    $('titleProv').textContent='';
+    $('titleNote').textContent='Not exported: '+(d||('HTTP '+res.status));
+    return;
+  }
+  const out=await res.json(), ex=out.export||{};
+  const cap=ex.status==='CAPTURED';
+  $('titlePill').className='pill '+(cap?'captured':'pending');
+  $('titlePill').textContent=cap?'Captured':'Not captured';
+  $('titleBody').textContent=ex.legal_description||'(empty)';
+  $('titleProv').textContent='· '+out.saved+' · '+(ex.county||'')
+    +' · run '+(ex.run_id||'');
+  $('lnkTitleDownload').href=DEMO.titleExportUrl(row.run);
+  $('lnkTitleDownload').classList.remove('hide');
+  $('titleNote').textContent='Saved in the run folder.';
+};
+$('btnTitleCopy').onclick=async()=>{
+  const t=$('titleBody').textContent;
+  try{ await navigator.clipboard.writeText(t); $('titleNote').textContent='Copied.'; }
+  catch(e){
+    const r=document.createRange(); r.selectNodeContents($('titleBody'));
+    const s=getSelection(); s.removeAllRanges(); s.addRange(r);
+    $('titleNote').textContent='The browser blocked the clipboard — '
+      +'text selected, press Ctrl+C.';
+  }
+};
+$('btnSave').onclick=async()=>{
+  if(stage!=='review'||!done().length) return;
+  const fs=done();
+  const finals=fs.map(fr=>((fr.final!==undefined)?fr.final:fr.raw).trim());
+  const body={run:row.run,supersede:false,
+    fragments:fs.map((fr,i)=>({page:fr.page,x0:fr.px.x0,y0:fr.px.y0,
+      x1:fr.px.x1,y1:fr.px.y1,raw_ocr_text:fr.raw,final_text:finals[i]}))};
+  let res=await fetch('/api/ldv/save',{method:'POST',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(res.status===409){
+    if(!confirm((await res.json()).detail)) return;
+    body.supersede=true;
+    res=await fetch('/api/ldv/save',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(body)});
+  }
+  if(!res.ok){ $('checkNote').textContent='Save failed: '+await res.text(); return; }
+  advance('Capture saved for '+row.run+'.');
+};
+$('btnSkip').onclick=()=>{
+  if(st.skip_blocked){ note(st.skip_blocked); return; }
+  if(done().length&&!confirm(done().length+' captured fragment(s) will be '
+    +'discarded.\n\nRecord this parcel as skipped anyway?')) return;
+  $('skipReasons').innerHTML=(st.reasons||[]).map((r,i)=>
+    '<label class="reason-row"><input type="radio" name="skipReason" '
+    +'value="'+esc(r.code)+'"'+(i===0?' checked':'')+'> '
+    +esc(r.label)+'</label>').join('');
+  $('skipNote').value='';
+  $('skipPanel').classList.remove('hide');
+};
+$('btnSkipCancel').onclick=()=>$('skipPanel').classList.add('hide');
+$('btnSkipOk').onclick=async()=>{
+  const code=(document.querySelector('input[name=skipReason]:checked')
+              ||{}).value;
+  const noteTxt=$('skipNote').value.trim();
+  if(code==='other'&&!noteTxt){
+    note("'Other' needs a note saying what was wrong."); return; }
+  const f=new FormData();
+  f.append('run',row.run); f.append('code',code); f.append('note',noteTxt);
+  const res=await fetch('/api/ldv/skip',{method:'POST',body:f});
+  if(!res.ok){ note('Skip failed: '+await res.text()); return; }
+  $('skipPanel').classList.add('hide');
+  advance('Skip recorded for '+row.run+'.');
+};
+async function advance(msg){
+  const prev=row?rows.findIndex(x=>x.run===row.run):-1;
+  const before=rows.map(x=>x.run);
+  await loadQueue(null);
+  let next=-1;
+  for(let i=0;i<rows.length;i++){
+    const bi=before.indexOf(rows[i].run);
+    if(rows[i].ldv==='none'&&(bi<0||bi>prev)){ next=i; break; }
+  }
+  if(next<0) next=rows.findIndex(x=>x.ldv==='none');
+  if(next>=0){ await selectRun(next); }
+  else{
+    row=null; $('app').classList.remove('check');
+    $('runView').classList.add('hide');
+    $('empty').classList.remove('hide');
+    $('empty').textContent=msg+' No pending runs remain in the queue.';
+    $('pdfview').classList.add('hide'); $('paneEmpty').classList.remove('hide');
+    $('paneEmpty').textContent='No deed open.';
+    return;
+  }
+  note(msg);
+}
+const want=new URLSearchParams(location.search).get('run');
+loadQueue(want);
+</script><script>
+(async()=>{try{
+  const w=await (await fetch('/api/whoami')).json();
+  const firmLabel=w.firm_name||w.firm;
+  document.getElementById('who').textContent='Signed in: '+w.me+
+    (firmLabel?' ('+firmLabel+')':'');
+  document.getElementById('navUsers').hidden=!w.operator;
+  document.getElementById('navAdmin').hidden=!w.operator;
+  document.getElementById('ver').textContent='Fee Simple '+w.version;
+}catch(e){}})();
+</script>
+</body></html>
