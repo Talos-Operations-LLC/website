@@ -537,7 +537,11 @@ function tryList() {
   READY.then(function (d) {
     var box = document.createElement('div');
     box.className = 'sect'; box.id = 'tryBox';
-    var h = '<div class="sect-h">Try an address<span class="prov">This demo runs on three sample properties. Click one to fill the form, then press Run.</span></div><div class="trylist">';
+    var n = d['try'].length;
+    var what = n === 1 ? 'one sample property' : (n + ' sample properties');
+    var h = '<div class="sect-h">Try an address<span class="prov">This demo runs on ' +
+      what + '. Click ' + (n === 1 ? 'it' : 'one') +
+      ' to fill the form, then press Run.</span></div><div class="trylist">';
     d['try'].forEach(function (t, i) {
       h += '<button type="button" class="tryrow" data-i="' + i + '"><b>' + t.address.replace(/</g, '&lt;') + '</b><span>' + t.city + ' · ' + pretty(t.county) + ' County</span></button>';
     });
