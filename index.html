@@ -108,7 +108,10 @@
     border: 1px solid var(--accent);
     border-radius: 999px;
     padding: 5px 12px;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
   }
+  .pill:hover, .pill:focus-visible { background: var(--accent); color: #fff; }
   .cta { margin-top: 36px; }
   .cta form { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
   .cta input[type="email"] {
@@ -307,7 +310,7 @@
   <section class="product">
     <div class="name"><span class="dot" aria-hidden="true"></span>Fee Simple</div>
     <p class="tagline">verified owner-of-record and mailing addresses from NC county records</p>
-    <span class="pill">[live in 26 NC counties]</span>
+    <a class="pill" href="/coverage.html">[live in 26 NC counties]</a>
 
     <div class="cta">
       <form name="early-access" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
