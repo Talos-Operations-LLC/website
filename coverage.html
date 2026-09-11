@@ -160,6 +160,8 @@
     .links { gap: 14px; flex-wrap: wrap; }
     .headline { margin: 48px auto 14px; }
     .legend { position: static; border: none; border-top: 1px solid var(--rule); border-radius: 0; }
+    /* On phones, pin the county label to the map's top-left corner instead of following the finger. */
+    .tooltip { left: 8px !important; top: 8px !important; }
     .stats { gap: 28px; }
   }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
