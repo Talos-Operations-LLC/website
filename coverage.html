@@ -223,7 +223,6 @@
 const CONFIG = {
   stats: {
     filesProcessed: 8742,       // retrieval runs (909 + 7,833)
-    testsPassing: 6291,         // tests passing (881 + 5,410)
     instrumentsInCorpus: 182,   // unique deed instruments, hash-deduped
   },
   counties: {
@@ -292,7 +291,6 @@ document.getElementById("counts").innerHTML =
 const statsData = [
   { num: CONFIG.stats.filesProcessed, lbl: "retrieval runs" },
   { num: CONFIG.stats.instrumentsInCorpus, lbl: "instruments in corpus" },
-  { num: CONFIG.stats.testsPassing, lbl: "tests passing" },
 ];
 const stats = document.getElementById("stats");
 statsData.forEach(d => {
