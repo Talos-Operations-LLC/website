@@ -83,7 +83,7 @@
     border: 1px solid var(--rule);
     border-radius: 3px;
   }
-  .map-wrap svg.map { display: block; width: 100%; height: auto; cursor: grab; }
+  .map-wrap svg.map { display: block; width: 100%; height: auto; cursor: grab; touch-action: pan-y; }
   .map-wrap svg.map:active { cursor: grabbing; }
   .nation-fill { fill: var(--paper); stroke: none; }
   .county { fill: transparent; stroke: var(--rule); stroke-width: 0.3; }
@@ -185,7 +185,7 @@
     <div class="map-controls">
       <button id="zoom-in" aria-label="Zoom in">+</button>
       <button id="zoom-out" aria-label="Zoom out">−</button>
-      <button id="zoom-reset" aria-label="Reset view">⌂</button>
+      <button id="zoom-reset" aria-label="Reset view to North Carolina">⌂</button>
     </div>
     <div class="legend">
       <div class="row"><span class="sw live"></span> live — in production</div>
@@ -300,6 +300,7 @@ statsData.forEach(d => {
 });
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
 
 // ---- map ----
 const svg = d3.select("#map");
@@ -342,6 +343,9 @@ g.selectAll("path.county")
         : `<div class="t-status">[not yet covered]</div>`);
   })
   .on("mouseleave", () => { tooltip.style.display = "none"; });
+mapWrap.addEventListener("touchstart", (e) => {
+  if (!(e.target instanceof Element) || !e.target.classList.contains("county")) tooltip.style.display = "none";
+}, { passive: true });
 
 g.append("path")
   .datum(topojson.mesh(topology, topology.objects.states, (a, b) => a !== b))
@@ -376,7 +380,7 @@ function fitBounds(features, scalePad) {
   return d3.zoomIdentity.translate(width / 2 - k * cx, height / 2 - k * cy).scale(k);
 }
 const ncTransform = fitBounds(ncCounties, 0.85);
-if (reduceMotion) {
+if (reduceMotion || coarsePointer) {
   svg.call(zoom.transform, ncTransform);
 } else {
   svg.transition().delay(500).duration(1600).call(zoom.transform, ncTransform);
@@ -384,7 +388,7 @@ if (reduceMotion) {
 
 document.getElementById("zoom-in").onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 1.6);
 document.getElementById("zoom-out").onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 1 / 1.6);
-document.getElementById("zoom-reset").onclick = () => svg.transition().duration(600).call(zoom.transform, d3.zoomIdentity);
+document.getElementById("zoom-reset").onclick = () => svg.transition().duration(600).call(zoom.transform, ncTransform);
 </script>
 </body>
 </html>
