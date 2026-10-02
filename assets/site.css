@@ -136,14 +136,13 @@ a { color: inherit; text-decoration: none; }
 /* ---------- responsive ---------- */
 @media (max-width: 720px) {
   .nav { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .links { gap: 14px; flex-wrap: wrap; }
+  .links { gap: 4px; flex-wrap: wrap; margin-left: -8px; }
   .learn { margin-top: 40px; }
   .answer { font-size: 18px; }
   .learn h2 { margin-top: 44px; }
   .cta-box { padding: 22px; }
   .cta-box .btn { display: block; text-align: center; }
   .sample th { width: 42%; }
-  .links { gap: 4px; margin-left: -8px; }
   .links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }
   .learn .related ul { margin-top: 4px; }
   .learn .related li + li { margin-top: 0; }
