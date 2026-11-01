@@ -18,7 +18,7 @@ const page = z.object({
   // Inline HTML: the lead answer can carry links.
   answer: z.string(),
   faq: z.array(z.object({ q: z.string(), a: z.string() })),
-  cta: z.string(),
+  cta: z.string().optional(),
   related: z.array(z.string()),
   // Indexed pages only: their llms.txt line and sitemap date.
   llms: z.string().optional(),

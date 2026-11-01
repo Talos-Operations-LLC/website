@@ -38,6 +38,7 @@ if (missing.length) throw new Error(`${entry.id}: related page(s) not found: ${m
 
     <Content />
 
+    {p.faq.length > 0 && (
     <section class="faq" aria-labelledby="faq-heading">
       <h2 id="faq-heading">Frequently asked questions</h2>
       {p.faq.map(({ q, a }) => (
@@ -47,9 +48,10 @@ if (missing.length) throw new Error(`${entry.id}: related page(s) not found: ${m
         </>
       ))}
     </section>
+    )}
 
     <div class="cta-box">
-      <p>{p.cta}</p>
+      {p.cta && <p>{p.cta}</p>}
       <a class="btn btn-primary" href="/#early-access">Request early access</a>
     </div>
 

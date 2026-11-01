@@ -14,12 +14,11 @@ faq:
     a: "[JOSH: approved answer]"
   - q: "What's a verification record?"
     a: "[JOSH: approved answer]"
-cta: "Fee Simple reads the county tax card and the recorded deed for a parcel and returns the owner of record and mailing address, matched by parcel."
 related:
   - "/learn/deed-vs-tax-card/"
   - "/learn/county-record-lag/"
 order: 7
-blurb: "Why the tax-card address goes stale."
+blurb: "Checking the address before a mailing."
 ---
 
 ## How is the mailing address different from the property address?

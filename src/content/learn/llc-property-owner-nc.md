@@ -11,16 +11,13 @@ faq:
     a: "Not necessarily. The registered agent is whoever the LLC designated to receive official papers. It can be an individual, who may or may not be an owner, or a commercial registered-agent service. The listing alone doesn't say who owns the LLC."
   - q: "Are Secretary of State records free?"
     a: "Yes. Viewing business records on the NC Secretary of State site is free. The fees printed on Secretary of State forms are for filing documents, not for viewing them."
-  - q: "What about trusts?"
-    a: "Trusts follow a different path. The deed into a trust typically names the trustee, and trust agreements usually aren't recorded, so the trustee named on the deed is generally where the public record leads."
-cta: "Fee Simple reads the county tax card and the recorded deed for a parcel and returns the owner of record and mailing address, matched by parcel."
 related:
   - "/learn/nc-property-owner-lookup/"
   - "/learn/chain-of-title-nc/"
 order: 6
 blurb: "Joining the deed to the Secretary of State filing."
 llms: "How the NC Secretary of State's business registry is used to find who is behind an LLC-owned parcel."
-updated: "2026-10-01"
+updated: "2026-11-01"
 ---
 
 ## What happens when a deed names an entity?
@@ -43,7 +40,7 @@ When property is held in an LLC, the deed names the LLC as the grantee and the t
 
 ## How do you join the parcel to the filing?
 
-An exact name match is the starting point. Punctuation and abbreviations often differ between the deed index and other records (periods in initials, commas before "INC"), and different entities can have very similar names. Comparing the addresses on the registry record with the tax card's mailing address can help tell similar names apart.
+An exact name match is the starting point. Comparing the addresses on the registry record with the tax card's mailing address can help tell similar names apart.
 
 ## Where does the trail stop?
 
