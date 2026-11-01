@@ -6,13 +6,14 @@
 
 - [Home](https://talosoperations.com/): What Fee Simple does and how to request early access.
 - [Coverage](https://talosoperations.com/coverage.html): Which North Carolina counties Fee Simple covers today, live in production or surveyed with bulk data mapped.
+- [Privacy Policy](https://talosoperations.com/privacy.html): What Fee Simple collects, what it does with it, who else handles it, and the choices you have.
+- [Terms of Service](https://talosoperations.com/terms.html): The terms for using Fee Simple: your account, acceptable use, what the records are and are not, and our liability.
 
 ## Learn
 
 - [Learn](https://talosoperations.com/learn/): An index of explanations of how North Carolina property records work.
 - [How to find out who owns a property in NC from county records](https://talosoperations.com/learn/nc-property-owner-lookup/): How to find a North Carolina property owner from the county tax card and the recorded deed.
-- [Deed vs. tax card: why they disagree](https://talosoperations.com/learn/deed-vs-tax-card/): Why the recorded deed and the county tax card can show different owners, and how to check both.
-- [Why county ownership records lag behind sales](https://talosoperations.com/learn/county-record-lag/): Why the tax card can still show the previous owner after a new deed is recorded.
+- [Deed vs. tax card: what each record is](https://talosoperations.com/learn/deed-vs-tax-card/): What the recorded deed and the county tax card each are, and how to check one against the other.
 - [Grantor vs. grantee: reading a deed index](https://talosoperations.com/learn/grantor-vs-grantee/): What grantor and grantee mean, and how a Register of Deeds index is organized and searched.
 - [What is a chain of title, and how is one checked in NC?](https://talosoperations.com/learn/chain-of-title-nc/): How a chain of title is followed through the NC grantor/grantee index, and what a break looks like.
 - [Finding the owner behind an LLC-owned property in NC](https://talosoperations.com/learn/llc-property-owner-nc/): How the NC Secretary of State's business registry is used to find who is behind an LLC-owned parcel.
