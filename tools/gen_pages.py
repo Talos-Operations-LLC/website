@@ -18,7 +18,7 @@ FONTS = "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&fami
 
 LEARN_TITLES = {
     "nc-property-owner-lookup": "How to find out who owns a property in NC from county records",
-    "deed-vs-tax-card": "Deed vs. tax card: why they disagree",
+    "deed-vs-tax-card": "Deed vs. tax card: what each record is",
     "county-record-lag": "Why county ownership records lag behind sales",
     "grantor-vs-grantee": "Grantor vs. grantee: reading a deed index",
     "chain-of-title-nc": "What is a chain of title, and how is one checked in NC?",
@@ -117,7 +117,12 @@ def page(p):
     else:
         crumb_html = f'    <p class="crumb"><a href="/">[home]</a> / {esc(crumb)}</p>'
 
+    # The learn library is about county records; its only product surface is the ask.
+    cta_html = "" if p["path"].startswith("/learn/") else f"      <p>{esc(p.get('cta', CTA_DEFAULT))}</p>\n"
     faq_html = "\n\n".join(f"      <h3>{esc(q)}</h3>\n      <p>{esc(a)}</p>" for q, a in p["faq"])
+    faq_section = ('    <section class="faq" aria-labelledby="faq-heading">\n'
+                   '      <h2 id="faq-heading">Frequently asked questions</h2>\n\n'
+                   f'{faq_html}\n    </section>\n\n') if p["faq"] else ""
     rel = "\n".join(related_link(r) for r in p["related"])
 
     body = f"""<body>
@@ -136,15 +141,8 @@ def page(p):
 
 {p['sections'].strip(chr(10))}
 
-    <section class="faq" aria-labelledby="faq-heading">
-      <h2 id="faq-heading">Frequently asked questions</h2>
-
-{faq_html}
-    </section>
-
-    <div class="cta-box">
-      <p>{esc(p.get('cta', CTA_DEFAULT))}</p>
-      <a class="btn btn-primary" href="/#early-access">Request early access</a>
+{faq_section}    <div class="cta-box">
+{cta_html}      <a class="btn btn-primary" href="/#early-access">Request early access</a>
     </div>
 
     <nav class="related" aria-labelledby="related-heading">
@@ -172,90 +170,58 @@ def page(p):
 
 PAGES = []
 
+LAG_HOLD = "SOURCE HOLD: noindex stays until the record-lag claims have a primary source that is not our own runs."
+
 # ---------------------------------------------------------------- Page 4
 PAGES.append(dict(
     path="/learn/deed-vs-tax-card/",
-    title="Deed vs. tax card: why they disagree",
-    desc="The deed is the recorded source document; the tax card is the tax office's working copy. Why the two disagree after a sale, over name formats and over mailing addresses.",
+    title="Deed vs. tax card: what each record is",
+    desc="The deed is the recorded source document; the tax card is the county tax office's record for the parcel. What each one holds, and how to check one against the other.",
     crumb="deed vs. tax card",
-    h1="Why don't the deed and the tax card show the same owner?",
-    answer="The deed is the recorded source document: it says who took title and when. The tax card is the county tax office's working record, updated after the deed is processed. The two disagree most often right after a sale, and also over name formatting, multiple owners, and mailing-address changes that never reach the county.",
+    h1="What's the difference between the deed and the tax card?",
+    answer="The deed is the recorded source document: it says who took title and when. The tax card is the county tax office's record for the parcel, kept for listing and taxing property.",
     sections="""
     <h2>What is each record, and which office keeps it?</h2>
     <p>The deed is the document that transfers ownership. After closing it is recorded at the county Register of Deeds, which indexes it under the names of the grantor and grantee and assigns it a book and page. The recorded deed is the source document for who took title and when.</p>
-    <p>The tax card is the county tax office's record for a parcel, kept for listing and taxing property. It carries the owner's name, a mailing address, the property address, the parcel number and the assessed value. The tax office updates the owner after a deed is recorded: the tax card follows the deed rather than creating ownership.</p>
-
-    <h2>Why do they disagree right after a sale?</h2>
-    <p>The deed is recorded first. The tax office processes the transfer afterward, in a separate system, so the tax card can still show the previous owner after the new deed is recorded. <a href="/learn/county-record-lag/">Why county records lag behind sales</a> covers that window.</p>
-
-    <h2>How do name formats make the same owner look different?</h2>
-    <ul>
-      <li><strong>Name order.</strong> Deed indexes list people last name first, and tax cards can too, while the deed itself is written in natural order.</li>
-      <li><strong>Two owners.</strong> Two owners can appear as separate rows in the deed index and as one line joined with "&amp;" on the tax card.</li>
-      <li><strong>Trusts.</strong> A property held in trust may be listed under the trust's name, the trustee's name, or both.</li>
-      <li><strong>Entities.</strong> Punctuation differs between records: periods in initials, commas before "INC".</li>
-    </ul>
+    <p>The tax card is the county tax office's record for a parcel, kept for listing and taxing property. It carries the owner's name, a mailing address, the property address, the parcel number and the assessed value.</p>
 
     <h2>Why is the mailing address a separate question?</h2>
-    <p>The tax card's mailing address is where the county sends the tax bill. It is a separate field from the property address, and it isn't part of the deed's conveyance. Owners who move, rent the property out or sell may never update it with the county. <a href="/learn/verify-mailing-address/">Verifying a mailing address</a> describes how it's checked.</p>
+    <p>The tax card's mailing address is where the county sends the tax bill. It is a separate field from the property address, and it isn't part of the deed's conveyance. <a href="/learn/verify-mailing-address/">Verifying a mailing address</a> describes how it's checked.</p>
 
     <h2>How do you check both, and what does a match look like?</h2>
     <ol>
       <li>Pull the tax card for the property address and note the owner, mailing address and parcel number.</li>
       <li>Find the most recent deed for the parcel, from the book and page on the tax card or by searching the grantee index for the owner's name.</li>
-      <li>Compare the deed's grantee name with the tax card owner, allowing for the format differences above.</li>
+      <li>Compare the deed's grantee name with the tax card owner.</li>
       <li>Compare the deed's property description with the tax card's parcel reference.</li>
       <li>Check the deed's recording date against the sale date on the tax card, if the card shows one.</li>
     </ol>
-    <p>A match means the grantee on the most recent deed is the owner on the tax card, allowing for formatting, and the parcel references agree.</p>
+    <p>A match means the grantee on the most recent deed is the owner on the tax card and the parcel references agree.</p>
 """,
     faq=[
-        ("Which record is \"right\"?", "They answer different questions. The recorded deed is the source document for who took title; the tax card is the tax office's working copy, which follows the deed. A disagreement right after a sale can mean the tax card hasn't caught up yet."),
-        ("How long until the tax card catches up?", "It varies by county and by how each tax office processes transfers. Fee Simple doesn't publish a figure yet. [ELIJAH: observed range from the assessor-lag data, labeled as observed]"),
-        ("Does a mismatch mean fraud?", "A mismatch on its own doesn't indicate fraud. Timing and name formatting both produce mismatches, as ordinary results of two offices keeping separate records."),
+        ("Which record is \"right\"?", "They answer different questions. The recorded deed is the source document for who took title; the tax card is the tax office's working copy."),
     ],
-    related=["/learn/nc-property-owner-lookup/", "/learn/county-record-lag/", "/learn/verify-mailing-address/", "/for/hoa-management/"],
+    related=["/learn/nc-property-owner-lookup/", "/learn/county-record-lag/", "/learn/verify-mailing-address/"],
 ))
 
 # ---------------------------------------------------------------- Page 5
 PAGES.append(dict(
-    path="/learn/county-record-lag/",
+    path="/learn/county-record-lag/", noindex=LAG_HOLD, jsonld=False,
     title="Why county ownership records lag behind sales",
     desc="After a sale, the deed is recorded at the Register of Deeds and the tax office processes the transfer separately. Why the tax card can still show the previous owner, and how the gap shows up.",
     crumb="record lag",
     h1="Why do county ownership records lag behind sales?",
-    answer="When a property sells in North Carolina, the deed is recorded and indexed at the Register of Deeds. The county tax office then processes the transfer separately, so the tax card can still show the previous owner after the new deed is recorded. Anyone mailing to the tax-card address during that window may be mailing to someone who has moved.",
+    answer="When a property sells in North Carolina, the deed is recorded and indexed at the Register of Deeds.",
     sections="""
     <h2>What path does a deed travel after closing?</h2>
     <ol>
       <li><strong>Closing.</strong> The seller signs the deed to the buyer.</li>
       <li><strong>Recording.</strong> The deed is presented to the county Register of Deeds, recorded and given a book and page.</li>
       <li><strong>Indexing.</strong> The deed is entered in the grantor and grantee index, where it becomes searchable by name.</li>
-      <li><strong>Tax office transfer.</strong> The county tax office updates the owner on the tax card, and the mailing address if a new one is supplied.</li>
     </ol>
-
-    <h2>Where does the lag come from?</h2>
-    <p>Recording and the tax transfer happen in separate offices, in separate systems, each on its own schedule. Until the tax office processes the transfer, the tax card reflects the owner before the sale.</p>
-    <p>Third-party copies of county data can trail further. A statewide parcel dataset reflects the date it was last refreshed: in one case we checked, it showed no sales after the end of 2025, about eight months behind the county's own records.</p>
-
-    <h2>What does a "last action" date on a tax card mean?</h2>
-    <p>Some county tax cards print a "last action" date for the record. A sale recorded after that date may not be reflected on the card yet.</p>
-
-    <h2>How does the lag show up in practice?</h2>
-    <ul>
-      <li>Mail to the tax-card address comes back, or is forwarded.</li>
-      <li>Notices go out addressed to the previous owner.</li>
-      <li>The new owner doesn't receive mail sent from county records.</li>
-      <li>A sale appears in the deed index but not yet on the tax card.</li>
-    </ul>
-    <p><a href="/learn/verify-mailing-address/">Verifying a mailing address</a> describes the check that catches this before a mailing.</p>
 """,
-    faq=[
-        ("How long is the lag typically?", "It varies by county and over the year, and Fee Simple doesn't publish a figure yet. In one case observed in our runs, a county tax card still showed the previous owner five days after the new deed was recorded. [ELIJAH: observed ranges from the assessor-lag data, labeled as observed]"),
-        ("Does every county lag the same?", "Not in what we've observed. Each county's tax office processes transfers in its own system, and the gaps we've seen differ: a tax card still behind five days after recording in one county, and at least seven days in another."),
-        ("Is the deed index also delayed?", "In the cases we've observed, the deed index has been ahead of the tax card, not behind it. It is the record the tax card updates from."),
-    ],
-    related=["/learn/deed-vs-tax-card/", "/learn/verify-mailing-address/", "/learn/nc-property-owner-lookup/", "/for/hoa-eye/"],
+    faq=[],
+    related=["/learn/deed-vs-tax-card/", "/learn/verify-mailing-address/", "/learn/nc-property-owner-lookup/"],
 ))
 
 # ---------------------------------------------------------------- Page 7
@@ -290,16 +256,12 @@ PAGES.append(dict(
       <li><strong>Estates.</strong> When an owner dies, the property can pass under a will or by inheritance without a new deed, so the next deed's grantor may be an heir or an executor. In North Carolina, the Clerk of Superior Court in each county handles the administration of estates.</li>
       <li><strong>Trusts and entities.</strong> Property moves into a trust or an entity, and the next link is indexed under the trustee's or the entity's name.</li>
     </ul>
-
-    <h2>When do people order title work instead of checking the index themselves?</h2>
-    <p>A chain-of-title check through the index answers one question: who holds title now, and through which deeds. Title work done by an attorney or abstractor typically covers more than the deeds, such as deeds of trust and their cancellations, liens, judgments and other recorded matters. People generally order title work when that wider scope matters, such as for a sale or a refinance, and check the index themselves when the question is only who owns the property.</p>
 """,
     faq=[
-        ("Is a chain-of-title check the same as a title search?", "No. A chain-of-title check follows the deeds to the current owner. A title search covers a wider scope, typically including deeds of trust, liens, judgments and other recorded matters affecting the property."),
-        ("How far back do people check?", "It depends on the purpose of the check. [JOSH: typical search periods in NC practice, described, if they are to be stated]"),
-        ("What if a deed is in a trust's name?", "Search under the trustee's name as well as the trust's name. The deed into the trust usually names both, which links the individual owner to the trust in the index."),
+        ("How far back do people check?", "It depends on the purpose of the check."),
+        ("What if a deed is in a trust's name?", "Search under the trustee's name as well as the trust's name."),
     ],
-    related=["/learn/grantor-vs-grantee/", "/learn/nc-property-owner-lookup/", "/for/title-update/"],
+    related=["/learn/grantor-vs-grantee/", "/learn/nc-property-owner-lookup/"],
 ))
 
 # ---------------------------------------------------------------- Page 8
@@ -331,7 +293,7 @@ PAGES.append(dict(
     </ul>
 
     <h2>How do you join the parcel to the filing?</h2>
-    <p>An exact name match is the starting point. Punctuation and abbreviations often differ between the deed index and other records (periods in initials, commas before "INC"), and different entities can have very similar names. Comparing the addresses on the registry record with the tax card's mailing address can help tell similar names apart.</p>
+    <p>An exact name match is the starting point. Comparing the addresses on the registry record with the tax card's mailing address can help tell similar names apart.</p>
 
     <h2>Where does the trail stop?</h2>
     <ul>
@@ -344,9 +306,8 @@ PAGES.append(dict(
     faq=[
         ("Is the registered agent the owner?", "Not necessarily. The registered agent is whoever the LLC designated to receive official papers. It can be an individual, who may or may not be an owner, or a commercial registered-agent service. The listing alone doesn't say who owns the LLC."),
         ("Are Secretary of State records free?", "Yes. Viewing business records on the NC Secretary of State site is free. The fees printed on Secretary of State forms are for filing documents, not for viewing them."),
-        ("What about trusts?", "Trusts follow a different path. The deed into a trust typically names the trustee, and trust agreements usually aren't recorded, so the trustee named on the deed is generally where the public record leads."),
     ],
-    related=["/learn/nc-property-owner-lookup/", "/learn/chain-of-title-nc/", "/for/investors/"],
+    related=["/learn/nc-property-owner-lookup/", "/learn/chain-of-title-nc/"],
 ))
 
 # ------------------------------------------------- review pages (noindex)
@@ -377,7 +338,7 @@ PAGES.append(dict(
         ("What typically happens after one is sent?", "[JOSH: approved answer]"),
         ("Is there a condo equivalent?", "[JOSH: approved answer, with a pointer to Chapter 47C]"),
     ],
-    related=["/learn/ncgs-47f-3-116/", "/learn/verify-mailing-address/", "/learn/hoa-collections-process-nc/", "/for/hoa-management/"],
+    related=["/learn/ncgs-47f-3-116/", "/learn/verify-mailing-address/", "/learn/hoa-collections-process-nc/"],
 ))
 
 PAGES.append(dict(
@@ -398,7 +359,7 @@ PAGES.append(dict(
         ("What's the difference between 47F and 47C?", "[JOSH: approved answer]"),
         ("When was it last amended?", "[JOSH: approved answer, verified against ncleg.gov before publishing]"),
     ],
-    related=["/learn/15-day-letter-nc/", "/learn/hoa-collections-process-nc/", "/for/attorneys/"],
+    related=["/learn/15-day-letter-nc/", "/learn/hoa-collections-process-nc/"],
 ))
 
 PAGES.append(dict(
@@ -419,7 +380,7 @@ PAGES.append(dict(
         ("Is the deed's address more current than the tax card's?", "[JOSH: approved answer]"),
         ("What's a verification record?", "[JOSH: approved answer]"),
     ],
-    related=["/learn/deed-vs-tax-card/", "/learn/county-record-lag/", "/for/hoa-management/"],
+    related=["/learn/deed-vs-tax-card/", "/learn/county-record-lag/"],
 ))
 
 PAGES.append(dict(
@@ -441,7 +402,7 @@ PAGES.append(dict(
         ("How long does the process take?", "[JOSH: approved answer, typical ranges labeled as observed]"),
         ("Who sends each notice?", "[JOSH: approved answer]"),
     ],
-    related=["/learn/15-day-letter-nc/", "/learn/ncgs-47f-3-116/", "/learn/verify-mailing-address/", "/for/hoa-management/"],
+    related=["/learn/15-day-letter-nc/", "/learn/ncgs-47f-3-116/", "/learn/verify-mailing-address/"],
 ))
 
 # ------------------------------------------------------ use-case pages

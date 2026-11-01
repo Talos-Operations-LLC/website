@@ -24,18 +24,10 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Is this really free?",
+      "name": "What do copies cost?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. In the counties we've worked in, searching records and viewing them on screen costs nothing, though some portals require an account login. Certified copies carry a fee set by state statute, and a Register of Deeds may also charge for uncertified copies."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How current are county records?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "A deed is recorded at the Register of Deeds after closing. The tax office processes the ownership change separately, so the tax card can still show the previous owner after the new deed is recorded. That gap is why the deed is used as the check on the tax card."
+        "text": "Certified copies carry a fee set by state statute, and a Register of Deeds may also charge for uncertified copies."
       }
     },
     {
@@ -44,14 +36,6 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "County records stop at the entity's name. The NC Secretary of State's business registry lists the LLC's registered agent and filing history, and matching the deed's grantee name to that filing is how people find who is behind an entity-owned parcel."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I search by owner name instead of address?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. County tax search portals generally accept an owner name, a property address or a parcel number, and the Register of Deeds index is searched by name. A name search returns every parcel and document under that name, so expect spelling variants and unrelated people with the same name."
       }
     }
   ]
@@ -77,11 +61,11 @@
 
     <h1>How do you find out who owns a property in North Carolina?</h1>
 
-    <p class="answer">Every North Carolina county keeps ownership records in two offices: the county tax office, whose tax card shows the owner's name and mailing address, and the Register of Deeds, which holds the recorded deed. In the counties we've worked in, searching both and viewing records on screen costs nothing. To look up an owner, pull the tax card for the address, then confirm it against the most recent deed. The same two steps apply in every county, online where the county offers it and at the office where it doesn't.</p>
+    <p class="answer">Every North Carolina county keeps ownership records in two offices: the county tax office, whose tax card shows the owner's name and mailing address, and the Register of Deeds, which holds the recorded deed. To look up an owner, pull the tax card for the address, then confirm it against the most recent deed. The same two steps apply in every county, online where the county offers it and at the office where it doesn't.</p>
 
     <h2>Step 1: How do you find the county tax card?</h2>
-    <p>The tax card (sometimes called the property record card) is the county tax office's record for one parcel. Most counties put it online through a tax or GIS search where you can enter the property address. Where a county doesn't, the same record is available at the tax office.</p>
-    <p>Parcels are identified by a PIN, a parcel identification number, and some counties also use their own account number, often called a REID (real estate ID). Once you have either, it's the most reliable way back to the same parcel, since addresses get abbreviated and misspelled.</p>
+    <p>The tax card (sometimes called the property record card) is the county tax office's record for one parcel. Search the county's tax or GIS site for the property address, or ask the county tax office.</p>
+    <p>Parcels are identified by a PIN, a parcel identification number. Wake County also uses its own account number, the REID (real estate ID).</p>
     <p>A typical tax card shows:</p>
     <table class="sample">
       <caption>Sample tax card. Names, addresses and numbers are invented.</caption>
@@ -97,7 +81,7 @@
     <p>The mailing address and the property address are separate fields. The mailing address is where the county sends the tax bill, and it can be a different house, a PO box or an out-of-state address.</p>
 
     <h2>Step 2: How do you confirm the owner against the recorded deed?</h2>
-    <p>The deed is the recorded source document, kept by the county Register of Deeds. Many tax cards list the deed's book and page, which takes you straight to it. Otherwise, search the Register of Deeds grantee index for the owner name on the tax card.</p>
+    <p>The deed is the recorded source document, kept by the county Register of Deeds. If the tax card lists the deed's book and page, that takes you straight to it. Otherwise, search the Register of Deeds grantee index for the owner name on the tax card.</p>
     <p>On the deed, check three things:</p>
     <ul>
       <li><strong>Grantee name</strong>: it matches the owner on the tax card</li>
@@ -106,40 +90,28 @@
     </ul>
     <p>To check that nothing has been recorded since, search the owner's name in the grantor index from that recording date forward. <a href="/learn/grantor-vs-grantee/">Grantor vs. grantee</a> explains how the two sides of the index work.</p>
 
-    <h2>Why can the two records disagree?</h2>
-    <p>The tax card is updated after the deed, by a different office, so the two can disagree right after a sale. They also differ over name formatting, multiple owners, and mailing-address changes that never reach the county. <a href="/learn/deed-vs-tax-card/">Deed vs. tax card</a> covers each of these, and <a href="/learn/county-record-lag/">why county records lag behind sales</a> covers the timing.</p>
     <p>If the deed names an LLC rather than a person, the trail continues at the NC Secretary of State. <a href="/learn/llc-property-owner-nc/">Finding the owner behind an LLC</a> walks through it.</p>
-
-    <!-- TODO: "County-by-county directory" section: links to all 100 /counties/ pages (the mesh hub). Add when the county pages exist. -->
 
     <section class="faq" aria-labelledby="faq-heading">
       <h2 id="faq-heading">Frequently asked questions</h2>
 
-      <h3>Is this really free?</h3>
-      <p>Yes. In the counties we've worked in, searching records and viewing them on screen costs nothing, though some portals require an account login. Certified copies carry a fee set by state statute, and a Register of Deeds may also charge for uncertified copies.</p>
-
-      <h3>How current are county records?</h3>
-      <p>A deed is recorded at the Register of Deeds after closing. The tax office processes the ownership change separately, so the tax card can still show the previous owner after the new deed is recorded. That gap is why the deed is used as the check on the tax card.</p>
+      <h3>What do copies cost?</h3>
+      <p>Certified copies carry a fee set by state statute, and a Register of Deeds may also charge for uncertified copies.</p>
 
       <h3>What if the owner is an LLC?</h3>
       <p>County records stop at the entity's name. The NC Secretary of State's business registry lists the LLC's registered agent and filing history, and matching the deed's grantee name to that filing is how people find who is behind an entity-owned parcel.</p>
-
-      <h3>Can I search by owner name instead of address?</h3>
-      <p>Yes. County tax search portals generally accept an owner name, a property address or a parcel number, and the Register of Deeds index is searched by name. A name search returns every parcel and document under that name, so expect spelling variants and unrelated people with the same name.</p>
     </section>
 
     <div class="cta-box">
-      <p>Fee Simple runs both steps for you: it reads the county tax card and the recorded deed for a parcel and returns the owner of record and mailing address, matched by parcel.</p>
       <a class="btn btn-primary" href="/#early-access">Request early access</a>
     </div>
 
     <nav class="related" aria-labelledby="related-heading">
       <h2 id="related-heading">[related]</h2>
       <ul>
-        <li><a href="/learn/deed-vs-tax-card/">Deed vs. tax card: why they disagree</a></li>
+        <li><a href="/learn/deed-vs-tax-card/">Deed vs. tax card: what each record is</a></li>
         <li><a href="/learn/county-record-lag/">Why county ownership records lag behind sales</a></li>
         <li><a href="/learn/llc-property-owner-nc/">Finding the owner behind an LLC-owned property in NC</a></li>
-        <li><a href="/for/investors/">Fee Simple for real estate investors</a></li>
       </ul>
     </nav>
 
