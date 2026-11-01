@@ -1,0 +1,9 @@
+---
+import { getCollection } from 'astro:content';
+import Article from '../../../components/Article.astro';
+
+export async function getStaticPaths() {
+  return (await getCollection('learn')).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+---
+<Article entry={Astro.props.entry} section="learn" />

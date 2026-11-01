@@ -1,0 +1,65 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { faqJsonld, linkTitles, pathOf, type Entry, type Section } from '../lib/pages';
+import '../styles/site.css';
+
+interface Props {
+  entry: Entry;
+  section: Section;
+}
+
+const { entry, section } = Astro.props;
+const p = entry.data;
+const { Content } = await render(entry);
+const titles = await linkTitles();
+const missing = p.related.filter((r) => !titles.has(r));
+if (missing.length) throw new Error(`${entry.id}: related page(s) not found: ${missing.join(', ')}`);
+---
+<Base
+  title={`${p.title} — Fee Simple`}
+  description={p.description}
+  path={pathOf(section, entry.id)}
+  ogType="article"
+  noindex={p.noindex}
+  jsonld={p.faqJsonld ? [faqJsonld(p.faq)] : []}
+  active={section === 'learn' ? 'learn' : undefined}
+>
+  <main>
+  <article class="learn">
+
+    {section === 'learn'
+      ? <p class="crumb"><a href="/learn/">[learn]</a> / {p.crumb}</p>
+      : <p class="crumb"><a href="/">[home]</a> / {p.crumb}</p>}
+
+    <h1>{p.h1}</h1>
+
+    <p class="answer" set:html={p.answer} />
+
+    <Content />
+
+    <section class="faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Frequently asked questions</h2>
+      {p.faq.map(({ q, a }) => (
+        <>
+          <h3>{q}</h3>
+          <p>{a}</p>
+        </>
+      ))}
+    </section>
+
+    <div class="cta-box">
+      <p>{p.cta}</p>
+      <a class="btn btn-primary" href="/#early-access">Request early access</a>
+    </div>
+
+    <nav class="related" aria-labelledby="related-heading">
+      <h2 id="related-heading">[related]</h2>
+      <ul>
+        {p.related.map((r) => <li><a href={r}>{titles.get(r)}</a></li>)}
+      </ul>
+    </nav>
+
+  </article>
+  </main>
+</Base>

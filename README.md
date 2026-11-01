@@ -12,9 +12,12 @@ Astro, built to static HTML. One dependency (`astro`, exact pin). See `BUILD.md`
 | --- | --- |
 | `src/pages/` | One file per page; the path is the URL |
 | `src/layouts/Base.astro` | Shared head, meta, canonical, JSON-LD, nav, footer |
-| `src/components/` | Nav and footer |
-| `src/styles/site.css` | Sitewide stylesheet |
+| `src/components/` | Nav, footer, and the article template for /learn/ and /for/ |
+| `src/content/` | The /learn/ and /for/ pages, in Markdown |
+| `src/lib/` | Page lists for the hub, sitemap and llms.txt |
+| `src/styles/site.css` | Stylesheet for the /learn/ and /for/ pages |
 | `public/` | Copied to the site as-is: favicon, images, `map-data.js`, `demo/` |
+| `FACTS.md` | Source for every factual claim on the site |
 | `public/demo/` | The product demo at /demo: the app's own pages with a stand-in server in the browser and sample data (public parcels only). Built by a script in the product repo; do not hand-edit. |
 | `netlify.toml` | Build command, security headers, redirects |
 

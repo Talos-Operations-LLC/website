@@ -8,9 +8,13 @@ after a build is exactly what visitors get.
 
 - **`src/pages/`** — each `.astro` file becomes one HTML page at the same path
   (`coverage.astro` → `/coverage.html`, `learn/index.astro` → `/learn/`).
+  `sitemap.xml.ts`, `robots.txt.ts` and `llms.txt.ts` write those three files.
+- **`src/content/`** — the /learn/ and /for/ pages as Markdown, one file each. The
+  front matter holds the title, description, FAQ, related links and noindex reason.
 - **`src/layouts/` and `src/components/`** — the shared head, nav and footer.
   Every page uses them, so a nav or footer change is made once.
-- **`src/styles/site.css`** — the sitewide stylesheet, bundled into `/_astro/`.
+- **`src/styles/site.css`** — the stylesheet for the /learn/ and /for/ pages, bundled
+  into `/_astro/`. Home, coverage, privacy and terms keep their own inline styles.
 - **`public/`** — copied into `dist/` byte for byte. Nothing in it is processed.
 
 ## Run it locally
