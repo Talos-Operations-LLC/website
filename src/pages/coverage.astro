@@ -5,20 +5,20 @@ import Base from '../layouts/Base.astro';
 <Fragment slot="head">
 <style is:inline>
   :root {
-    --bg: #E4E4E1;
-    --ink: #1A1A1A;
-    --mute: #6B6B6B;
-    --rule: #C9C9C6;
-    --accent: #1F4FD8;
-    --accent-dark: #163CA8;
-    --btn: #111111;
-    --paper: #F4F4F2;
+    --bg: #151b27;
+    --ink: #e6eaf2;
+    --mute: #8b93a7;
+    --rule: #2c3446;
+    --accent: #4d7cff;
+    --accent-dark: #2f5be0;
+    --btn: #4d7cff;
+    --paper: #1d2433;
     --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
     --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
     --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { color-scheme: light; }
+  html { color-scheme: dark; }
   body {
     background: var(--bg);
     color: var(--ink);
@@ -82,7 +82,7 @@ import Base from '../layouts/Base.astro';
   .county.surveyed:hover { fill: var(--mute); fill-opacity: 0.5; }
   .county.live:hover { fill: var(--accent-dark); }
   .state-line { fill: none; stroke: var(--rule); stroke-width: 0.7; pointer-events: none; }
-  .nation-line { fill: none; stroke: var(--ink); stroke-width: 0.8; pointer-events: none; }
+  .nation-line { fill: none; stroke: var(--mute); stroke-width: 0.8; pointer-events: none; }
   .map-controls { position: absolute; top: 12px; right: 12px; display: flex; flex-direction: column; gap: 6px; }
   .map-controls button {
     width: 34px; height: 34px;
@@ -103,7 +103,7 @@ import Base from '../layouts/Base.astro';
   .legend .row { display: flex; align-items: center; gap: 8px; }
   .legend .sw { width: 16px; height: 11px; border: 1px solid var(--rule); flex: none; }
   .sw.live { background: var(--accent); border-color: var(--accent-dark); }
-  .sw.surveyed { background: rgba(107,107,107,0.3); border-color: var(--mute); }
+  .sw.surveyed { background: rgba(139,147,167,0.3); border-color: var(--mute); }
   .sw.none { background: var(--paper); }
   .tooltip {
     position: absolute; pointer-events: none;
