@@ -17,7 +17,6 @@ cta: "Fee Simple reads the county tax card and the recorded deed for a parcel an
 related:
   - "/learn/nc-property-owner-lookup/"
   - "/learn/chain-of-title-nc/"
-  - "/for/investors/"
 order: 6
 blurb: "Joining the deed to the Secretary of State filing."
 llms: "How the NC Secretary of State's business registry is used to find who is behind an LLC-owned parcel."

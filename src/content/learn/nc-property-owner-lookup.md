@@ -5,10 +5,10 @@ description: "Every NC county keeps ownership records in two offices: the tax of
 faqJsonld: true
 crumb: "owner lookup"
 h1: "How do you find out who owns a property in North Carolina?"
-answer: "Every North Carolina county keeps ownership records in two offices: the county tax office, whose tax card shows the owner's name and mailing address, and the Register of Deeds, which holds the recorded deed. In the counties we've worked in, searching both and viewing records on screen costs nothing. To look up an owner, pull the tax card for the address, then confirm it against the most recent deed. The same two steps apply in every county, online where the county offers it and at the office where it doesn't."
+answer: "Every North Carolina county keeps ownership records in two offices: the county tax office, whose tax card shows the owner's name and mailing address, and the Register of Deeds, which holds the recorded deed. In the counties checked so far, searching both and viewing records on screen costs nothing. To look up an owner, pull the tax card for the address, then confirm it against the most recent deed. The same two steps apply in every county, online where the county offers it and at the office where it doesn't."
 faq:
   - q: "Is this really free?"
-    a: "Yes. In the counties we've worked in, searching records and viewing them on screen costs nothing, though some portals require an account login. Certified copies carry a fee set by state statute, and a Register of Deeds may also charge for uncertified copies."
+    a: "Yes. In the counties checked so far, searching records and viewing them on screen costs nothing, though some portals require an account login. Certified copies carry a fee set by state statute, and a Register of Deeds may also charge for uncertified copies."
   - q: "How current are county records?"
     a: "A deed is recorded at the Register of Deeds after closing. The tax office processes the ownership change separately, so the tax card can still show the previous owner after the new deed is recorded. That gap is why the deed is used as the check on the tax card."
   - q: "What if the owner is an LLC?"
@@ -20,7 +20,6 @@ related:
   - "/learn/deed-vs-tax-card/"
   - "/learn/county-record-lag/"
   - "/learn/llc-property-owner-nc/"
-  - "/for/investors/"
 order: 1
 blurb: "The two-office method that works in all 100 counties."
 llms: "How to find a North Carolina property owner from the county tax card and the recorded deed."

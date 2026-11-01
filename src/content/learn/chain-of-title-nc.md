@@ -19,7 +19,6 @@ cta: "Fee Simple reads the county tax card and the recorded deed for a parcel an
 related:
   - "/learn/grantor-vs-grantee/"
   - "/learn/nc-property-owner-lookup/"
-  - "/for/title-update/"
 order: 5
 blurb: "Walking conveyances forward through the index."
 llms: "How a chain of title is followed through the NC grantor/grantee index, and what a break looks like."

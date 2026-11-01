@@ -18,7 +18,6 @@ related:
   - "/learn/nc-property-owner-lookup/"
   - "/learn/county-record-lag/"
   - "/learn/verify-mailing-address/"
-  - "/for/hoa-management/"
 order: 2
 blurb: "Two records, two offices, one parcel."
 llms: "Why the recorded deed and the county tax card can show different owners, and how to check both."

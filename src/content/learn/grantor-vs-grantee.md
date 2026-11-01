@@ -17,7 +17,6 @@ cta: "Fee Simple reads the county tax card and the recorded deed for a parcel an
 related:
   - "/learn/chain-of-title-nc/"
   - "/learn/nc-property-owner-lookup/"
-  - "/for/title-update/"
 order: 4
 blurb: "The two roles and how the index is organized."
 llms: "What grantor and grantee mean, and how a Register of Deeds index is organized and searched."
@@ -61,8 +60,6 @@ Each county's Register of Deeds keeps an index of every recorded document, searc
 Chaining these searches together, deed by deed, is how a chain of title is put together. [How a chain of title is checked in NC](/learn/chain-of-title-nc/) walks through that method.
 
 ## What index quirks trip people up?
-
-<!-- TODO: add observed patterns from Fee Simple's own matching data (per the skeleton). No figures until they're real. -->
 
 - **Name order.** Indexes list people last name first, with or without a comma between surname and given names, depending on the county's system.
 - **Two owners.** A deed to two owners can be indexed with a separate row for each name, though some indexes put co-owners who share a surname on one row.

@@ -18,7 +18,6 @@ cta: "Fee Simple reads the county tax card and the recorded deed for a parcel an
 related:
   - "/learn/deed-vs-tax-card/"
   - "/learn/county-record-lag/"
-  - "/for/hoa-management/"
 order: 7
 blurb: "Why the tax-card address goes stale."
 ---
