@@ -143,7 +143,7 @@ const description = 'Fee Simple: the highest and most complete form of parcel di
    drift so big bright points hang over tiny dim ones.
 
    Performance choices (lag fixes, each tunable):
-   - ~7.3k particles on desktop (every 2nd point), ~3.7k on phones
+   - ~3.7k particles on desktop (every 4th point), ~1.8k on phones
    - devicePixelRatio capped at 1.5 (glow hides pixels)
    - all link lines batched into ONE stroked path per frame
    No network, no libraries.
@@ -205,7 +205,7 @@ function makeSprites() {
     const grad = c.createRadialGradient(SPR/2, SPR/2, 0, SPR/2, SPR/2, SPR/2);
     grad.addColorStop(0,    'rgba(255,255,255,0.9)');            // hot core
     grad.addColorStop(0.18, 'rgba(' + r + ',' + g + ',' + bl + ',0.85)');
-    grad.addColorStop(0.5,  'rgba(' + r + ',' + g + ',' + bl + ',0.22)');
+    grad.addColorStop(0.5,  'rgba(' + r + ',' + g + ',' + bl + ',0.1)');
     grad.addColorStop(1,    'rgba(' + r + ',' + g + ',' + bl + ',0)');
     c.fillStyle = grad;
     c.fillRect(0, 0, SPR, SPR);
@@ -243,8 +243,9 @@ function build() {
   let cx = 0, cy = 0, n = src.length / 2;
   for (let i = 0; i < src.length; i += 2) { cx += src[i]; cy += src[i + 1]; }
   cx /= n; cy /= n;
-  // desktop: every 2nd point (~7.3k); phones: every 4th (~3.7k)
-  const stride = (innerWidth < 640 ? 4 : 2) * 2;
+  // Sparse on purpose: the map should read as a starfield, not a solid mass.
+  // desktop: every 4th point (~3.7k); phones: every 8th (~1.8k)
+  const stride = (innerWidth < 640 ? 8 : 4) * 2;
   for (let i = 0; i < src.length; i += stride) {
     const r = Math.random;
     const mx = src[i], my = src[i + 1];
@@ -255,8 +256,8 @@ function build() {
     P.push({
       mx, my,
       bucket: bucketFor(hue),
-      size: (0.9 + Math.pow(r(), 2.6) * 3.4) * (0.55 + z * 0.9),
-      alpha: 0.22 + z * 0.6,
+      size: (0.6 + Math.pow(r(), 3.2) * 2.2) * (0.5 + z * 0.8),
+      alpha: 0.14 + z * 0.5,
       sx: 0, sy: 0,
       a1: r() * Math.PI * 2, a2: r() * Math.PI * 2,
       f1: 0.22 + r() * 0.35, f2: 0.16 + r() * 0.3,
@@ -434,7 +435,8 @@ function frame(ms) {
 
   // the blue web, ONE batched path
   ctx.lineWidth = 0.5;
-  ctx.strokeStyle = 'rgba(105,145,255,0.055)';
+  // Links stretch across the box once the map dissolves; only show them formed.
+  ctx.strokeStyle = 'rgba(105,145,255,' + 0.03 * (reduced ? 1 : formAmount) + ')';
   ctx.beginPath();
   for (const [i, j] of LINKS) {
     ctx.moveTo(P[i].x, P[i].y);
