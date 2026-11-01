@@ -2,20 +2,20 @@
    The home, coverage, privacy and terms pages still carry their own copies of the
    tokens, nav and footer rules inline; keep them in sync until those merge in here. */
 :root {
-  --bg: #E4E4E1;
-  --ink: #1A1A1A;
-  --mute: #6B6B6B;
-  --rule: #C9C9C6;
-  --accent: #1F4FD8;
-  --accent-dark: #163CA8;
-  --btn: #111111;
-  --paper: #F4F4F2;
+  --bg: #151b27;
+  --ink: #e6eaf2;
+  --mute: #8b93a7;
+  --rule: #2c3446;
+  --accent: #4d7cff;
+  --accent-dark: #7a9cff;
+  --btn: #2f5be0;
+  --paper: #1d2433;
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
   --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { color-scheme: light; }
+html { color-scheme: dark; }
 body {
   background: var(--bg);
   color: var(--ink);
