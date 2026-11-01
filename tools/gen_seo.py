@@ -3,7 +3,7 @@
 #
 # Inputs:
 #   - Every tracked .html file (git ls-files). A page is included if its own <head> has no
-#     robots noindex meta tag and it isn't under demo/. Changing a page's noindex status and
+#     robots noindex meta tag. Changing a page's noindex status and
 #     re-running is all it takes to add or drop it.
 #   - lastmod: the date of the file's last commit (git log -1 --format=%cs).
 #   - LLMS below: a title and a one-sentence description for each indexable page, keyed by
@@ -17,6 +17,7 @@
 #
 # Run from the repo root:  python tools/gen_seo.py
 import html, json, re, subprocess, sys
+from pathlib import Path
 
 DOMAIN = "https://talosoperations.com"
 HUB = "learn/index.html"
@@ -51,8 +52,6 @@ SECTIONS = [("/learn/", "Learn")]
 ROBOTS = """# robots.txt for talosoperations.com
 # Every crawler is allowed. The named group records that the search and AI
 # crawlers listed in it are welcome; "*" already covers them.
-# /demo/ is kept out of search by the X-Robots-Tag header in netlify.toml,
-# which a crawler can only see if it is allowed to fetch the page.
 
 User-agent: *
 Allow: /
@@ -101,7 +100,7 @@ def file_for(url):
 
 
 def indexable(f):
-    return not f.startswith("demo/") and not NOINDEX.search(read(f))
+    return Path(f).is_file() and not NOINDEX.search(read(f))
 
 
 def hub_list():
