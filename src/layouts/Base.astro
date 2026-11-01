@@ -13,17 +13,25 @@ interface Props {
   noindex?: string;
   jsonld?: object[];
   active?: 'home' | 'coverage' | 'learn';
+  // The dark homepage brings its own fonts and chrome; every other page
+  // takes the light-theme nav, footer and type.
+  bare?: boolean;
+  fonts?: string;
+  viewport?: string;
 }
 
-const { title, description, path, ogType = 'website', noindex, jsonld = [], active } = Astro.props;
+const LIGHT_FONTS = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;600;700&display=swap';
+const {
+  title, description, path, ogType = 'website', noindex, jsonld = [], active,
+  bare = false, fonts = LIGHT_FONTS, viewport = 'width=device-width, initial-scale=1.0',
+} = Astro.props;
 const url = path ? new URL(path, Astro.site).href : undefined;
-const FONTS = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;600;700&display=swap';
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content={viewport}>
 <title>{title}</title>
 <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
@@ -38,16 +46,18 @@ const FONTS = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;
 {url && <meta property="og:url" content={url}>}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href={FONTS} rel="stylesheet">
+<link href={fonts} rel="stylesheet">
 {jsonld.map((d) => <script is:inline type="application/ld+json" set:html={JSON.stringify(d, null, 2)} />)}
 <slot name="head" />
 </head>
 <body>
+{bare ? <slot /> : (
 <div class="wrap">
 <Nav active={active} />
 <slot />
 <Footer />
 </div>
+)}
 <slot name="end" />
 </body>
 </html>
