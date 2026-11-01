@@ -9,8 +9,10 @@ answer: "A chain of title is the sequence of recorded deeds showing how ownershi
 faq:
   - q: "Is a chain-of-title check the same as a title search?"
     a: "No. A chain-of-title check follows the deeds to the current owner. A title search covers a wider scope, typically including deeds of trust, liens, judgments and other recorded matters affecting the property."
+  # Holding answer: worth a fuller one describing typical NC search periods,
+  # once that wording is reviewed.
   - q: "How far back do people check?"
-    a: "It depends on the purpose of the check. [JOSH: typical search periods in NC practice, described, if they are to be stated]"
+    a: "It depends on the purpose of the check."
   - q: "What if a deed is in a trust's name?"
     a: "Search under the trustee's name as well as the trust's name. The deed into the trust usually names both, which links the individual owner to the trust in the index."
 cta: "Fee Simple reads the county tax card and the recorded deed for a parcel and returns the owner of record and mailing address, matched by parcel."
