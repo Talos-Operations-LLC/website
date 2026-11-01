@@ -1,31 +1,33 @@
 # Website
 
-Public website for Talos Operations LLC's deed tool. Currently a coming-soon placeholder while the product site is built out.
+Public website for Fee Simple, built by Talos Operations LLC.
 
 ## Stack
 
-Static HTML/CSS — no build step, no dependencies.
+Astro, built to static HTML. One dependency (`astro`, exact pin). See `BUILD.md`.
 
 ## Structure
 
-| File | Purpose |
+| Path | Purpose |
 | --- | --- |
-| `index.html` | Coming-soon landing page |
-| `404.html` | Not-found page (served automatically by Netlify) |
-| `netlify.toml` | Publish directory + security headers |
-| `demo/` | The product demo at /demo: the app's own pages with a stand-in server in the browser and sample data (public parcels only). Built by a script in the product repo; do not hand-edit. |
+| `src/pages/` | One file per page; the path is the URL |
+| `src/layouts/Base.astro` | Shared head, meta, canonical, JSON-LD, nav, footer |
+| `src/components/` | Nav and footer |
+| `src/styles/site.css` | Sitewide stylesheet |
+| `public/` | Copied to the site as-is: favicon, images, `map-data.js`, `demo/` |
+| `public/demo/` | The product demo at /demo: the app's own pages with a stand-in server in the browser and sample data (public parcels only). Built by a script in the product repo; do not hand-edit. |
+| `netlify.toml` | Build command, security headers, redirects |
 
 ## Local development
 
-Open `index.html` directly in a browser, or serve the folder:
-
 ```
-python -m http.server 8000
+npm ci
+npm run dev
 ```
 
 ## Deployment
 
-Connected to Netlify — every push to `main` deploys automatically.
+Connected to Netlify — every push to `main` builds and deploys automatically.
 
 ---
 

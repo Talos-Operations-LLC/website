@@ -15,3 +15,6 @@ dist/
 
 # local screenshots
 screens/
+
+# Astro
+.astro/
