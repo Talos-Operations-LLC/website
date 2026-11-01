@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Footer from '../components/Footer.astro';
 // Particle home positions inside the continental US. GENERATED DATA — never
 // hand-edit. Provenance: US Census TIGER geometry via us-atlas@3.0.1
 // (states-10m), AK/HI/PR removed, Albers USA projection, grid-sampled at
@@ -18,7 +19,6 @@ const jsonld = [
     ]
   }
 ];
-const FONTS = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400..700&family=Fragment+Mono&display=swap';
 const description = 'Fee Simple: the highest and most complete form of parcel diligence.';
 ---
 <Base
@@ -26,67 +26,61 @@ const description = 'Fee Simple: the highest and most complete form of parcel di
   description={description}
   jsonld={jsonld}
   bare
-  fonts={FONTS}
   viewport="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
 <Fragment slot="head">
 <style is:inline>
-  /* Layout: full-bleed particle canvas behind; copy block pinned lower-left; single committed dark look. */
   :root {
-    --bg: #030409;          /* near-black, blue-biased */
-    --ink: #e9edf6;         /* headline text */
-    --mute: #8b93a7;        /* dictionary entries, footer */
-    --faint: #565e72;       /* pronunciation marks, rules */
-    --blue: #4d7cff;        /* Fee Simple electric blue (wordmark + claim accent) */
+    --bg: #030409;
+    --ink: #e9edf6;
+    --mute: #8b93a7;
+    --rule: #1c2130;
+    --blue: #4d7cff;
+    --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
     color-scheme: dark;
   }
-  body { margin: 0; background: var(--bg); color: var(--ink);
-         font-family: "Fragment Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
+         -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
 
-  /* One screen today; a section, not a body scroll lock, so content can follow it. */
-  .hero { position: relative; height: 100vh; height: 100svh; overflow: hidden; }
-  #field { position: absolute; inset: 0; display: block; }
-
-  .chrome, .copy, .foot { position: absolute; z-index: 2;
+  .page { max-width: 1100px; margin: 0 auto;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
-  .chrome { top: 0; left: 0; right: 0;
-    padding-top: calc(18px + env(safe-area-inset-top, 0px));
-    display: flex; justify-content: space-between; align-items: baseline; }
-  .wordmark { font-family: "Cinzel", "Times New Roman", serif; font-weight: 500;
-    font-size: 16px; letter-spacing: .38em; text-transform: uppercase; color: var(--ink); }
-  .nav { font-size: 11px; color: var(--mute); letter-spacing: .08em; text-transform: lowercase;
-    display: flex; gap: 16px; }
-  .nav a { color: var(--mute); text-decoration: none; }
+  .chrome { display: flex; justify-content: space-between; align-items: baseline;
+    padding-top: calc(22px + env(safe-area-inset-top, 0px)); padding-bottom: 22px; }
+  .wordmark { font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
+  .nav { font-family: var(--mono); font-size: 13px; display: flex; gap: 20px; }
+  .nav a { color: var(--mute); }
   .nav a:hover { color: var(--ink); }
   .nav a:focus-visible { outline: 1px solid var(--blue); outline-offset: 3px; }
 
-  .copy { left: 0; bottom: 0; max-width: 620px;
-    padding-bottom: calc(44px + env(safe-area-inset-bottom, 0px)); }
-  .claim { font-family: "Cinzel", "Times New Roman", serif; font-weight: 500;
-    font-size: clamp(19px, 2.6vw, 30px); line-height: 1.55; letter-spacing: .17em;
-    text-transform: uppercase; margin: 0;
-    text-wrap: balance; max-width: 24em; text-shadow: 0 2px 18px rgba(3,4,9,.95); }
-  .claim i { color: inherit; font-style: normal; }
-  .rule { width: 34px; height: 1px; background: var(--faint); margin: 24px 0 0; }
+  .claim { font-weight: 600; font-size: clamp(36px, 6vw, 80px); line-height: 1.04;
+    letter-spacing: -0.03em; margin: clamp(32px, 7vh, 88px) 0 0; max-width: 13em;
+    text-wrap: balance; }
+  .claim i { font-style: normal; color: var(--mute); }
 
-  .foot { right: 0; bottom: 0; left: auto; font-size: 10.5px; color: var(--faint);
-    letter-spacing: .06em; padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+  /* The canvas sizes itself to this box, so the box sets the map's size. */
+  .map { position: relative; width: 100%; aspect-ratio: 16 / 9; max-height: 52svh;
+    margin-top: clamp(16px, 4vh, 40px); }
+  #field { position: absolute; inset: 0; display: block; }
+
+  .footer { margin-top: clamp(32px, 6vh, 64px); padding: 28px 0 calc(36px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--rule); text-align: center;
+    font-family: var(--mono); font-size: 12px; line-height: 1.9; color: var(--mute); }
+  .footer a { color: var(--mute); }
+  .footer a:hover { color: var(--ink); }
 
   @media (max-width: 620px) {
-    .copy { max-width: none; right: 0; padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)); }
-    .foot { display: none; }
     .nav { gap: 4px; margin-right: -8px; }
     .nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }
   }
-  @media (prefers-reduced-motion: reduce) { /* script checks this and renders a still map */ }
 </style>
 </Fragment>
 
-<section class="hero">
-  <canvas id="field" aria-hidden="true"></canvas>
-
+<div class="page">
   <header class="chrome">
     <div class="wordmark">Fee Simple</div>
     <nav class="nav" aria-label="Primary">
@@ -95,13 +89,15 @@ const description = 'Fee Simple: the highest and most complete form of parcel di
     </nav>
   </header>
 
-  <main class="copy">
+  <main>
     <h1 class="claim">The highest and most complete form of <i>parcel diligence.</i></h1>
-    <div class="rule"></div>
+    <div class="map">
+      <canvas id="field" aria-hidden="true"></canvas>
+    </div>
   </main>
 
-  <div class="foot">built by Talos Operations LLC</div>
-</section>
+  <Footer />
+</div>
 
 <Fragment slot="end">
 <script is:inline type="application/json" id="hero-points" set:html={JSON.stringify(points)} />
@@ -130,7 +126,7 @@ const description = 'Fee Simple: the highest and most complete form of parcel di
 const DATA = JSON.parse(document.getElementById('hero-points').textContent);
 
 const canvas = document.getElementById('field');
-// The field fills the hero section, not the window, so content can sit below it.
+// The field fills its box, not the window, so content can sit around it.
 const hero = canvas.parentElement;
 const ctx = canvas.getContext('2d');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -192,17 +188,17 @@ function bucketFor(hue) {
   const h = Math.max(BAND_LO, Math.min(BAND_HI, hue));
   return Math.round((h - BAND_LO) / (BAND_HI - BAND_LO) * (BUCKETS - 1));
 }
-// gold endpoint sprite for the "connecting the country" pulses
-let GOLD;
-function makeGold() {
-  GOLD = document.createElement('canvas');
-  GOLD.width = GOLD.height = SPR;
-  const c = GOLD.getContext('2d');
+// white endpoint sprite for the "connecting the country" pulses
+let WHITE;
+function makeWhite() {
+  WHITE = document.createElement('canvas');
+  WHITE.width = WHITE.height = SPR;
+  const c = WHITE.getContext('2d');
   const grad = c.createRadialGradient(SPR/2, SPR/2, 0, SPR/2, SPR/2, SPR/2);
   grad.addColorStop(0,    'rgba(255,255,255,0.95)');
-  grad.addColorStop(0.2,  'rgba(255,208,110,0.9)');
-  grad.addColorStop(0.55, 'rgba(255,190,80,0.25)');
-  grad.addColorStop(1,    'rgba(255,190,80,0)');
+  grad.addColorStop(0.2,  'rgba(255,255,255,0.9)');
+  grad.addColorStop(0.55, 'rgba(255,255,255,0.25)');
+  grad.addColorStop(1,    'rgba(255,255,255,0)');
   c.fillStyle = grad;
   c.fillRect(0, 0, SPR, SPR);
 }
@@ -239,12 +235,12 @@ function build() {
       amp: (1.0 + r() * 2.0) * (0.5 + z),
       lag: r(),
       tw: r() * Math.PI * 2,
-      ig: Infinity,                                  // gold-wave ignition time
+      ig: Infinity,                                  // white-wave ignition time
       x: 0, y: 0
     });
   }
   // the web: ~1 in 3 particles linked to its nearest neighbor in map space.
-  // Drawn faint blue always; segments light up gold when both ends are flashing.
+  // Drawn faint blue always; segments light up white when both ends are flashing.
   LINKS.length = 0;
   for (let i = 0; i < P.length; i += 3) {
     let best = -1, bd = 17 * 17;
@@ -281,8 +277,8 @@ function build() {
   }
 }
 
-// ---- localized gold pulls ---------------------------------------------------
-// While the country is formed, county-sized pockets flash gold: a random spot
+// ---- localized white pulls ---------------------------------------------------
+// While the country is formed, county-sized pockets flash white: a random spot
 // ignites and blooms outward over a small radius, every point inside flashes,
 // then cools back to blue. Several pockets stagger across the map at once.
 let nextPulse = 0;
@@ -294,7 +290,7 @@ function flashAt(p, t) {
   if (g <= 0 || g >= FLASH) return 0;
   return g < F_IN ? g / F_IN : 1 - (g - F_IN) / (FLASH - F_IN);
 }
-// A "string" is a random walk along the web: gold crawls node-to-node,
+// A "string" is a random walk along the web: white crawls node-to-node,
 // lighting each node and the edge behind it, then fades like a cooling wire.
 function walk(start, maxLen, visited) {
   const seq = [start];
@@ -336,11 +332,9 @@ function layout() {
   canvas.width = W * dpr; canvas.height = H * dpr;
   canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  const narrow = W < 640;
-  const fw = W * (narrow ? 0.94 : 0.82), fh = H * (narrow ? 0.52 : 0.80);
-  scale = Math.min(fw / DATA.w, fh / DATA.h);
-  ox = (W - DATA.w * scale) / 2 + (narrow ? 0 : W * 0.06);
-  oy = (narrow ? H * 0.06 : (H - DATA.h * scale) / 2 - H * 0.06);
+  scale = Math.min(W * 0.94 / DATA.w, H * 0.92 / DATA.h);
+  ox = (W - DATA.w * scale) / 2;
+  oy = (H - DATA.h * scale) / 2;
   for (const p of P) {
     p.sx = W * (0.06 + Math.random() * 0.88);
     p.sy = H * (0.05 + Math.random() * 0.9);
@@ -376,7 +370,7 @@ function frame(ms) {
   ctx.clearRect(0, 0, W, H);
   ctx.globalCompositeOperation = 'lighter';          // additive: overlaps bloom
 
-  // spawn gold strings while the country is (mostly) formed
+  // spawn white strings while the country is (mostly) formed
   const formAmount = reduced ? 0 : 1 - phaseAt(t + T_OFFSET, 0.5);
   if (!reduced && formAmount > 0.85 && t >= nextPulse && STRINGS.length < 8) {
     spawnString(t);
@@ -400,12 +394,12 @@ function frame(ms) {
     const s = p.size * 3.2;
     ctx.drawImage(SPRITES[p.bucket], p.x - s / 2, p.y - s / 2, s, s);
 
-    // gold overlay on flashing nodes: small flare so the LINE stays the star
+    // white overlay on flashing nodes: small flare so the LINE stays the star
     const gm = flashAt(p, t);
     if (gm > 0) {
       ctx.globalAlpha = Math.min(1, gm * (0.35 + p.alpha * 0.8));
       const gs = s * 1.1;
-      ctx.drawImage(GOLD, p.x - gs / 2, p.y - gs / 2, gs, gs);
+      ctx.drawImage(WHITE, p.x - gs / 2, p.y - gs / 2, gs, gs);
     }
   }
   ctx.globalAlpha = 1;
@@ -420,11 +414,11 @@ function frame(ms) {
   }
   ctx.stroke();
 
-  // gold strings: draw each walk's consecutive edges where both ends still
+  // white strings: draw each walk's consecutive edges where both ends still
   // glow — a filament crawling the web with a cooling tail behind it
   if (!reduced && STRINGS.length) {
     ctx.lineWidth = 0.9;
-    ctx.strokeStyle = 'rgba(255,202,100,0.5)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.5)';
     ctx.beginPath();
     for (const s of STRINGS) {
       for (let k = 1; k < s.seq.length; k++) {
@@ -442,7 +436,7 @@ function frame(ms) {
 }
 
 makeSprites();
-makeGold();
+makeWhite();
 build();
 layout();
 addEventListener('resize', () => { layout(); if (reduced) frame(0); });

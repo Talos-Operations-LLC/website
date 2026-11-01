@@ -13,17 +13,16 @@ interface Props {
   noindex?: string;
   jsonld?: object[];
   active?: 'home' | 'coverage' | 'learn';
-  // The dark homepage brings its own fonts and chrome; every other page
-  // takes the light-theme nav, footer and type.
+  // The dark homepage brings its own chrome; every other page takes the
+  // light-theme nav and footer.
   bare?: boolean;
-  fonts?: string;
   viewport?: string;
 }
 
-const LIGHT_FONTS = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;600;700&display=swap';
+const FONTS = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;600;700&display=swap';
 const {
   title, description, path, ogType = 'website', noindex, jsonld = [], active,
-  bare = false, fonts = LIGHT_FONTS, viewport = 'width=device-width, initial-scale=1.0',
+  bare = false, viewport = 'width=device-width, initial-scale=1.0',
 } = Astro.props;
 const url = path ? new URL(path, Astro.site).href : undefined;
 ---
@@ -46,7 +45,7 @@ const url = path ? new URL(path, Astro.site).href : undefined;
 {url && <meta property="og:url" content={url}>}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href={fonts} rel="stylesheet">
+<link href={FONTS} rel="stylesheet">
 {jsonld.map((d) => <script is:inline type="application/ld+json" set:html={JSON.stringify(d, null, 2)} />)}
 <slot name="head" />
 </head>
