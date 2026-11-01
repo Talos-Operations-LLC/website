@@ -67,8 +67,8 @@ const description = 'Fee Simple: the highest and most complete form of parcel di
     margin: clamp(24px, 5vh, 48px) auto 0; }
   #field { position: absolute; inset: 0; display: block; }
 
-  .cta { margin-top: clamp(24px, 4vh, 40px); }
-  .cta form { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cta { margin-top: clamp(24px, 4vh, 40px); text-align: center; }
+  .cta form { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
   .cta input[type="email"] { font-family: var(--mono); font-size: 14px; color: var(--ink);
     background: #0b0e17; border: 1px solid var(--mute); border-radius: 3px;
     padding: 11px 14px; width: 300px; max-width: 100%; }
@@ -107,6 +107,9 @@ const description = 'Fee Simple: the highest and most complete form of parcel di
 
   <main>
     <h1 class="claim">The highest and most complete form of <i>parcel diligence.</i></h1>
+    <div class="map">
+      <canvas id="field" aria-hidden="true"></canvas>
+    </div>
     <div class="cta" id="early-access">
       <form name="early-access" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="early-access">
@@ -118,9 +121,6 @@ const description = 'Fee Simple: the highest and most complete form of parcel di
         <button type="submit">send</button>
       </form>
       <p class="caption">Enter your email — we'll reach out to set up access.</p>
-    </div>
-    <div class="map">
-      <canvas id="field" aria-hidden="true"></canvas>
     </div>
   </main>
 
