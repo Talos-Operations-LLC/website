@@ -7,8 +7,10 @@ crumb: "record lag"
 h1: "Why do county ownership records lag behind sales?"
 answer: "When a property sells in North Carolina, the deed is recorded and indexed at the Register of Deeds. The county tax office then processes the transfer separately, so the tax card can still show the previous owner after the new deed is recorded. Anyone mailing to the tax-card address during that window may be mailing to someone who has moved."
 faq:
+  # Holding answer: worth a fuller one with observed ranges from the
+  # assessor-lag data, labeled as observed, once those figures exist.
   - q: "How long is the lag typically?"
-    a: "It varies by county and over the year, and Fee Simple doesn't publish a figure yet. In one case observed in our runs, a county tax card still showed the previous owner five days after the new deed was recorded. [ELIJAH: observed ranges from the assessor-lag data, labeled as observed]"
+    a: "It varies by county and over the year, and Fee Simple doesn't publish a figure yet. In one case observed in our runs, a county tax card still showed the previous owner five days after the new deed was recorded."
   - q: "Does every county lag the same?"
     a: "Not in what we've observed. Each county's tax office processes transfers in its own system, and the gaps we've seen differ: a tax card still behind five days after recording in one county, and at least seven days in another."
   - q: "Is the deed index also delayed?"
