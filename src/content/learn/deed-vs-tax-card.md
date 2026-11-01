@@ -9,8 +9,8 @@ answer: "The deed is the recorded source document: it says who took title and wh
 faq:
   - q: "Which record is \"right\"?"
     a: "They answer different questions. The recorded deed is the source document for who took title; the tax card is the tax office's working copy, which follows the deed. A disagreement right after a sale can mean the tax card hasn't caught up yet."
-  - q: "How long until the tax card catches up?"
-    a: "It varies by county and by how each tax office processes transfers. Fee Simple doesn't publish a figure yet. [ELIJAH: observed range from the assessor-lag data, labeled as observed]"
+  # "How long until the tax card catches up?" returns here once the observed
+  # assessor-lag range is verified. Until then it states no figure at all.
   - q: "Does a mismatch mean fraud?"
     a: "A mismatch on its own doesn't indicate fraud. Timing and name formatting both produce mismatches, as ordinary results of two offices keeping separate records."
 cta: "Fee Simple reads the county tax card and the recorded deed for a parcel and returns the owner of record and mailing address, matched by parcel."
