@@ -48,8 +48,11 @@ its files against `dist/`.
   `python tools/demo/build_demo.py C:\talos-website\public <data dir>`.
   It replaces `public/demo/` wholesale, so hand edits are lost.
 - **`public/map-data.js`** — the pre-projected county map used by `/coverage.html`.
+- **`src/data/hero-points.json`** — the homepage particle positions inside the
+  continental US (US Census TIGER via us-atlas@3.0.1, Albers USA). The build
+  inlines it into the homepage.
 
-Both pass through the build untouched.
+The first two pass through the build untouched.
 
 ## Versions
 

@@ -1,5 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
+// Particle home positions inside the continental US. GENERATED DATA — never
+// hand-edit. Provenance: US Census TIGER geometry via us-atlas@3.0.1
+// (states-10m), AK/HI/PR removed, Albers USA projection, grid-sampled at
+// ~4.6px with jitter, point-in-polygon tested (d3-geo geoContains).
+import points from '../data/hero-points.json';
+
 const jsonld = [
   {
     "@context": "https://schema.org",
@@ -12,312 +18,435 @@ const jsonld = [
     ]
   }
 ];
+const FONTS = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400..700&family=Fragment+Mono&display=swap';
+const description = 'Fee Simple: the highest and most complete form of parcel diligence.';
 ---
-<Base title="Fee Simple — verified NC county records for HOA collections" description="Fee Simple pulls the owner of record and mailing address from North Carolina county tax cards and deeds, matched by parcel, for HOA collections." active="home" jsonld={jsonld}>
+<Base
+  title="Fee Simple — complete parcel diligence"
+  description={description}
+  jsonld={jsonld}
+  bare
+  fonts={FONTS}
+  viewport="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
 <Fragment slot="head">
 <style is:inline>
+  /* Layout: full-bleed particle canvas behind; copy block pinned lower-left; single committed dark look. */
   :root {
-    --bg: #E4E4E1;
-    --ink: #1A1A1A;
-    --mute: #6B6B6B;
-    --rule: #C9C9C6;
-    --accent: #1F4FD8;
-    --btn: #111111;
-    --paper: #F4F4F2;
-    --sheet: #F7F7F5;
-    --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-    --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
-    --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+    --bg: #030409;          /* near-black, blue-biased */
+    --ink: #e9edf6;         /* headline text */
+    --mute: #8b93a7;        /* dictionary entries, footer */
+    --faint: #565e72;       /* pronunciation marks, rules */
+    --blue: #4d7cff;        /* Fee Simple electric blue (wordmark + claim accent) */
+    color-scheme: dark;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { color-scheme: light; }
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--sans);
-    font-size: 16px;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
-  a { color: inherit; text-decoration: none; }
-  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font-family: "Fragment Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
 
-  /* ---------- nav ---------- */
-  .nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 22px 0;
-    border-bottom: 1px solid var(--rule);
-  }
-  .wordmark { font-weight: 600; font-size: 17px; letter-spacing: -0.01em; }
-  .links { display: flex; gap: 20px; font-family: var(--mono); font-size: 13px; }
-  .links a { color: var(--ink); }
-  .links a:hover { color: var(--accent); }
-  .links a.active { color: var(--accent); }
+  /* One screen today; a section, not a body scroll lock, so content can follow it. */
+  .hero { position: relative; height: 100vh; height: 100svh; overflow: hidden; }
+  #field { position: absolute; inset: 0; display: block; }
 
-  /* ---------- headline ---------- */
-  .headline {
-    font-family: var(--serif);
-    font-weight: 400;
-    font-size: clamp(38px, 6vw, 64px);
-    line-height: 1.08;
-    letter-spacing: -0.01em;
-    text-align: center;
-    max-width: 820px;
-    margin: 72px auto 44px;
-  }
-  .headline i { font-style: italic; }
+  .chrome, .copy, .foot { position: absolute; z-index: 2;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
-  /* ---------- hero stage + watermark ---------- */
-  .hero-stage { position: relative; display: flow-root; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); padding: 0 24px; }
-  .hero-stage > .headline, .hero-stage > .hero { position: relative; z-index: 1; }
-  .watermark {
-    position: absolute; inset: 0; z-index: 0;
-    color: var(--mute); opacity: 0.22;
-    font: 13px/2.4 var(--mono); overflow: hidden;
-    padding-top: 40px;
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 22%, rgba(0,0,0,.35) 48%, transparent 70%);
-            mask-image: linear-gradient(to bottom, #000 0%, #000 22%, rgba(0,0,0,.35) 48%, transparent 70%);
-    pointer-events: none; user-select: none; -webkit-user-select: none;
-  }
-  .watermark > div { white-space: pre; }
-  .watermark b { opacity: 1.6; color: var(--ink); font-weight: 500; }   /* bold fragments read slightly darker */
-  .hero .cap-bg { fill: var(--bg); stroke: none; }
+  .chrome { top: 0; left: 0; right: 0;
+    padding-top: calc(18px + env(safe-area-inset-top, 0px));
+    display: flex; justify-content: space-between; align-items: baseline; }
+  .wordmark { font-family: "Cinzel", "Times New Roman", serif; font-weight: 500;
+    font-size: 16px; letter-spacing: .38em; text-transform: uppercase; color: var(--ink); }
+  .nav { font-size: 11px; color: var(--mute); letter-spacing: .08em; text-transform: lowercase;
+    display: flex; gap: 16px; }
+  .nav a { color: var(--mute); text-decoration: none; }
+  .nav a:hover { color: var(--ink); }
+  .nav a:focus-visible { outline: 1px solid var(--blue); outline-offset: 3px; }
 
-  /* ---------- hero illustration ---------- */
-  .hero { max-width: 900px; margin: 0 auto 64px; }
-  .hero svg { width: 100%; height: auto; display: block; }
-  .hero .paper { fill: var(--sheet); stroke: var(--ink); stroke-width: 1; }
-  .hero .shadow { fill: none; stroke: var(--rule); stroke-width: 1; }
-  .hero .desk { fill: none; stroke: var(--rule); stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; }
-  .hero .ln { fill: none; stroke: var(--ink); stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; }
-  .hero .lead { fill: none; stroke: var(--ink); stroke-width: 1; stroke-dasharray: 3 3; }
-  .hero .mark { fill: var(--accent); stroke: none; }
-  .hero .cap { font-family: var(--mono); font-size: 11px; fill: var(--ink); }
+  .copy { left: 0; bottom: 0; max-width: 620px;
+    padding-bottom: calc(44px + env(safe-area-inset-bottom, 0px)); }
+  .claim { font-family: "Cinzel", "Times New Roman", serif; font-weight: 500;
+    font-size: clamp(19px, 2.6vw, 30px); line-height: 1.55; letter-spacing: .17em;
+    text-transform: uppercase; margin: 0;
+    text-wrap: balance; max-width: 24em; text-shadow: 0 2px 18px rgba(3,4,9,.95); }
+  .claim i { color: inherit; font-style: normal; }
+  .rule { width: 34px; height: 1px; background: var(--faint); margin: 24px 0 0; }
 
-  /* ---------- product block ---------- */
-  .product { text-align: center; max-width: 620px; margin: 0 auto; }
-  .name {
-    display: inline-flex; align-items: center; gap: 14px;
-    font-weight: 700; font-size: 44px; letter-spacing: -0.02em; line-height: 1;
-  }
-  .name .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); flex: none; }
-  .tagline { color: var(--mute); font-size: 18px; margin: 18px auto 22px; max-width: 480px; }
-  .pill {
-    display: inline-block;
-    font-family: var(--mono); font-size: 12px;
-    color: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: 999px;
-    padding: 5px 12px;
-    text-decoration: none;
-    transition: background 0.15s, color 0.15s;
-  }
-  .pill:hover, .pill:focus-visible { background: var(--accent); color: #fff; }
-  .cta { margin-top: 36px; }
-  .cta form { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-  .cta input[type="email"] {
-    font-family: var(--mono); font-size: 14px;
-    color: var(--ink);
-    background: var(--paper);
-    border: 1px solid var(--ink);
-    border-radius: 3px;
-    padding: 11px 14px;
-    width: 280px;
-    max-width: 100%;
-  }
-  .cta input[type="email"]::placeholder { color: var(--mute); }
-  .cta input[type="email"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-  .btn {
-    display: inline-block;
-    font-family: var(--mono); font-size: 14px;
-    border-radius: 3px;
-    padding: 11px 20px;
-    cursor: pointer;
-    line-height: 1.5;
-    border: 1px solid transparent;
-  }
-  .btn-primary { background: var(--btn); color: #fff; border-color: var(--btn); }
-  .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
-  .btn-secondary { background: var(--rule); color: var(--ink); border-color: var(--rule); }
-  .btn-secondary:hover { background: #BDBDBA; border-color: #BDBDBA; }
-  .hidden { display: none; }
-  .caption { font-family: var(--mono); font-size: 12px; color: var(--mute); margin-top: 14px; }
+  .foot { right: 0; bottom: 0; left: auto; font-size: 10.5px; color: var(--faint);
+    letter-spacing: .06em; padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
 
-  /* ---------- footer ---------- */
-  .footer {
-    font-family: var(--mono); font-size: 12px; color: var(--mute);
-    text-align: center;
-    border-top: 1px solid var(--rule);
-    margin-top: 96px;
-    padding: 28px 0 40px;
+  @media (max-width: 620px) {
+    .copy { max-width: none; right: 0; padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px)); }
+    .foot { display: none; }
+    .nav { gap: 4px; margin-right: -8px; }
+    .nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }
   }
-  .footer a:hover { color: var(--accent); }
-  .footer a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-  /* ---------- responsive ---------- */
-  @media (max-width: 720px) {
-    .nav { flex-direction: column; align-items: flex-start; gap: 12px; }
-    .links { gap: 4px; flex-wrap: wrap; margin-left: -8px; }
-    .headline { margin: 48px auto 32px; }
-    .hero { margin-bottom: 44px; }
-    .name { font-size: 36px; }
-    .cta form { flex-direction: column; align-items: stretch; }
-    .cta input[type="email"] { width: 100%; }
-    .btn { text-align: center; }
-    .links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }
-  }
+  @media (prefers-reduced-motion: reduce) { /* script checks this and renders a still map */ }
 </style>
 </Fragment>
-  <div class="hero-stage">
 
-  <div class="watermark" aria-hidden="true">
-    <div>         PIN 0000.00-00-0000           <b>NORTH CAROLINA</b>      DEED OF TRUST      PARCEL ID           WAKE COUNTY     WITNESSETH             BOOK 0000 PAGE 000     THIS DEED made this __ day of __       LAND USE        ASSESSED VALUE</div>
-    <div><b>NORTH CAROLINA</b>             DURHAM COUNTY      ASSESSED VALUE           LAND USE      WITNESSETH            GRANTOR    LOT __ BLOCK __         DEED OF TRUST             PARCEL ID             THIS DEED made this __ day of __</div>
-    <div>      LAND USE          REID 0000000          JOHNSTON COUNTY             <b>OWNER OF RECORD</b>             IN TESTIMONY WHEREOF       NORTH CAROLINA        REGISTER OF DEEDS         THIS DEED made this __ day of __       TAX PARCEL</div>
-    <div>  REGISTER OF DEEDS    THIS DEED made this __ day of __        GRANVILLE COUNTY       REID 0000000             GRANTOR       IN TESTIMONY WHEREOF              LOT __ BLOCK __          WITNESSETH             <b>GRANTEE</b>    TAX PARCEL</div>
-    <div>         NORTH CAROLINA       <b>PARCEL ID</b>       THIS DEED made this __ day of __      WITNESSETH           HARNETT COUNTY      OWNER OF RECORD            REID 0000000    PIN 0000.00-00-0000            TAX PARCEL        IN TESTIMONY WHEREOF</div>
-    <div>      REID 0000000           <b>RECORDED</b>         MAILING ADDRESS         FORSYTH COUNTY      GRANTOR            REGISTER OF DEEDS      LOT __ BLOCK __      LAND USE           GRANTEE          PIN 0000.00-00-0000              BOOK 0000 PAGE 000</div>
-    <div>       LAND USE             REGISTER OF DEEDS      TAX PARCEL    GUILFORD COUNTY             BOOK 0000 PAGE 000         NORTH CAROLINA    PARCEL ID           MAILING ADDRESS    PIN 0000.00-00-0000      LOT __ BLOCK __            GRANTOR</div>
-    <div>           SITUS         <b>LAND USE</b>          RECORDED       PARCEL ID            CUMBERLAND COUNTY             NORTH CAROLINA         GRANTEE     TAX PARCEL             REID 0000000           PIN 0000.00-00-0000           DEED OF TRUST</div>
-    <div>    DEED OF TRUST    NEW HANOVER COUNTY        IN TESTIMONY WHEREOF        WITNESSETH             <b>BOOK 0000 PAGE 000</b>             RECORDED             SITUS    LAND USE            GRANTEE              REGISTER OF DEEDS    GRANTOR</div>
-    <div>       WITNESSETH           MAILING ADDRESS       IREDELL COUNTY        REGISTER OF DEEDS            OWNER OF RECORD     BOOK 0000 PAGE 000    DEED OF TRUST          LAND USE     ASSESSED VALUE          NORTH CAROLINA           TAX PARCEL</div>
-    <div>   OWNER OF RECORD          REGISTER OF DEEDS              GRANTOR          ASSESSED VALUE           ROWAN COUNTY    LOT __ BLOCK __        PIN 0000.00-00-0000     LAND USE     <b>NORTH CAROLINA</b>             REID 0000000              PARCEL ID</div>
-    <div>            MAILING ADDRESS             LAND USE            ASSESSED VALUE            PIN 0000.00-00-0000            <b>DAVIDSON COUNTY</b>         WITNESSETH     THIS DEED made this __ day of __              OWNER OF RECORD              REID 0000000</div>
-    <div>          PARCEL ID          OWNER OF RECORD           REGISTER OF DEEDS     GRANTOR         NASH COUNTY          RECORDED              REID 0000000             LOT __ BLOCK __     <b>TAX PARCEL</b>      SITUS        THIS DEED made this __ day of __</div>
-    <div><b>NORTH CAROLINA</b>            MOORE COUNTY     PARCEL ID              WITNESSETH         PIN 0000.00-00-0000           TAX PARCEL            DEED OF TRUST          LAND USE      OWNER OF RECORD        RECORDED      IN TESTIMONY WHEREOF</div>
-    <div>      MAILING ADDRESS          ASSESSED VALUE              <b>REID 0000000</b>              LEE COUNTY     PIN 0000.00-00-0000          BOOK 0000 PAGE 000     THIS DEED made this __ day of __          LAND USE          GRANTEE        DEED OF TRUST</div>
-    <div>    TAX PARCEL           PENDER COUNTY          <b>RECORDED</b>             WITNESSETH        ASSESSED VALUE        LOT __ BLOCK __            GRANTOR      THIS DEED made this __ day of __         IN TESTIMONY WHEREOF    MAILING ADDRESS</div>
-    <div>      DEED OF TRUST      <b>THIS DEED made this __ day of __</b>     RANDOLPH COUNTY         IN TESTIMONY WHEREOF     GRANTEE      OWNER OF RECORD           MAILING ADDRESS        GRANTOR          LAND USE    REID 0000000      TAX PARCEL</div>
-    <div>         LOT __ BLOCK __     OWNER OF RECORD            THIS DEED made this __ day of __       <b>TAX PARCEL</b>             SAMPSON COUNTY          LAND USE      RECORDED           ASSESSED VALUE          DEED OF TRUST          GRANTOR</div>
-    <div>      TAX PARCEL    <b>REGISTER OF DEEDS</b>      PARCEL ID              WATAUGA COUNTY      DEED OF TRUST         WITNESSETH            REID 0000000     LAND USE      ASSESSED VALUE     PIN 0000.00-00-0000             MAILING ADDRESS</div>
-    <div>        <b>ASSESSED VALUE</b>    RECORDED        GRANTOR              WILKES COUNTY       SITUS     PIN 0000.00-00-0000    REID 0000000       WITNESSETH              LAND USE     LOT __ BLOCK __      REGISTER OF DEEDS       OWNER OF RECORD</div>
-    <div>   IN TESTIMONY WHEREOF     YADKIN COUNTY           <b>DEED OF TRUST</b>             PARCEL ID       THIS DEED made this __ day of __        WITNESSETH            BOOK 0000 PAGE 000      GRANTOR             ASSESSED VALUE       RECORDED</div>
-    <div>    <b>TAX PARCEL</b>             STOKES COUNTY              BOOK 0000 PAGE 000              REGISTER OF DEEDS             OWNER OF RECORD       GRANTOR      REID 0000000         LAND USE             WITNESSETH           SITUS    RECORDED</div>
-    <div>       BOOK 0000 PAGE 000        RECORDED        PIN 0000.00-00-0000         PERSON COUNTY             GRANTEE          <b>LAND USE</b>             MAILING ADDRESS     IN TESTIMONY WHEREOF      LOT __ BLOCK __              THIS DEED made this __ day of __</div>
-    <div>           WITNESSETH              REGISTER OF DEEDS      <b>NORTH CAROLINA</b>              DEED OF TRUST        FRANKLIN COUNTY    PARCEL ID       BOOK 0000 PAGE 000         OWNER OF RECORD      GRANTOR     GRANTEE             REID 0000000</div>
-  </div>
+<section class="hero">
+  <canvas id="field" aria-hidden="true"></canvas>
 
-  <h1 class="headline">county records, <i>verified</i>, for HOA collections</h1>
+  <header class="chrome">
+    <div class="wordmark">Fee Simple</div>
+    <nav class="nav" aria-label="Primary">
+      <a href="/learn/">[learn]</a>
+      <a href="/coverage.html">[coverage]</a>
+    </nav>
+  </header>
 
-  <div class="hero">
-    <svg viewBox="0 0 900 500" role="img" aria-labelledby="hero-title" xmlns="http://www.w3.org/2000/svg">
-      <title id="hero-title">Three documents on a desk: a county tax card, a recorded deed, and the verified output record, with the parcel number matched between the two sources.</title>
+  <main class="copy">
+    <h1 class="claim">The highest and most complete form of <i>parcel diligence.</i></h1>
+    <div class="rule"></div>
+  </main>
 
-      <!-- desk -->
-      <g id="desk" class="desk">
-        <path d="M60 400 H840"/>
-        <path d="M40 432 H860"/>
-        <path d="M60 400 L40 432"/>
-        <path d="M840 400 L860 432"/>
-      </g>
+  <div class="foot">built by Talos Operations LLC</div>
+</section>
 
-      <!-- sheet: tax card (left) -->
-      <g id="sheet-taxcard" transform="translate(140 140) rotate(-6 100 130)">
-        <rect class="shadow" x="1" y="1" width="200" height="260" rx="2"/>
-        <rect class="paper" x="0" y="0" width="200" height="260" rx="2"/>
-        <g class="ln">
-          <path d="M16 24 H110"/>
-          <path d="M16 32 H70"/>
-          <rect x="16" y="52" width="168" height="120"/>
-          <path d="M16 76 H184 M16 100 H184 M16 124 H184 M16 148 H184"/>
-          <path d="M90 52 V172"/>
-          <path d="M24 64 H70 M24 88 H60 M24 112 H74 M24 136 H56 M24 160 H66"/>
-          <path d="M100 64 H160 M100 88 H150 M100 112 H170 M100 136 H140 M100 160 H164"/>
-          <rect id="taxcard-pin" x="16" y="190" width="168" height="22"/>
-          <path d="M24 201 H52 M60 201 H170"/>
-          <path d="M16 228 H150 M16 240 H120"/>
-        </g>
-      </g>
+<Fragment slot="end">
+<script is:inline type="application/json" id="hero-points" set:html={JSON.stringify(points)} />
+<script is:inline>
+/* ============================================================================
+   Fee Simple hero field.
+   Particles sit inside the continental US (US Census TIGER geometry via
+   us-atlas, Albers USA projection, precomputed). Ambient only — no pointer
+   or user interaction; the field breathes on its own:
+   FORMED map -> dissolve -> floating CLOUD -> reform (21s loop).
 
-      <!-- sheet: output record (right) -->
-      <g id="sheet-output" transform="translate(540 150) rotate(5 105 120)">
-        <rect class="shadow" x="1" y="1" width="210" height="240" rx="2"/>
-        <rect class="paper" x="0" y="0" width="210" height="240" rx="2"/>
-        <g class="ln">
-          <path d="M16 24 H100"/>
-          <rect x="16" y="44" width="178" height="96"/>
-          <path d="M16 68 H194 M16 92 H194 M16 116 H194"/>
-          <path d="M80 44 V140"/>
-          <path d="M24 56 H60 M24 80 H66 M24 104 H54 M24 128 H62"/>
-          <path d="M88 56 H140 M88 80 H150 M88 104 H134 M88 128 H146"/>
-          <path d="M168 58 l4 4 l8 -9 M168 82 l4 4 l8 -9 M168 106 l4 4 l8 -9 M168 130 l4 4 l8 -9"/>
-          <rect id="output-address" x="16" y="160" width="178" height="60"/>
-          <path d="M28 176 H150 M28 190 H120 M28 204 H100"/>
-        </g>
-      </g>
+   Palette: one theme, the Fee Simple blues — cyan-blue -> electric blue only,
+   warped into irregular clusters by coarse noise; additive blending blooms
+   dense regions toward white. Depth (random z) drives size, brightness and
+   drift so big bright points hang over tiny dim ones.
 
-      <!-- sheet: deed (center, on top) -->
-      <g id="sheet-deed" transform="translate(320 70)">
-        <rect class="shadow" x="1" y="1" width="250" height="330" rx="2"/>
-        <rect class="paper" x="0" y="0" width="250" height="330" rx="2"/>
-        <g class="ln">
-          <rect x="170" y="16" width="64" height="28"/>
-          <path d="M178 26 H210 M178 36 H226"/>
-          <path d="M16 30 H120"/>
-          <path d="M16 40 H90"/>
-          <path d="M16 70 H218 M16 82 H200 M16 94 H218 M16 106 H206 M16 118 H218 M16 130 H196 M16 142 H218 M16 154 H210 M16 166 H218 M16 178 H190 M16 190 H218 M16 202 H150"/>
-          <rect id="deed-pin" x="16" y="222" width="150" height="14"/>
-          <path d="M24 229 H48 M56 229 H156"/>
-          <circle cx="60" cy="285" r="22"/>
-          <circle cx="60" cy="285" r="15"/>
-          <path d="M120 292 c 8 -22, 18 6, 30 -10 s 18 14, 34 -6 s 16 10, 34 -4"/>
-          <path d="M110 302 H230"/>
-        </g>
-      </g>
+   Performance choices (lag fixes, each tunable):
+   - ~7.3k particles on desktop (every 2nd point), ~3.7k on phones
+   - devicePixelRatio capped at 1.5 (glow hides pixels)
+   - all link lines batched into ONE stroked path per frame
+   No network, no libraries.
+   ========================================================================== */
+'use strict';
 
-      <!-- callouts -->
-      <g id="callouts">
-        <g id="callout-taxcard">
-          <rect class="cap-bg" x="36" y="33" width="193" height="15"/>
-          <text class="cap" x="40" y="44">[tax card — county assessor]</text>
-          <rect class="mark" x="40" y="60" width="6" height="6"/>
-          <path class="lead" d="M43 66 L130 155"/>
-        </g>
-        <g id="callout-deed">
-          <rect class="cap-bg" x="376" y="9" width="180" height="15"/>
-          <text class="cap" x="380" y="20">[deed — Register of Deeds]</text>
-          <rect class="mark" x="380" y="48" width="6" height="6"/>
-          <path class="lead" d="M383 54 L400 70"/>
-        </g>
-        <g id="callout-pin">
-          <rect class="cap-bg" x="36" y="471" width="259" height="15"/>
-          <text class="cap" x="40" y="482">[PIN match — same parcel, two sources]</text>
-          <rect class="mark" x="290" y="452" width="6" height="6"/>
-          <path class="lead" d="M293 452 L290 352"/>
-          <path class="lead" d="M293 452 L340 308"/>
-        </g>
-        <g id="callout-output">
-          <rect class="cap-bg" x="616" y="471" width="232" height="15"/>
-          <text class="cap" x="620" y="482">[verified owner + mailing address]</text>
-          <rect class="mark" x="620" y="452" width="6" height="6"/>
-          <path class="lead" d="M623 452 L690 378"/>
-        </g>
-      </g>
-    </svg>
-  </div>
+// DATA.pts is a flat array of x,y pairs in a 960x600 plane, inlined at build time.
+const DATA = JSON.parse(document.getElementById('hero-points').textContent);
 
-  </div><!-- /hero-stage -->
+const canvas = document.getElementById('field');
+// The field fills the hero section, not the window, so content can sit below it.
+const hero = canvas.parentElement;
+const ctx = canvas.getContext('2d');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  <section class="product" id="early-access">
-    <div class="name"><span class="dot" aria-hidden="true"></span>Fee Simple</div>
-    <p class="tagline">verified owner-of-record and mailing addresses from NC county records</p>
-    <a class="pill" href="/coverage.html">[live in 26 NC counties]</a>
+// ---- color: the blue band --------------------------------------------------
+// Hue lives in [196, 234]: cyan-blue -> pure blue, nothing past blue (no
+// violet). The angular ramp gives loose structure; noise breaks it into blotches.
+const BAND_LO = 196, BAND_HI = 234;
+const HUE_RAMP = [203, 218, 231, 210, 199, 224, 203];   // sweep within the band
+function hueAt(a01) {
+  const f = a01 * (HUE_RAMP.length - 1), i = Math.floor(f), u = f - i;
+  return HUE_RAMP[i] + (HUE_RAMP[i + 1] - HUE_RAMP[i]) * u;
+}
+const CELL = 110, GRID = new Map();
+function cellVal(ix, iy) {
+  const k = ix + ',' + iy;
+  let v = GRID.get(k);
+  if (v === undefined) { v = Math.random(); GRID.set(k, v); }
+  return v;
+}
+function noise2(x, y) {
+  const gx = x / CELL, gy = y / CELL, ix = Math.floor(gx), iy = Math.floor(gy);
+  const fx = gx - ix, fy = gy - iy, sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy);
+  const a = cellVal(ix, iy), b = cellVal(ix + 1, iy), c = cellVal(ix, iy + 1), d = cellVal(ix + 1, iy + 1);
+  return a + (b - a) * sx + (c - a) * sy + (a - b - c + d) * sx * sy;
+}
+function hslToRgb(h, s, l) {
+  h = ((h % 360) + 360) % 360;
+  const c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs((h / 60) % 2 - 1)), m = l - c / 2;
+  let r = 0, g = 0, b = 0;
+  if (h < 60) { r = c; g = x; } else if (h < 120) { r = x; g = c; }
+  else if (h < 180) { g = c; b = x; } else if (h < 240) { g = x; b = c; }
+  else if (h < 300) { r = x; b = c; } else { r = c; b = x; }
+  return [(r + m) * 255 | 0, (g + m) * 255 | 0, (b + m) * 255 | 0];
+}
 
-    <div class="cta">
-      <form name="early-access" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="early-access">
-        <p class="hidden" aria-hidden="true">
-          <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
-        </p>
-        <label for="email" class="hidden">Email</label>
-        <input type="email" id="email" name="email" placeholder="you@association.org" required autocomplete="email">
-        <button type="submit" class="btn btn-primary">send</button>
-        <!-- demo temporarily unlinked: <a href="/demo/" class="btn btn-secondary">see a sample run</a> -->
-      </form>
-      <p class="caption">Enter your email — we'll reach out to set up access.</p>
-    </div>
-  </section>
+// ---- glow sprites ----------------------------------------------------------
+// 24 sprites spanning the blue band; particles drawImage these additively.
+const SPRITES = [], BUCKETS = 24, SPR = 28;
+function makeSprites() {
+  SPRITES.length = 0;
+  for (let b = 0; b < BUCKETS; b++) {
+    const off = document.createElement('canvas');
+    off.width = off.height = SPR;
+    const c = off.getContext('2d');
+    const hue = BAND_LO + (b / (BUCKETS - 1)) * (BAND_HI - BAND_LO);
+    const [r, g, bl] = hslToRgb(hue, 0.85, 0.62);
+    const grad = c.createRadialGradient(SPR/2, SPR/2, 0, SPR/2, SPR/2, SPR/2);
+    grad.addColorStop(0,    'rgba(255,255,255,0.9)');            // hot core
+    grad.addColorStop(0.18, 'rgba(' + r + ',' + g + ',' + bl + ',0.85)');
+    grad.addColorStop(0.5,  'rgba(' + r + ',' + g + ',' + bl + ',0.22)');
+    grad.addColorStop(1,    'rgba(' + r + ',' + g + ',' + bl + ',0)');
+    c.fillStyle = grad;
+    c.fillRect(0, 0, SPR, SPR);
+    SPRITES.push(off);
+  }
+}
+function bucketFor(hue) {
+  const h = Math.max(BAND_LO, Math.min(BAND_HI, hue));
+  return Math.round((h - BAND_LO) / (BAND_HI - BAND_LO) * (BUCKETS - 1));
+}
+// gold endpoint sprite for the "connecting the country" pulses
+let GOLD;
+function makeGold() {
+  GOLD = document.createElement('canvas');
+  GOLD.width = GOLD.height = SPR;
+  const c = GOLD.getContext('2d');
+  const grad = c.createRadialGradient(SPR/2, SPR/2, 0, SPR/2, SPR/2, SPR/2);
+  grad.addColorStop(0,    'rgba(255,255,255,0.95)');
+  grad.addColorStop(0.2,  'rgba(255,208,110,0.9)');
+  grad.addColorStop(0.55, 'rgba(255,190,80,0.25)');
+  grad.addColorStop(1,    'rgba(255,190,80,0)');
+  c.fillStyle = grad;
+  c.fillRect(0, 0, SPR, SPR);
+}
+
+// ---- particles -------------------------------------------------------------
+let W = 0, H = 0, dpr = 1, scale = 1, ox = 0, oy = 0;
+const P = [];
+const LINKS = [];        // [i, j] pairs; drawn as one batched path
+const ADJ = [];          // walk graph: per-particle neighbor indices (spatial hash)
+
+function build() {
+  P.length = 0;
+  const src = DATA.pts;
+  let cx = 0, cy = 0, n = src.length / 2;
+  for (let i = 0; i < src.length; i += 2) { cx += src[i]; cy += src[i + 1]; }
+  cx /= n; cy /= n;
+  // desktop: every 2nd point (~7.3k); phones: every 4th (~3.7k)
+  const stride = (innerWidth < 640 ? 4 : 2) * 2;
+  for (let i = 0; i < src.length; i += stride) {
+    const r = Math.random;
+    const mx = src[i], my = src[i + 1];
+    const ang = Math.atan2(-(my - cy), -(mx - cx));
+    const a01 = ((ang / (Math.PI * 2)) % 1 + 1) % 1;
+    const hue = hueAt(a01) + (noise2(mx, my) - 0.5) * 30 + (r() * 2 - 1) * 5;
+    const z = r();                                   // depth: 0 far/dim, 1 near/bright
+    P.push({
+      mx, my,
+      bucket: bucketFor(hue),
+      size: (0.9 + Math.pow(r(), 2.6) * 3.4) * (0.55 + z * 0.9),
+      alpha: 0.22 + z * 0.6,
+      sx: 0, sy: 0,
+      a1: r() * Math.PI * 2, a2: r() * Math.PI * 2,
+      f1: 0.22 + r() * 0.35, f2: 0.16 + r() * 0.3,
+      amp: (1.0 + r() * 2.0) * (0.5 + z),
+      lag: r(),
+      tw: r() * Math.PI * 2,
+      ig: Infinity,                                  // gold-wave ignition time
+      x: 0, y: 0
+    });
+  }
+  // the web: ~1 in 3 particles linked to its nearest neighbor in map space.
+  // Drawn faint blue always; segments light up gold when both ends are flashing.
+  LINKS.length = 0;
+  for (let i = 0; i < P.length; i += 3) {
+    let best = -1, bd = 17 * 17;
+    for (let j = Math.max(0, i - 300); j < Math.min(P.length, i + 300); j++) {
+      if (j === i) continue;
+      const dx = P[i].mx - P[j].mx, dy = P[i].my - P[j].my, d = dx * dx + dy * dy;
+      if (d < bd) { bd = d; best = j; }
+    }
+    if (best >= 0) LINKS.push([i, best]);
+  }
+  // walk graph: every particle's 3 nearest neighbors within 18 map units,
+  // found with a spatial hash (index order is not spatial, so no windows here)
+  const CS = 18, HASH = new Map();
+  const key = (gx, gy) => gx * 4096 + gy;
+  for (let i = 0; i < P.length; i++) {
+    const k = key((P[i].mx / CS) | 0, (P[i].my / CS) | 0);
+    let b = HASH.get(k); if (!b) { b = []; HASH.set(k, b); }
+    b.push(i);
+  }
+  ADJ.length = 0;
+  for (let i = 0; i < P.length; i++) {
+    const gx = (P[i].mx / CS) | 0, gy = (P[i].my / CS) | 0;
+    const cand = [];
+    for (let ax = -1; ax <= 1; ax++) for (let ay = -1; ay <= 1; ay++) {
+      const b = HASH.get(key(gx + ax, gy + ay));
+      if (b) for (const j of b) {
+        if (j === i) continue;
+        const dx = P[i].mx - P[j].mx, dy = P[i].my - P[j].my, d = dx * dx + dy * dy;
+        if (d < CS * CS) cand.push([d, j]);
+      }
+    }
+    cand.sort((a, b) => a[0] - b[0]);
+    ADJ.push(cand.slice(0, 3).map(c => c[1]));
+  }
+}
+
+// ---- localized gold pulls ---------------------------------------------------
+// While the country is formed, county-sized pockets flash gold: a random spot
+// ignites and blooms outward over a small radius, every point inside flashes,
+// then cools back to blue. Several pockets stagger across the map at once.
+let nextPulse = 0;
+const FLASH = 1.5, F_IN = 0.18;                    // node flash lifetime / attack
+const STEP = 0.055;                                // seconds per hop along a string
+const STRINGS = [];                                // active strings: {seq:[idx], t0}
+function flashAt(p, t) {
+  const g = t - p.ig;
+  if (g <= 0 || g >= FLASH) return 0;
+  return g < F_IN ? g / F_IN : 1 - (g - F_IN) / (FLASH - F_IN);
+}
+// A "string" is a random walk along the web: gold crawls node-to-node,
+// lighting each node and the edge behind it, then fades like a cooling wire.
+function walk(start, maxLen, visited) {
+  const seq = [start];
+  visited.add(start);
+  let cur = start;
+  while (seq.length < maxLen) {
+    const nbrs = ADJ[cur].filter(j => !visited.has(j));
+    if (!nbrs.length) break;
+    cur = nbrs[(Math.random() * nbrs.length) | 0];
+    visited.add(cur);
+    seq.push(cur);
+  }
+  return seq;
+}
+function spawnString(t) {
+  const start = (Math.random() * P.length) | 0;
+  const visited = new Set();
+  const main = walk(start, 30 + (Math.random() * 20 | 0), visited);
+  if (main.length < 6) return;                     // isolated node; skip
+  const t0 = t + 0.05;
+  const strings = [{ seq: main, t0 }];
+  // one branch off the middle of the main string
+  const bi = (main.length * (0.3 + Math.random() * 0.4)) | 0;
+  const branch = walk(main[bi], 10 + (Math.random() * 10 | 0), visited);
+  if (branch.length > 4) strings.push({ seq: branch, t0: t0 + bi * STEP });
+  for (const s of strings) {
+    for (let k = 0; k < s.seq.length; k++) {
+      const p = P[s.seq[k]];
+      const busy = t - p.ig > 0 && t - p.ig < FLASH;
+      if (!busy) p.ig = s.t0 + k * STEP;
+    }
+    STRINGS.push(s);
+  }
+}
+
+function layout() {
+  dpr = Math.min(devicePixelRatio || 1, 1.5);        // glow hides pixels; capped for speed
+  W = hero.clientWidth; H = hero.clientHeight;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const narrow = W < 640;
+  const fw = W * (narrow ? 0.94 : 0.82), fh = H * (narrow ? 0.52 : 0.80);
+  scale = Math.min(fw / DATA.w, fh / DATA.h);
+  ox = (W - DATA.w * scale) / 2 + (narrow ? 0 : W * 0.06);
+  oy = (narrow ? H * 0.06 : (H - DATA.h * scale) / 2 - H * 0.06);
+  for (const p of P) {
+    p.sx = W * (0.06 + Math.random() * 0.88);
+    p.sy = H * (0.05 + Math.random() * 0.9);
+  }
+}
+
+// ---- breathing cycle -------------------------------------------------------
+// hold 7 formed, 3.5 dissolve, 7 cloud, 3.5 reform (21s loop)
+const T_HOLD = 7, T_MOVE = 3.5, T_LOOP = (T_HOLD + T_MOVE) * 2;
+// Start the loop mid-CLOUD so the page opens on chaos that assembles into the
+// US (~3s of drift, then reform) — order out of chaos is the product story.
+const T_OFFSET = T_HOLD + T_MOVE + 4;
+const easeInOut = u => u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+function phaseAt(t, lag) {
+  let u = (t % T_LOOP + T_LOOP) % T_LOOP;
+  const spread = 1.2;
+  if (u < T_HOLD) return 0;
+  u -= T_HOLD;
+  if (u < T_MOVE) return easeInOut(Math.min(1, Math.max(0, (u - lag * spread) / (T_MOVE - spread))));
+  u -= T_MOVE;
+  if (u < T_HOLD) return 1;
+  u -= T_HOLD;
+  return 1 - easeInOut(Math.min(1, Math.max(0, (u - lag * spread) / (T_MOVE - spread))));
+}
+
+// ---- render ----------------------------------------------------------------
+const lerp = (a, b, u) => a + (b - a) * u;
+
+function frame(ms) {
+  const t = ms / 1000;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalAlpha = 1;
+  ctx.clearRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'lighter';          // additive: overlaps bloom
+
+  // spawn gold strings while the country is (mostly) formed
+  const formAmount = reduced ? 0 : 1 - phaseAt(t + T_OFFSET, 0.5);
+  if (!reduced && formAmount > 0.85 && t >= nextPulse && STRINGS.length < 8) {
+    spawnString(t);
+    nextPulse = t + 0.9 + Math.random() * 0.8;
+  }
+  // retire strings whose last node has fully cooled
+  for (let k = STRINGS.length - 1; k >= 0; k--) {
+    const s = STRINGS[k];
+    if (t > s.t0 + s.seq.length * STEP + FLASH) STRINGS.splice(k, 1);
+  }
+
+  for (const p of P) {
+    const ph = reduced ? 0 : phaseAt(t + T_OFFSET, p.lag);
+    const fx = reduced ? 0 : Math.sin(t * p.f1 + p.a1) * p.amp * (1 + ph * 2.0);
+    const fy = reduced ? 0 : Math.cos(t * p.f2 + p.a2) * p.amp * (1 + ph * 2.0);
+    p.x = lerp(p.mx * scale + ox, p.sx, ph) + fx;
+    p.y = lerp(p.my * scale + oy, p.sy, ph) + fy;
+
+    const tw = reduced ? 1 : 0.78 + 0.22 * Math.sin(t * 1.25 + p.tw);
+    ctx.globalAlpha = p.alpha * tw;
+    const s = p.size * 3.2;
+    ctx.drawImage(SPRITES[p.bucket], p.x - s / 2, p.y - s / 2, s, s);
+
+    // gold overlay on flashing nodes: small flare so the LINE stays the star
+    const gm = flashAt(p, t);
+    if (gm > 0) {
+      ctx.globalAlpha = Math.min(1, gm * (0.35 + p.alpha * 0.8));
+      const gs = s * 1.1;
+      ctx.drawImage(GOLD, p.x - gs / 2, p.y - gs / 2, gs, gs);
+    }
+  }
+  ctx.globalAlpha = 1;
+
+  // the blue web, ONE batched path
+  ctx.lineWidth = 0.5;
+  ctx.strokeStyle = 'rgba(105,145,255,0.055)';
+  ctx.beginPath();
+  for (const [i, j] of LINKS) {
+    ctx.moveTo(P[i].x, P[i].y);
+    ctx.lineTo(P[j].x, P[j].y);
+  }
+  ctx.stroke();
+
+  // gold strings: draw each walk's consecutive edges where both ends still
+  // glow — a filament crawling the web with a cooling tail behind it
+  if (!reduced && STRINGS.length) {
+    ctx.lineWidth = 0.9;
+    ctx.strokeStyle = 'rgba(255,202,100,0.5)';
+    ctx.beginPath();
+    for (const s of STRINGS) {
+      for (let k = 1; k < s.seq.length; k++) {
+        const A = P[s.seq[k - 1]], B = P[s.seq[k]];
+        if (flashAt(A, t) > 0.08 && flashAt(B, t) > 0.08) {
+          ctx.moveTo(A.x, A.y);
+          ctx.lineTo(B.x, B.y);
+        }
+      }
+    }
+    ctx.stroke();
+  }
+
+  if (!reduced) requestAnimationFrame(frame);
+}
+
+makeSprites();
+makeGold();
+build();
+layout();
+addEventListener('resize', () => { layout(); if (reduced) frame(0); });
+if (reduced) { frame(0); } else { requestAnimationFrame(frame); }
+</script>
+</Fragment>
 </Base>

@@ -15,6 +15,7 @@ Astro, built to static HTML. One dependency (`astro`, exact pin). See `BUILD.md`
 | `src/components/` | Nav, footer, and the article template for /learn/ and /for/ |
 | `src/content/` | The /learn/ and /for/ pages, in Markdown |
 | `src/lib/` | Page lists for the hub, sitemap and llms.txt |
+| `src/data/hero-points.json` | Generated homepage particle positions; never hand-edit |
 | `src/styles/site.css` | Stylesheet for the /learn/ and /for/ pages |
 | `public/` | Copied to the site as-is: favicon, images, `map-data.js`, `demo/` |
 | `FACTS.md` | Source for every factual claim on the site |
