@@ -1,0 +1,51 @@
+:root { color-scheme: dark; }
+
+.page { max-width: 1100px; margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+  .chrome { display: flex; justify-content: space-between; align-items: baseline;
+    padding-top: calc(22px + env(safe-area-inset-top, 0px)); padding-bottom: 22px; }
+  .wordmark { font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
+  .nav { font-family: var(--mono); font-size: 13px; display: flex; gap: 20px; }
+  .nav a { color: var(--mute); }
+  .nav a:hover { color: var(--ink); }
+  .nav a:focus-visible { outline: 1px solid var(--blue); outline-offset: 3px; }
+
+  .claim { font-weight: 600; font-size: clamp(36px, 6vw, 80px); line-height: 1.04;
+    letter-spacing: -0.03em; margin: clamp(32px, 7vh, 88px) 0 0; max-width: 13em;
+    text-wrap: balance; }
+  .claim i { font-style: normal; color: var(--mute); }
+
+  /* The canvas sizes itself to this box, so the box sets the map's size. */
+  .map { position: relative; width: 100%; max-width: 720px; aspect-ratio: 16 / 9; max-height: 36svh;
+    margin: clamp(24px, 5vh, 48px) auto 0; }
+  #field { position: absolute; inset: 0; display: block; }
+
+  .cta { margin-top: clamp(24px, 4vh, 40px); text-align: center; }
+  .cta form { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .cta input[type="email"] { font-family: var(--mono); font-size: 14px; color: var(--ink);
+    background: #0b0e17; border: 1px solid var(--mute); border-radius: 3px;
+    padding: 11px 14px; width: 300px; max-width: 100%; }
+  .cta input[type="email"]::placeholder { color: var(--mute); }
+  .cta input[type="email"]:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
+  .cta button { font-family: var(--mono); font-size: 14px; line-height: 1.5; cursor: pointer;
+    background: var(--ink); color: var(--bg); border: 1px solid var(--ink); border-radius: 3px;
+    padding: 11px 20px; }
+  .cta button:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .hidden { display: none; }
+  .caption { font-family: var(--mono); font-size: 12px; color: var(--mute); margin: 14px 0 0; }
+
+  .footer { margin-top: clamp(32px, 6vh, 64px); padding: 28px 0 calc(36px + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--rule); text-align: center;
+    font-family: var(--mono); font-size: 12px; line-height: 1.9; color: var(--mute); }
+  .footer a { color: var(--mute); }
+  .footer a:hover { color: var(--ink); }
+
+  @media (max-width: 620px) {
+    .chrome { flex-wrap: wrap; gap: 8px; }
+    .nav { gap: 4px; margin-right: -8px; }
+    .nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }
+    .cta form { flex-direction: column; align-items: stretch; }
+    .cta input[type="email"] { width: 100%; }
+  }

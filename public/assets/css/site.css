@@ -1,0 +1,14 @@
+/* Shared theme and browser defaults. Page styles may override these. */
+:root {
+    --bg: #030409;
+    --ink: #e9edf6;
+    --mute: #8b93a7;
+    --rule: #1c2130;
+    --blue: #4d7cff;
+    --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
+         -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }

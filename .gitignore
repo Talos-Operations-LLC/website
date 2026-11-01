@@ -15,3 +15,9 @@ dist/
 
 # local screenshots
 screens/
+
+# Local assistant/browser state and Python caches
+.gstack/
+.claude/
+__pycache__/
+*.py[cod]

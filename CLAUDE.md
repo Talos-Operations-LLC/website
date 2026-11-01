@@ -1,37 +1,50 @@
-# Website
+# Fee Simple website
 
-Public website for Talos Operations LLC's Fee Simple product.
+Public website for Talos Operations LLC. Main navigation: Home, Coverage, Learn,
+and Demo. The homepage and hero are the priority. The original sample-data demo
+is restored at `public/demo/` as a temporary version until its replacement arrives. Privacy and Terms are
+footer pages. Learn and audience content is restored in `public/learn/` and
+`public/for/`, including its original SEO metadata. Keep Learn in navigation.
+Preserve noindex settings on draft pages; do not delete this content.
 
-Static HTML/CSS/JS. No build step or package installation. Deployed by Netlify on every push to `main`.
+## Shared memory
 
-## Site direction
+Use `/Users/ethanriddle/ai-memory`. At session start, pull with `--ff-only`, preserving
+local changes; if sync fails, report it and read locally. Read `codex/global-AGENTS.md`,
+`shared/SHARED.md`, every @-referenced shared note, and `claude/website/MEMORY.md` plus
+relevant project notes. Verify memories against disk. Save durable notes in the
+existing memory folders, keep the index current, and never store secrets or firm
+data. Commit or push memory only when Ethan asks.
 
-Keep the main site small: Home, Coverage (details TBD), and a link to the future demo.
-The home page and its hero are the priority. The replacement demo is being built
-separately and will be integrated later; the old local demo was removed.
+## Structure
 
-`learn/` and `for/` are existing content sections, pending a separate cleanup decision.
-Do not treat the intended navigation as approval to delete those sections.
-Privacy and Terms are footer pages.
+- `public/` is the entire deployed website. Keep internal files outside it.
+- `public/assets/css/`: shared defaults plus page-specific styles.
+- `public/assets/js/`: hero and coverage behavior.
+- `public/assets/data/`: hero geometry, county geometry, and coverage statuses.
+- `public/assets/images/`: the supplied logo and icons.
+- `public/demo/`: self-contained temporary demo, browser adapter, and generated fictitious data.
+  Keep its data intact; see `docs/demo.md`. Preserve its noindex metadata and Netlify headers.
+- `tools/`: optional Python development helpers, not a build system.
+- `docs/FACTS.md`: sources supporting content claims, not current coverage data.
+- `archive/content/`: original snapshot and legacy generators for reference; edit active pages under `public/`.
 
-Any future public demo data must be entirely fictitious; never publish real
-parcel, owner, or recorded-instrument data as sample data.
+Plain HTML/CSS/JS. No framework, build step, or npm dependencies. Coverage uses
+pinned CDN D3/TopoJSON; fonts come from Google Fonts. Preserve existing behavior
+when reorganizing code. Keep legal wording unchanged unless specifically asked.
+Public demo samples must remain entirely fictitious.
 
-## Skill routing
+## Working on the site
 
-When the user's request matches an available skill, invoke it via the Skill tool. When in doubt, invoke the skill.
+Read `README.md` for file ownership and commands. Preview with:
 
-Key routing rules:
-- Product ideas/brainstorming → invoke /office-hours
-- Strategy/scope → invoke /plan-ceo-review
-- Architecture → invoke /plan-eng-review
-- Design system/plan review → invoke /design-consultation or /plan-design-review
-- Full review pipeline → invoke /autoplan
-- Bugs/errors → invoke /investigate
-- QA/testing site behavior → invoke /qa or /qa-only
-- Code review/diff check → invoke /review
-- Visual polish → invoke /design-review
-- Ship/deploy/PR → invoke /ship or /land-and-deploy
-- Save progress → invoke /context-save
-- Resume context → invoke /context-restore
-- Author a backlog-ready spec/issue → invoke /spec
+`python3 -m http.server 8000 --bind 127.0.0.1 --directory public`
+
+Run `python3 tools/check_site.py` (Python 3.11+) after structural/content changes.
+Check changed JavaScript syntax and verify affected behavior in the browser.
+Update navigation, sitemap, and llms.txt when pages change. Preserve the Netlify
+form attributes and existing `/ledger` redirects. Follow applicable available
+skills; do not install tooling merely to satisfy a stale skill name.
+
+Netlify publishes `public/` on pushes to `main`. Do not commit, push, open a PR,
+or deploy unless Ethan asks. Preserve other sessions' uncommitted work.

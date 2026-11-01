@@ -1,0 +1,258 @@
+{
+  "stats": {
+    "filesProcessed": 8742,
+    "instrumentsInCorpus": 182
+  },
+  "counties": {
+    "37011": {
+      "name": "Avery",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37019": {
+      "name": "Brunswick",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37023": {
+      "name": "Burke",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37027": {
+      "name": "Caldwell",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37031": {
+      "name": "Carteret",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37033": {
+      "name": "Caswell",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37035": {
+      "name": "Catawba",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37037": {
+      "name": "Chatham",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37051": {
+      "name": "Cumberland",
+      "status": "live",
+      "since": "2026"
+    },
+    "37053": {
+      "name": "Currituck",
+      "status": "live",
+      "since": "2026"
+    },
+    "37057": {
+      "name": "Davidson",
+      "status": "live",
+      "since": "2026"
+    },
+    "37061": {
+      "name": "Duplin",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37063": {
+      "name": "Durham",
+      "status": "live",
+      "since": "2026"
+    },
+    "37065": {
+      "name": "Edgecombe",
+      "status": "live",
+      "since": "2026"
+    },
+    "37067": {
+      "name": "Forsyth",
+      "status": "live",
+      "since": "2026"
+    },
+    "37069": {
+      "name": "Franklin",
+      "status": "live",
+      "since": "2026"
+    },
+    "37077": {
+      "name": "Granville",
+      "status": "live",
+      "since": "2026"
+    },
+    "37079": {
+      "name": "Greene",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37081": {
+      "name": "Guilford",
+      "status": "live",
+      "since": "2026"
+    },
+    "37085": {
+      "name": "Harnett",
+      "status": "live",
+      "since": "2026"
+    },
+    "37093": {
+      "name": "Hoke",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37097": {
+      "name": "Iredell",
+      "status": "live",
+      "since": "2026"
+    },
+    "37101": {
+      "name": "Johnston",
+      "status": "live",
+      "since": "2026"
+    },
+    "37105": {
+      "name": "Lee",
+      "status": "live",
+      "since": "2026"
+    },
+    "37107": {
+      "name": "Lenoir",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37109": {
+      "name": "Lincoln",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37111": {
+      "name": "McDowell",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37123": {
+      "name": "Montgomery",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37125": {
+      "name": "Moore",
+      "status": "live",
+      "since": "2026"
+    },
+    "37127": {
+      "name": "Nash",
+      "status": "live",
+      "since": "2026"
+    },
+    "37129": {
+      "name": "New Hanover",
+      "status": "live",
+      "since": "2026"
+    },
+    "37131": {
+      "name": "Northampton",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37133": {
+      "name": "Onslow",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37139": {
+      "name": "Pasquotank",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37141": {
+      "name": "Pender",
+      "status": "live",
+      "since": "2026"
+    },
+    "37145": {
+      "name": "Person",
+      "status": "live",
+      "since": "2026"
+    },
+    "37147": {
+      "name": "Pitt",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37151": {
+      "name": "Randolph",
+      "status": "live",
+      "since": "2026"
+    },
+    "37157": {
+      "name": "Rockingham",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37159": {
+      "name": "Rowan",
+      "status": "live",
+      "since": "2026"
+    },
+    "37163": {
+      "name": "Sampson",
+      "status": "live",
+      "since": "2026"
+    },
+    "37169": {
+      "name": "Stokes",
+      "status": "live",
+      "since": "2026"
+    },
+    "37181": {
+      "name": "Vance",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37183": {
+      "name": "Wake",
+      "status": "live",
+      "since": "2026"
+    },
+    "37185": {
+      "name": "Warren",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37189": {
+      "name": "Watauga",
+      "status": "live",
+      "since": "2026"
+    },
+    "37191": {
+      "name": "Wayne",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37193": {
+      "name": "Wilkes",
+      "status": "live",
+      "since": "2026"
+    },
+    "37195": {
+      "name": "Wilson",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37197": {
+      "name": "Yadkin",
+      "status": "live",
+      "since": "2026"
+    }
+  }
+}
