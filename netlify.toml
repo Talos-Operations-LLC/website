@@ -21,3 +21,16 @@
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; frame-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'"
     X-Robots-Tag = "noindex, nofollow"
     Cache-Control = "public, max-age=0, must-revalidate"
+
+# /ledger was the original home page. Retired 2026-10-01: its county map now
+# lives on /coverage.html, so old links land there. The bare path is listed
+# too, in case the splat rule doesn't cover it.
+[[redirects]]
+  from = "/ledger"
+  to = "/coverage.html"
+  status = 301
+
+[[redirects]]
+  from = "/ledger/*"
+  to = "/coverage.html"
+  status = 301

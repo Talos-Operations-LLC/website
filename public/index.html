@@ -159,15 +159,26 @@
   /* ---------- responsive ---------- */
   @media (max-width: 720px) {
     .nav { flex-direction: column; align-items: flex-start; gap: 12px; }
-    .links { gap: 14px; flex-wrap: wrap; }
+    .links { gap: 4px; flex-wrap: wrap; margin-left: -8px; }
     .headline { margin: 48px auto 32px; }
     .hero { margin-bottom: 44px; }
     .name { font-size: 36px; }
     .cta form { flex-direction: column; align-items: stretch; }
     .cta input[type="email"] { width: 100%; }
     .btn { text-align: center; }
+    .links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }
   }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Talos Operations LLC",
+  "url": "https://talosoperations.com/",
+  "email": "info@talosoperations.com",
+  "sameAs": ["https://www.linkedin.com/company/talos_operations/"]
+}
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -177,6 +188,7 @@
     <div class="links">
       <a href="/" class="active" aria-current="page">[home]</a>
       <a href="/coverage.html">[coverage]</a>
+      <a href="/learn/">[learn]</a>
       <!-- demo temporarily unlinked: <a href="/demo/">[sample run]</a> -->
     </div>
   </nav>
@@ -311,7 +323,7 @@
 
   </div><!-- /hero-stage -->
 
-  <section class="product">
+  <section class="product" id="early-access">
     <div class="name"><span class="dot" aria-hidden="true"></span>Fee Simple</div>
     <p class="tagline">verified owner-of-record and mailing addresses from NC county records</p>
     <a class="pill" href="/coverage.html">[live in 26 NC counties]</a>
