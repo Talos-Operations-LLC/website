@@ -157,12 +157,13 @@
   /* ---------- responsive ---------- */
   @media (max-width: 720px) {
     .nav { flex-direction: column; align-items: flex-start; gap: 12px; }
-    .links { gap: 14px; flex-wrap: wrap; }
+    .links { gap: 4px; flex-wrap: wrap; margin-left: -8px; }
     .headline { margin: 48px auto 14px; }
     .legend { position: static; border: none; border-top: 1px solid var(--rule); border-radius: 0; }
     /* On phones, pin the county label to the map's top-left corner instead of following the finger. */
     .tooltip { left: 8px !important; top: 8px !important; }
     .stats { gap: 28px; }
+    .links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }
   }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
@@ -175,6 +176,7 @@
     <div class="links">
       <a href="/">[home]</a>
       <a href="/coverage.html" class="active" aria-current="page">[coverage]</a>
+      <a href="/learn/">[learn]</a>
       <!-- demo temporarily unlinked: <a href="/demo/">[sample run]</a> -->
     </div>
   </nav>
