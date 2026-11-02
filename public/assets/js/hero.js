@@ -32,8 +32,14 @@ import { multiply, axisAngle, fromCamera, dragRotation, slerp, matrix } from './
    Performance choices (each tunable):
    - every dot is a precomputed unit vector, rotated by one shared matrix
    - the far side of the globe and anything outside the box are skipped
-   - roughly 15k dots on desktop (10k drawn after culling), half that on phones
+   - roughly 7.6k dots on desktop (fewer drawn after culling), half that on phones
    - devicePixelRatio up to 2 on WebGL (crisp on Retina), 1.5 on the 2D fallback
+   - the machine sets the pace (see "the governor"): a machine that cannot keep
+     the loop smooth steps down to lite (every other dot, no Retina), then to
+     still (one frame of the globe holds; dragging and keys still redraw it).
+     Software-only WebGL is refused and a lost context gives way to the 2D path,
+     which the governor paces the same way. The loop rests while the field is
+     off screen, so the rest of the page has the whole CPU.
    Loads local geometry once; no animation libraries.
    ========================================================================== */
 async function startHero() {
@@ -48,9 +54,17 @@ async function startHero() {
   // WebGL first; the 2D context only if the browser has no WebGL (see the bootstrap).
   // Transparent, like the 2D canvas was: the page's own background shows through,
   // so there is no opaque layer for the browser to colour-shift against the page.
+  // failIfMajorPerformanceCaveat: a browser that could only draw WebGL in software
+  // says no instead, and the 2D path takes over at a pace that machine can hold.
   let gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false,
-                                        depth: false, stencil: false, powerPreference: 'high-performance' });
-  let ctx = gl ? null : canvas.getContext('2d');
+                                        depth: false, stencil: false, powerPreference: 'high-performance',
+                                        failIfMajorPerformanceCaveat: true });
+  // A driver that caps point sprites near one pixel would leave the dots invisible: 2D there too.
+  if (gl) {
+    const range = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE);
+    if (!range || range[1] < 12) gl = null;
+  }
+  let ctx = null;                            // the 2D context, once useCanvas2D() has made its canvas
 
   // ---- color: the blue band --------------------------------------------------
   // Hue lives in [196, 234]: cyan-blue -> pure blue, nothing past blue (no
@@ -156,7 +170,7 @@ async function startHero() {
       const cl = Math.cos(lat * D2R);
       P.push({
         px: cl * Math.cos(lon * D2R), py: Math.sin(lat * D2R), pz: cl * Math.sin(lon * D2R),
-        us, coarse: false, mx: 0, my: 0,
+        us, coarse: false, lod: 0, mx: 0, my: 0,     // lod 1: the half the lite level leaves out
         bucket: 0, size: 1, alpha: 0.3,
         a1: r() * Math.PI * 2, a2: r() * Math.PI * 2,
         f1: 0.22 + r() * 0.35, f2: 0.16 + r() * 0.3,
@@ -167,14 +181,15 @@ async function startHero() {
       });
     };
     // world: every dot on desktop, every other on phones. US: every 2nd / every 4th.
+    // Every other dot is marked lod 1: the lite level (see the governor) leaves those out.
     const w = GEO.world, wStride = phone ? 4 : 2;
-    for (let i = 0; i < w.length; i += wStride) add(w[i] / 10, w[i + 1] / 10, false);
+    for (let i = 0, n = 0; i < w.length; i += wStride, n++) { add(w[i] / 10, w[i + 1] / 10, false); P[P.length - 1].lod = n & 1; }
     const u = GEO.us, uStride = phone ? 8 : 4;
     for (let i = 0; i < u.length; i += uStride) { US.push(P.length); add(u[i] / 100, u[i + 1] / 100, true); }
     // On the globe the US shows only every COARSE-th of its dots, matching the
-    // world grid's density; the rest arrive with the zoom.
+    // world grid's density; the rest arrive with the zoom. Those coarse dots always stay.
     const COARSE = Math.max(1, Math.round(GEO.ws * GEO.ws / (GEO.uss * GEO.uss * (uStride / 2))));
-    for (let k = 0; k < US.length; k++) P[US[k]].coarse = k % COARSE === 0;
+    for (let k = 0; k < US.length; k++) { const p = P[US[k]]; p.coarse = k % COARSE === 0; p.lod = p.coarse ? 0 : k & 1; }
 
     // Project everything with the landed camera once, frame the US, and lay it on the sheet.
     const c0 = Math.cos(US_LON * D2R), s0 = Math.sin(US_LON * D2R);
@@ -270,7 +285,7 @@ async function startHero() {
     visited.add(start);
     let cur = start;
     while (seq.length < maxLen) {
-      const nbrs = ADJ[cur].filter(j => !visited.has(j));
+      const nbrs = ADJ[cur].filter(j => !visited.has(j) && P[j].lod <= quality);
       if (!nbrs.length) break;
       cur = nbrs[(Math.random() * nbrs.length) | 0];
       visited.add(cur);
@@ -327,13 +342,13 @@ async function startHero() {
       orientation = [...CAM.q];
       pullback = reduced || CAM.z === 0 ? null : { z: CAM.z, start: performance.now(), duration: 650 };
     }
-    if (reduced) frame(performance.now());
+    redraw();
   }
   function resetOrientation() {
     if (!exploring) setExploring(true);
     stopMomentum();
     const target = fromCamera(-58, GLOBE_LAT);
-    if (reduced) { orientation = target; frame(performance.now()); }
+    if (reduced || still) { orientation = target; redraw(); }
     else resetting = { from: [...orientation], to: target, start: performance.now() };
   }
   function onDown(e) {
@@ -374,7 +389,7 @@ async function startHero() {
     }
     drag.x = x; drag.y = y;
     holdUntil = performance.now() + 6000;
-    if (reduced) frame(performance.now());
+    redraw();
   }
   function onUp(e) {
     if (e.pointerId !== drag.pointerId) return;
@@ -384,6 +399,7 @@ async function startHero() {
     mouse.vx = mouse.vy = 0;
     holdUntil = performance.now() + 6000;
     try { canvas.releasePointerCapture(e.pointerId); } catch {}
+    redraw();
   }
   function onLeave() { mouse.on = false; mouse.vx = mouse.vy = 0; }
   function attachPointer(el) {
@@ -408,7 +424,7 @@ async function startHero() {
         : e.key === 'ArrowDown' ? axisAngle(1, 0, 0, angle)
         : axisAngle(0, 0, 1, e.key === 'q' ? angle : -angle);
       orientation = multiply(delta, orientation);
-      if (reduced) frame(performance.now());
+      redraw();
     });
   }
   function spinStep(dt, ms) {
@@ -418,7 +434,7 @@ async function startHero() {
       if (amount === 1) resetting = null;
       return;
     }
-    if (drag.on || CAM.z > 0.15 || pullback || reduced) return;
+    if (drag.on || CAM.z > 0.15 || pullback || reduced || still) return;
     const speed = Math.hypot(...drag.velocity);
     if (speed > 0.008) {
       const decay = Math.exp(-dt * 1.8);
@@ -430,7 +446,7 @@ async function startHero() {
   }
 
   function layout() {
-    dpr = Math.min(devicePixelRatio || 1, gl ? 2 : 1.5);   // WebGL can afford Retina; the 2D path is capped
+    dpr = Math.min(devicePixelRatio || 1, gl ? 2 : 1.5, quality < 2 ? 1 : 2);   // Retina on WebGL at full; the 2D path is capped; lite and still draw 1:1
     BW = hero.clientWidth; BH = hero.clientHeight;
     W = Math.round(BW * (1 + 2 * PAD_X)); H = Math.round(BH * (1 + 2 * PAD_Y));
     canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
@@ -475,6 +491,44 @@ async function startHero() {
   }
   function landed() { CAM.z = 1; CAM.q = LAND_Q; CAM.R = R_LAND; CAM.cx = UC[0]; CAM.cy = UC[1]; }
 
+  // ---- the governor ----------------------------------------------------------
+  // The machine sets the pace. Once the loop has warmed up, the gap between
+  // frames is sampled; when the typical gap runs long, so the whole page would
+  // stutter, the hero steps down a level and stays there:
+  //   2 full   every dot, Retina
+  //   1 lite   every other dot, no Retina
+  //   0 still  the loop stops; one frame of the globe holds, and dragging or keys redraw it
+  // A machine far over the budget goes straight to still. The level is written
+  // on the box as data-quality. The loop also rests while the field is off screen.
+  let quality = 2, still = false, visible = true, queued = false, lostAt = 0;
+  const SLOW_MS = 40;                                  // a typical gap over this (under 25 fps) is a step down
+  const SAMPLES = new Float32Array(16);
+  let sampled = 0, settleAt = performance.now() + 1200;
+  function setQuality(q) {
+    quality = q;
+    hero.dataset.quality = ['still', 'lite', 'full'][q];
+    sampled = 0; settleAt = performance.now() + 1000;
+    if (q === 0) {                                     // hold the globe, not whatever the tour was doing
+      still = true; exploring = false; hero.dataset.exploring = 'false';
+      pullback = null; resetting = null; zoomFrom = null; sceneTime = 0; stopMomentum();
+    }
+    if (q < 2) layout();
+  }
+  function govern(ms, gap) {
+    if (quality === 0 || ms < settleAt) return;
+    SAMPLES[sampled++] = gap;
+    if (sampled < SAMPLES.length) return;
+    const median = Array.from(SAMPLES).sort((a, b) => a - b)[SAMPLES.length >> 1];
+    if (median > SLOW_MS) setQuality(median > SLOW_MS * 2.5 ? 0 : quality - 1);
+    else sampled = 0;
+  }
+  function schedule() {
+    if (queued || reduced || still || !visible) return;
+    queued = true;
+    requestAnimationFrame(ms => { queued = false; frame(ms); schedule(); });
+  }
+  function redraw() { if (reduced || still) frame(performance.now()); }   // one frame, when nothing loops
+
   // ---- render ----------------------------------------------------------------
   // frame() moves the camera, projects every dot and writes what the drawing
   // needs into DYN (x, y, size, alpha, flash per dot: five floats each); then
@@ -483,13 +537,14 @@ async function startHero() {
   let lastMs = 0, cursor = '';
   function frame(ms) {
     const dt = lastMs ? Math.min(0.05, (ms - lastMs) / 1000) : 1 / 60;
+    if (lastMs && !reduced && !still) govern(ms, ms - lastMs);
     lastMs = ms;
     const t = ms / 1000;
-    if (!reduced && exploring && !drag.on && ms >= interactionUntil) setExploring(false);
+    if (!reduced && !still && exploring && !drag.on && ms >= interactionUntil) setExploring(false);
     if (reduced && !exploring) landed();
     else {
       spinStep(dt, ms);
-      if (!exploring && !drag.on && ms >= holdUntil && !pullback) sceneTime += dt;
+      if (!exploring && !drag.on && ms >= holdUntil && !pullback && !still) sceneTime += dt;
       camera(ms);
     }
     const { R, cx, cy, z } = CAM;
@@ -531,7 +586,7 @@ async function startHero() {
       const y = ROT[3] * p.pz + ROT[4] * p.py + ROT[5] * p.px;
       const zc = ROT[6] * p.pz + ROT[7] * p.py + ROT[8] * p.px;
       let a = 0;
-      if (zc > 0.02) {                                 // the near side only
+      if (zc > 0.02 && p.lod <= quality) {             // the near side only; lite leaves half the dots out
         a = p.alpha * (0.3 + 0.7 * zc) * (1 + 0.85 * (1 - z));   // limb shading; brighter on the globe
         a *= p.us ? (p.coarse ? 1 : detail) : dim;
       }
@@ -569,8 +624,8 @@ async function startHero() {
       DYN[o + 4] = gm > 0 ? Math.min(1, gm * (0.35 + p.alpha * 0.8)) * edge : 0;
     }
 
+    if (gl && !G && lostAt && ms - lostAt > 2000) useCanvas2D();   // a context lost for good: carry on in 2D
     if (gl) drawGL(z, X0, Y0, R, formAmount, t); else draw2D(z, X0, Y0, R, formAmount, t);
-    if (!reduced) requestAnimationFrame(frame);
   }
 
   // the sphere's body fades away as it outgrows the box, instead of being clipped
@@ -728,14 +783,29 @@ async function startHero() {
     float a = uCol.a * (1.0 - smoothstep(uFeather, 1.0, abs(vE)));   // soft edge, one device px
     gl_FragColor = vec4(uCol.rgb * a, a);
   }`;
-  const VS_DISC = `attribute vec2 aPos; void main() { gl_Position = vec4(aPos, 0.0, 1.0); }`;
-  const FS_DISC = `
-  precision highp float;
-  uniform vec2 uRes; uniform float uDpr; uniform vec2 uC; uniform float uR; uniform float uA;
+  // The sphere's body is shaded on a quad just around it, not the whole canvas,
+  // and each pixel's place arrives in sphere radii from the vertex stage: small
+  // numbers, so medium precision does where a GPU has no high precision.
+  const VS_DISC = `
+  attribute vec2 aPos;
+  uniform vec2 uRes; uniform vec2 uC; uniform float uR;
+  varying vec2 vV;
   void main() {
-    vec2 p = gl_FragCoord.xy / uDpr; p.y = uRes.y - p.y;          // css px, y down
-    float r = length(p - uC) / uR;
-    vec2 v = (p - uC) / uR;
+    vec2 c = aPos / uRes * 2.0 - 1.0;
+    gl_Position = vec4(c.x, -c.y, 0.0, 1.0);
+    vV = (aPos - uC) / uR;                         // this corner, in sphere radii, y down
+  }`;
+  const FS_DISC = `
+  #ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+  #else
+  precision mediump float;
+  #endif
+  uniform float uR; uniform float uA;
+  varying vec2 vV;
+  void main() {
+    vec2 v = vV;
+    float r = length(v);
     float front = sqrt(max(0.0, 1.0 - r * r));
     vec3 normal = vec3(v.x, -v.y, front);
     float light = max(0.0, dot(normal, normalize(vec3(-0.55, 0.65, 0.8))));
@@ -773,12 +843,10 @@ async function startHero() {
               aFlash: at(dot, 'aFlash'), aCol: at(dot, 'aCol'), uRes: u(dot, 'uRes'), uDpr: u(dot, 'uDpr') },
       line: { p: line, aPos: at(line, 'aPos'), aEdge: at(line, 'aEdge'),
               uRes: u(line, 'uRes'), uCol: u(line, 'uCol'), uFeather: u(line, 'uFeather') },
-      disc: { p: disc, aPos: at(disc, 'aPos'), uRes: u(disc, 'uRes'), uDpr: u(disc, 'uDpr'),
+      disc: { p: disc, aPos: at(disc, 'aPos'), uRes: u(disc, 'uRes'),
               uC: u(disc, 'uC'), uR: u(disc, 'uR'), uA: u(disc, 'uA') },
-      bDyn: gl.createBuffer(), bCol: gl.createBuffer(), bLine: gl.createBuffer(), bTri: gl.createBuffer()
+      bDyn: gl.createBuffer(), bCol: gl.createBuffer(), bLine: gl.createBuffer(), bDisc: gl.createBuffer()
     };
-    gl.bindBuffer(gl.ARRAY_BUFFER, G.bTri);              // one triangle that covers the canvas
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
   }
   // what never changes: each dot's colour (the same 24 hues the sprites use)
   function uploadStatic() {
@@ -794,6 +862,7 @@ async function startHero() {
   // lines: each segment becomes two triangles, hw wide, with an aEdge of -1..1
   // across the width so the fragment shader can feather the outer pixel
   const LQ = { arr: new Float32Array(0), n: 0, w: 0, hw: 0 };
+  const QUAD = new Float32Array(12);                     // the sphere's quad, two triangles in css px
   function lineBegin(w) {
     LQ.n = 0; LQ.w = w;
     LQ.hw = (Math.max(w * dpr, 1) + 1) / 2 / dpr;        // half-width, css px, plus the feather
@@ -830,16 +899,19 @@ async function startHero() {
   function drawGL(z, X0, Y0, R, formAmount, t) {
     if (!G) return;                                      // context lost; nothing to draw with
     gl.clear(gl.COLOR_BUFFER_BIT);
-    // the sphere's body: a faint disc and rim so the globe reads against the dark
-    if (z < 0.999) {
-      const d = G.disc;
+    // the sphere's body: a faint disc and rim so the globe reads against the dark,
+    // shaded only on a quad around the sphere (its halo ends within 1.25 radii)
+    const discA = (1 - z) * discFade(R);
+    if (discA > 0.002) {
+      const d = G.disc, e = R * 1.25;
       gl.useProgram(d.p);
       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-      gl.uniform2f(d.uRes, W, H); gl.uniform1f(d.uDpr, dpr);
-      gl.uniform2f(d.uC, X0, Y0); gl.uniform1f(d.uR, R); gl.uniform1f(d.uA, (1 - z) * discFade(R));
-      gl.bindBuffer(gl.ARRAY_BUFFER, G.bTri);
+      gl.uniform2f(d.uRes, W, H); gl.uniform2f(d.uC, X0, Y0); gl.uniform1f(d.uR, R); gl.uniform1f(d.uA, discA);
+      QUAD.set([X0 - e, Y0 - e, X0 + e, Y0 - e, X0 - e, Y0 + e, X0 + e, Y0 - e, X0 + e, Y0 + e, X0 - e, Y0 + e]);
+      gl.bindBuffer(gl.ARRAY_BUFFER, G.bDisc);
+      gl.bufferData(gl.ARRAY_BUFFER, QUAD, gl.DYNAMIC_DRAW);
       gl.enableVertexAttribArray(d.aPos); gl.vertexAttribPointer(d.aPos, 2, gl.FLOAT, false, 0, 0);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
       gl.disableVertexAttribArray(d.aPos);
     }
     gl.blendFunc(gl.ONE, gl.ONE);
@@ -887,26 +959,37 @@ async function startHero() {
   build();
   DYN = new Float32Array(P.length * 5);
   LQ.arr = new Float32Array(Math.max(LINKS.length, 2048) * 18);
+  // the 2D path: a fresh canvas (one that has had WebGL can't give a 2D context), same handlers
+  function useCanvas2D() {
+    gl = null; G = null; lostAt = 0;
+    const fresh = canvas.cloneNode();
+    canvas.replaceWith(fresh); canvas = fresh;
+    ctx = canvas.getContext('2d');
+    attachPointer(canvas);
+    layout();
+  }
   if (gl) {
     try { initGL(); uploadStatic(); }
-    catch (err) {                                        // a driver that can't take the shaders: use 2D
-      gl = null; G = null;
-      const fresh = canvas.cloneNode();                  // a canvas that has had WebGL can't give a 2D context
-      canvas.replaceWith(fresh); canvas = fresh;
-      ctx = canvas.getContext('2d');
-    }
+    catch (err) { console.warn('Hero: WebGL unavailable, drawing in 2D.', err); gl = null; }   // a driver that can't take the shaders
   }
   if (gl) {
-    canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); G = null; });
-    canvas.addEventListener('webglcontextrestored', () => { initGL(); uploadStatic(); layout(); if (reduced) frame(0); });
-  }
-  attachPointer(canvas);
-  layout();
-  addEventListener('resize', () => { layout(); if (reduced) frame(0); });
+    canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); G = null; lostAt = performance.now(); });
+    canvas.addEventListener('webglcontextrestored', () => { initGL(); uploadStatic(); lostAt = 0; layout(); redraw(); });
+    attachPointer(canvas);
+    layout();
+  } else useCanvas2D();
+  addEventListener('resize', () => { layout(); redraw(); });
   if (typeof ResizeObserver !== 'undefined') {
-    new ResizeObserver(() => { layout(); if (reduced) frame(0); }).observe(hero);
+    new ResizeObserver(() => { layout(); redraw(); }).observe(hero);
   }
-  if (reduced) { frame(0); } else { requestAnimationFrame(frame); }
+  if (typeof IntersectionObserver !== 'undefined') {     // off screen, the loop rests and the page has the CPU
+    new IntersectionObserver(entries => {
+      visible = entries[entries.length - 1].isIntersecting;
+      if (visible) { lastMs = 0; schedule(); }
+    }).observe(hero);
+  }
+  hero.dataset.quality = 'full';
+  if (reduced) frame(performance.now()); else schedule();
 }
 
 startHero().catch(error => {
