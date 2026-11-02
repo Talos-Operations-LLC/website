@@ -82,5 +82,6 @@ const words = headline.split(' ');
   <Fragment slot="end">
     <script is:inline type="module" src="/assets/js/hero.js"></script>
     <script is:inline type="module" src="/assets/js/home-motion.js"></script>
+    <script is:inline nomodule>document.querySelector('.map').hidden = true;</script>
   </Fragment>
 </Base>
