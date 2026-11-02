@@ -1,15 +1,15 @@
 /* Fee Simple: shared theme, header, footer and page container for every page.
    The shared layout links this file first; each page's own stylesheet adds its rules on top. */
 :root {
-  --bg: #030409;
-  --ink: #e9edf6;
+  --bg: #151b27;
+  --ink: #e6eaf2;
   --mute: #8b93a7;
-  --rule: #1c2130;
+  --rule: #2c3446;
   --blue: #4d7cff;
   --accent: var(--blue);
-  --accent-dark: #3a63d6;
-  --paper: #0b0e17;
-  --btn: var(--blue);
+  --accent-dark: #7a9cff;
+  --paper: #1d2433;
+  --btn: #2f5be0;
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
   --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;

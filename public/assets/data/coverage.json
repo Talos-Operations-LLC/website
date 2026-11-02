@@ -11,8 +11,8 @@
     },
     "37019": {
       "name": "Brunswick",
-      "status": "surveyed",
-      "since": "—"
+      "status": "live",
+      "since": "2026"
     },
     "37023": {
       "name": "Burke",
@@ -84,6 +84,11 @@
       "status": "live",
       "since": "2026"
     },
+    "37071": {
+      "name": "Gaston",
+      "status": "live",
+      "since": "2026"
+    },
     "37077": {
       "name": "Granville",
       "status": "live",
@@ -138,6 +143,11 @@
       "name": "McDowell",
       "status": "surveyed",
       "since": "—"
+    },
+    "37119": {
+      "name": "Mecklenburg",
+      "status": "live",
+      "since": "2026"
     },
     "37123": {
       "name": "Montgomery",
@@ -209,8 +219,18 @@
       "status": "live",
       "since": "2026"
     },
+    "37165": {
+      "name": "Scotland",
+      "status": "live",
+      "since": "2026"
+    },
     "37169": {
       "name": "Stokes",
+      "status": "live",
+      "since": "2026"
+    },
+    "37179": {
+      "name": "Union",
       "status": "live",
       "since": "2026"
     },

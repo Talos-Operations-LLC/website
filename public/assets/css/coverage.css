@@ -1,5 +1,6 @@
 /* Fee Simple coverage page: headline, counts, the county map and its stats.
    Theme, header and footer come from site.css. */
+:root { --accent-dark: #2f5be0; --btn: #4d7cff; }
 /* ---------- headline ---------- */
   .headline {
     font-family: var(--serif);

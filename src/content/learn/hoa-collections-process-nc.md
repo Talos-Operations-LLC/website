@@ -14,7 +14,6 @@ faq:
     a: "[JOSH: approved answer, typical ranges labeled as observed]"
   - q: "Who sends each notice?"
     a: "[JOSH: approved answer]"
-cta: "Fee Simple reads the county tax card and the recorded deed for a parcel and returns the owner of record and mailing address, matched by parcel."
 related:
   - "/learn/15-day-letter-nc/"
   - "/learn/ncgs-47f-3-116/"

@@ -16,7 +16,6 @@ faq:
     a: "[JOSH: approved answer]"
   - q: "Is there a condo equivalent?"
     a: "[JOSH: approved answer, with a pointer to Chapter 47C]"
-cta: "Fee Simple reads the county tax card and the recorded deed for a parcel and returns the owner of record and mailing address, matched by parcel."
 related:
   - "/learn/ncgs-47f-3-116/"
   - "/learn/verify-mailing-address/"
