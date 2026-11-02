@@ -1,0 +1,39 @@
+---
+import Base from '../../layouts/Base.astro';
+import { learnPages, pathOf } from '../../lib/pages';
+
+const pages = await learnPages();
+const itemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Learn',
+  itemListElement: pages
+    .filter((e) => !e.data.noindex)
+    .map((e, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: e.data.linkTitle,
+      url: new URL(pathOf('learn', e.id), Astro.site).href,
+    })),
+};
+const description = 'How North Carolina property records work: owner lookups, deed indexes, record lag, mailing-address checks, and the HOA collections process, described step by step.';
+---
+<Base title="Learn — Fee Simple" description={description} path="/learn/" jsonld={[itemList]} active="learn">
+<Fragment slot="head">
+<link rel="stylesheet" href="/assets/css/content.css">
+</Fragment>
+  <main>
+  <article class="learn">
+
+    <h1>Learn</h1>
+    <p class="lede">How North Carolina property records actually work — lookups, indexes, and where records lag.</p>
+
+    <ol class="library">
+      {pages.map((e) => (
+        <li><a href={pathOf('learn', e.id)}>{e.data.linkTitle}</a><span class="blurb">{e.data.blurb}</span></li>
+      ))}
+    </ol>
+
+  </article>
+  </main>
+</Base>

@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro';
+import Footer from '../components/Footer.astro';
+const jsonld = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Talos Operations LLC",
+    "url": "https://talosoperations.com/",
+    "email": "info@talosoperations.com",
+    "sameAs": [
+      "https://www.linkedin.com/company/talos_operations/"
+    ]
+  }
+];
+const description = 'Fee Simple: the highest and most complete form of parcel diligence.';
+---
+<Base
+  title="Fee Simple — complete parcel diligence"
+  description={description}
+  jsonld={jsonld}
+  bare
+  fontStylesheet="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  viewport="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+<Fragment slot="head">
+<link rel="stylesheet" href="/assets/css/home.css">
+</Fragment>
+
+<a class="skip" href="#main">Skip to main content</a>
+<header class="home-header home-container">
+  <a class="brand" href="/" aria-label="Fee Simple home">Fee Simple<span class="brand-dot">.</span></a>
+  <nav class="home-nav" aria-label="Primary">
+    <a class="nav-demo" href="/demo/">Explore the demo <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="hero-copy home-container">
+      <h1 class="claim">The highest and most complete form of <span>parcel diligence.</span></h1>
+    </div>
+    <div class="map" role="img" aria-label="Animated globe rotating and zooming into the United States">
+      <canvas id="field" aria-hidden="true"></canvas>
+    </div>
+    <div class="hero-floor home-container"><span class="mono">A TALOS OPERATIONS PRODUCT</span></div>
+  </section>
+
+  <section class="signup home-container" id="early-access" aria-label="Request early access">
+    <form name="early-access" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="early-access">
+      <p hidden aria-hidden="true">
+        <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+      </p>
+      <label for="email" class="visually-hidden">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@association.org" required autocomplete="email">
+      <button type="submit">send</button>
+    </form>
+    <p class="caption">Enter your email — we'll reach out to set up access.</p>
+  </section>
+</main>
+
+<div class="home-container"><Footer /></div>
+
+<Fragment slot="end">
+<script is:inline type="module" src="/assets/js/hero.js"></script>
+</Fragment>
+</Base>
