@@ -28,6 +28,8 @@ import { multiply, axisAngle, fromCamera, dragRotation, slerp, matrix } from './
    rotates the globe freely like a trackball, with a little coast on release.
    Dragging pauses the tour, which resumes after ten seconds without interaction.
    Touch supports horizontal dragging while leaving vertical page scrolling free.
+   With prefers-reduced-motion the globe holds still at the view the tour spins
+   to; dragging and the keys still turn it, and nothing else moves.
 
    Performance choices (each tunable):
    - every dot is a precomputed unit vector, rotated by one shared matrix
@@ -320,7 +322,7 @@ async function startHero() {
   const drag = { on: false, pointerId: null, x: 0, y: 0, t: 0, velocity: [0, 0, 0] };
   let exploring = false, holdUntil = 0, pullback = null, resetting = null;
   let interactionUntil = 0;
-  let orientation = fromCamera(-58 + SPIN * 6, GLOBE_LAT);
+  let orientation = fromCamera(reduced ? -58 : -58 + SPIN * 6, GLOBE_LAT);   // reduced motion rests where the spin would end
   const ROT = new Float64Array(9);
   const clampV = v => Math.max(-3000, Math.min(3000, v));
 
@@ -489,8 +491,6 @@ async function startHero() {
     CAM.R = Math.exp(Math.log(R_GLOBE) + (Math.log(R_LAND) - Math.log(R_GLOBE)) * z);
     CAM.cx = UC[0] * z; CAM.cy = UC[1] * z;
   }
-  function landed() { CAM.z = 1; CAM.q = LAND_Q; CAM.R = R_LAND; CAM.cx = UC[0]; CAM.cy = UC[1]; }
-
   // ---- the governor ----------------------------------------------------------
   // The machine sets the pace. Once the loop has warmed up, the gap between
   // frames is sampled; when the typical gap runs long, so the whole page would
@@ -541,12 +541,9 @@ async function startHero() {
     lastMs = ms;
     const t = ms / 1000;
     if (!reduced && !still && exploring && !drag.on && ms >= interactionUntil) setExploring(false);
-    if (reduced && !exploring) landed();
-    else {
-      spinStep(dt, ms);
-      if (!exploring && !drag.on && ms >= holdUntil && !pullback && !still) sceneTime += dt;
-      camera(ms);
-    }
+    spinStep(dt, ms);
+    if (!exploring && !drag.on && ms >= holdUntil && !pullback && !still && !reduced) sceneTime += dt;
+    camera(ms);
     const { R, cx, cy, z } = CAM;
     matrix(CAM.q, ROT);
     const X0 = W / 2 - cx * R, Y0 = H / 2 + cy * R;    // screen = X0 + x*R, Y0 - y*R
@@ -559,7 +556,7 @@ async function startHero() {
     const dim = 1 - smooth(0.5, 0.95, z);              // the rest of the world fades out as the camera lands
     const dotMul = 0.82 + 0.18 * z;                    // dots grow with the camera
     const wob = 0.35 + 0.65 * z;                       // drift: calm on the globe
-    const formAmount = reduced ? 1 : smooth(0.85, 1, z);
+    const formAmount = smooth(0.85, 1, z);
 
     // spawn white strings while the country is formed
     if (!reduced && z > 0.97 && t >= nextPulse && STRINGS.length < 8) {
@@ -965,6 +962,7 @@ async function startHero() {
     const fresh = canvas.cloneNode();
     canvas.replaceWith(fresh); canvas = fresh;
     ctx = canvas.getContext('2d');
+    hero.dataset.renderer = '2d';
     attachPointer(canvas);
     layout();
   }
@@ -988,7 +986,10 @@ async function startHero() {
       if (visible) { lastMs = 0; schedule(); }
     }).observe(hero);
   }
+  // what the page decided, readable in the inspector: data-quality, data-renderer, data-motion
   hero.dataset.quality = 'full';
+  if (gl) hero.dataset.renderer = 'webgl';
+  hero.dataset.motion = reduced ? 'reduced' : 'full';
   if (reduced) frame(performance.now()); else schedule();
 }
 
