@@ -903,6 +903,9 @@ async function startHero() {
   attachPointer(canvas);
   layout();
   addEventListener('resize', () => { layout(); if (reduced) frame(0); });
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(() => { layout(); if (reduced) frame(0); }).observe(hero);
+  }
   if (reduced) { frame(0); } else { requestAnimationFrame(frame); }
 }
 
