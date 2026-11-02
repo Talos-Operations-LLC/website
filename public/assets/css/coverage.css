@@ -72,16 +72,6 @@
   .tooltip .t-status { color: var(--mute); margin-top: 2px; }
   .tooltip .t-status.live { color: var(--accent); }
 
-  /* ---------- stats ---------- */
-  .stats {
-    display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
-    font-family: var(--mono);
-    margin: 40px auto 0;
-    text-align: center;
-  }
-  .stats .num { font-size: 36px; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1.1; color: var(--accent); }
-  .stats .lbl { font-size: 11px; color: var(--mute); margin-top: 6px; }
-
   .motto {
     font-family: var(--mono); font-size: 12px; color: var(--mute);
     text-align: center;
@@ -89,12 +79,22 @@
   }
   .motto a:hover { color: var(--ink); }
 
+  /* ---------- desktop: header, headline and map fill the first screen; the footer sits below the fold ---------- */
+  @media (min-width: 901px) {
+    .stage { display: flex; flex-direction: column; min-height: calc(100svh - var(--chrome-top) - var(--chrome-height)); padding-bottom: clamp(12px, 2svh, 32px); }
+    .headline { margin: clamp(16px, 4.5svh, 75px) auto clamp(8px, 1.6svh, 24px); font-size: clamp(36px, min(5.6vw, 9svh), 80px); }
+    .counts { margin-bottom: clamp(10px, 2.4svh, 40px); }
+    .map-wrap { flex: 1; min-height: 240px; }
+    .map-wrap svg.map { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .motto { margin-top: clamp(12px, 3svh, 80px); }
+    .wrap > .home-footer { margin-top: 32px; }
+  }
+
   /* ---------- responsive ---------- */
   @media (max-width: 720px) {
     .headline { margin: 42px auto 24px; font-size: clamp(36px, 9.9vw, 57px); }
     .legend { position: static; border: none; border-top: 1px solid var(--rule); border-radius: 0; }
     /* On phones, pin the county label to the map's top-left corner instead of following the finger. */
     .tooltip { left: 8px !important; top: 8px !important; }
-    .stats { gap: 28px; }
   }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

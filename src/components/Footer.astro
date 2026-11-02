@@ -1,9 +1,33 @@
 ---
 interface Props {
-  minimal?: boolean;
+  // The full footer is the homepage's: brand, explore and contact columns,
+  // then the legal row. Without it, pages get the one-line contact footer.
+  full?: boolean;
 }
-const { minimal = false } = Astro.props;
+const { full = false } = Astro.props;
+const year = new Date().getFullYear();
 ---
-<footer class="footer">
-  {minimal ? <span>© {new Date().getFullYear()} Talos Operations LLC</span> : <Fragment>Talos Operations LLC · <a href="mailto:info@talosoperations.com">info@talosoperations.com</a> · <a href="https://www.linkedin.com/company/talos_operations/" target="_blank" rel="me noopener noreferrer">LinkedIn</a><br><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a></Fragment>}
+{full ? (
+<footer class="home-footer">
+  <div class="footer-top">
+    <div class="footer-identity">
+      <a class="footer-brand" href="/">Fee Simple<span>.</span></a>
+      <p>A Talos Operations product.</p>
+    </div>
+    <nav class="footer-explore" aria-label="Explore">
+      <a href="/coverage.html">Coverage <span aria-hidden="true">↗</span></a>
+      <a href="/learn/">Learn <span aria-hidden="true">↗</span></a>
+    </nav>
+    <nav class="footer-contact" aria-label="Contact">
+      <a href="mailto:info@talosoperations.com">info@talosoperations.com <span aria-hidden="true">↗</span></a>
+      <a href="https://www.linkedin.com/company/talos_operations/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+  <div class="footer-bottom">
+    <span>© {year} Talos Operations LLC</span>
+    <nav aria-label="Legal"><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a></nav>
+  </div>
 </footer>
+) : (
+<footer class="footer">Talos Operations LLC · <a href="mailto:info@talosoperations.com">info@talosoperations.com</a> · <a href="https://www.linkedin.com/company/talos_operations/" target="_blank" rel="me noopener noreferrer">LinkedIn</a><br><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a></footer>
+)}

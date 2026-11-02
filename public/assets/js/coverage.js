@@ -22,22 +22,21 @@
     document.getElementById("counts").innerHTML =
       `<span class="live">[${liveCount} live]</span><span class="surveyed">[${surveyedCount} surveyed]</span>`;
 
-    const statsData = [
-      { num: CONFIG.stats.filesProcessed, lbl: "retrieval runs" },
-      { num: CONFIG.stats.instrumentsInCorpus, lbl: "instruments in corpus" },
-    ];
-    const stats = document.getElementById("stats");
-    statsData.forEach(d => {
-      const cell = document.createElement("div");
-      cell.innerHTML = `<div class="num">${d.num.toLocaleString()}</div><div class="lbl">${d.lbl}</div>`;
-      stats.appendChild(cell);
-    });
-
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // ---- map ----
     const svg = d3.select("#map");
-    const width = 975, height = 610;
+    const svgNode = svg.node();
+    // The geometry is pre-projected into a 975 x 610 frame.
+    const BASE_W = 975, BASE_H = 610;
+    // On desktop the page sizes the map's box, so the viewBox takes the box's
+    // own proportions (nation centred) and North Carolina fills the box instead
+    // of being letterboxed. On phones the box keeps the frame's proportions.
+    const desktop = window.matchMedia("(min-width: 901px)");
+    let width = BASE_W, height = BASE_H, originX = 0, originY = 0;
+    // The view starts on North Carolina and keeps following it through
+    // resizes until the visitor moves the map themselves.
+    let pinnedToNC = true;
 
     const g = svg.append("g");
     const path = d3.geoPath(); // topology is pre-projected (Albers USA)
@@ -89,14 +88,29 @@
 
     const zoom = d3.zoom()
       .scaleExtent([1, 30])
-      .translateExtent([[0, 0], [width, height]])
       .on("zoom", (event) => {
         g.attr("transform", event.transform);
         g.selectAll(".county").attr("stroke-width", 0.3 / event.transform.k * 1.4 + 0.08);
         g.select(".state-line").attr("stroke-width", 0.7 / Math.sqrt(event.transform.k));
         g.select(".nation-line").attr("stroke-width", 0.8 / Math.sqrt(event.transform.k));
+        if (event.sourceEvent) pinnedToNC = false;
       });
     svg.call(zoom);
+
+    function sizeViewBox() {
+      const rect = svgNode.getBoundingClientRect();
+      if (!desktop.matches || !rect.width || !rect.height) {
+        width = BASE_W; height = BASE_H; originX = 0; originY = 0;
+      } else if (rect.width / rect.height >= BASE_W / BASE_H) {
+        height = BASE_H; width = BASE_H * rect.width / rect.height;
+        originX = (BASE_W - width) / 2; originY = 0;
+      } else {
+        width = BASE_W; height = BASE_W * rect.height / rect.width;
+        originX = 0; originY = (BASE_H - height) / 2;
+      }
+      svg.attr("viewBox", `${originX} ${originY} ${width} ${height}`);
+      zoom.translateExtent([[originX, originY], [originX + width, originY + height]]);
+    }
 
     const ncCounties = counties.filter(d => d.id.startsWith("37"));
     function fitBounds(features, scalePad) {
@@ -107,8 +121,13 @@
       const dx = b[1][0] - b[0][0], dy = b[1][1] - b[0][1];
       const cx = (b[0][0] + b[1][0]) / 2, cy = (b[0][1] + b[1][1]) / 2;
       const k = Math.min(30, scalePad / Math.max(dx / width, dy / height));
-      return d3.zoomIdentity.translate(width / 2 - k * cx, height / 2 - k * cy).scale(k);
+      return d3.zoomIdentity.translate(originX + width / 2 - k * cx, originY + height / 2 - k * cy).scale(k);
     }
+
+    // Web fonts change the headline's height, and with it the map's box, so
+    // the first fit waits for them.
+    if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch (_) {} }
+    sizeViewBox();
     const ncTransform = fitBounds(ncCounties, 0.85);
     if (reduceMotion) {
       svg.call(zoom.transform, ncTransform);
@@ -116,15 +135,28 @@
       svg.transition().delay(500).duration(1600).call(zoom.transform, ncTransform);
     }
 
-    document.getElementById("zoom-in").onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 1.6);
-    document.getElementById("zoom-out").onclick = () => svg.transition().duration(300).call(zoom.scaleBy, 1 / 1.6);
-    document.getElementById("zoom-reset").onclick = () => svg.transition().duration(600).call(zoom.transform, d3.zoomIdentity);
+    function refit() {
+      sizeViewBox();
+      if (!pinnedToNC) return;
+      const t = fitBounds(ncCounties, 0.85);
+      if (reduceMotion) svg.call(zoom.transform, t);
+      else svg.transition().duration(400).call(zoom.transform, t);
+    }
+    if (typeof ResizeObserver !== "undefined") {
+      let settled = false; // the observer reports the current size once on attach
+      new ResizeObserver(() => { if (settled) refit(); settled = true; }).observe(svgNode);
+    } else {
+      addEventListener("resize", refit);
+    }
+
+    document.getElementById("zoom-in").onclick = () => { pinnedToNC = false; svg.transition().duration(300).call(zoom.scaleBy, 1.6); };
+    document.getElementById("zoom-out").onclick = () => { pinnedToNC = false; svg.transition().duration(300).call(zoom.scaleBy, 1 / 1.6); };
+    document.getElementById("zoom-reset").onclick = () => { pinnedToNC = false; svg.transition().duration(600).call(zoom.transform, d3.zoomIdentity); };
 
   } catch (error) {
     console.error('Coverage map failed to load:', error);
     document.getElementById('counts').textContent =
       'The coverage map could not load. Please refresh the page.';
     document.querySelector('.map-wrap').hidden = true;
-    document.getElementById('stats').hidden = true;
   }
 })();
