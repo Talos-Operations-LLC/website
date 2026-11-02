@@ -1,11 +1,27 @@
 {
-  "stats": {
-    "filesProcessed": 8742,
-    "instrumentsInCorpus": 182
-  },
   "counties": {
-    "37011": {
-      "name": "Avery",
+    "37001": {
+      "name": "Alamance",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37003": {
+      "name": "Alexander",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37009": {
+      "name": "Ashe",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37013": {
+      "name": "Beaufort",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37017": {
+      "name": "Bladen",
       "status": "surveyed",
       "since": "—"
     },
@@ -14,18 +30,23 @@
       "status": "live",
       "since": "2026"
     },
+    "37021": {
+      "name": "Buncombe",
+      "status": "surveyed",
+      "since": "—"
+    },
     "37023": {
       "name": "Burke",
       "status": "surveyed",
       "since": "—"
     },
-    "37027": {
-      "name": "Caldwell",
+    "37025": {
+      "name": "Cabarrus",
       "status": "surveyed",
       "since": "—"
     },
-    "37031": {
-      "name": "Carteret",
+    "37027": {
+      "name": "Caldwell",
       "status": "surveyed",
       "since": "—"
     },
@@ -44,6 +65,26 @@
       "status": "surveyed",
       "since": "—"
     },
+    "37039": {
+      "name": "Cherokee",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37045": {
+      "name": "Cleveland",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37047": {
+      "name": "Columbus",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37049": {
+      "name": "Craven",
+      "status": "surveyed",
+      "since": "—"
+    },
     "37051": {
       "name": "Cumberland",
       "status": "live",
@@ -54,10 +95,15 @@
       "status": "live",
       "since": "2026"
     },
+    "37055": {
+      "name": "Dare",
+      "status": "surveyed",
+      "since": "—"
+    },
     "37057": {
       "name": "Davidson",
-      "status": "live",
-      "since": "2026"
+      "status": "surveyed",
+      "since": "—"
     },
     "37061": {
       "name": "Duplin",
@@ -86,28 +132,38 @@
     },
     "37071": {
       "name": "Gaston",
-      "status": "live",
-      "since": "2026"
+      "status": "surveyed",
+      "since": "—"
     },
     "37077": {
       "name": "Granville",
       "status": "live",
       "since": "2026"
     },
-    "37079": {
-      "name": "Greene",
-      "status": "surveyed",
-      "since": "—"
-    },
     "37081": {
       "name": "Guilford",
       "status": "live",
       "since": "2026"
     },
+    "37083": {
+      "name": "Halifax",
+      "status": "surveyed",
+      "since": "—"
+    },
     "37085": {
       "name": "Harnett",
       "status": "live",
       "since": "2026"
+    },
+    "37089": {
+      "name": "Henderson",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37091": {
+      "name": "Hertford",
+      "status": "surveyed",
+      "since": "—"
     },
     "37093": {
       "name": "Hoke",
@@ -118,6 +174,11 @@
       "name": "Iredell",
       "status": "live",
       "since": "2026"
+    },
+    "37099": {
+      "name": "Jackson",
+      "status": "surveyed",
+      "since": "—"
     },
     "37101": {
       "name": "Johnston",
@@ -144,15 +205,25 @@
       "status": "surveyed",
       "since": "—"
     },
+    "37113": {
+      "name": "Macon",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37115": {
+      "name": "Madison",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37117": {
+      "name": "Martin",
+      "status": "surveyed",
+      "since": "—"
+    },
     "37119": {
       "name": "Mecklenburg",
       "status": "live",
       "since": "2026"
-    },
-    "37123": {
-      "name": "Montgomery",
-      "status": "surveyed",
-      "since": "—"
     },
     "37125": {
       "name": "Moore",
@@ -169,13 +240,13 @@
       "status": "live",
       "since": "2026"
     },
-    "37131": {
-      "name": "Northampton",
+    "37133": {
+      "name": "Onslow",
       "status": "surveyed",
       "since": "—"
     },
-    "37133": {
-      "name": "Onslow",
+    "37135": {
+      "name": "Orange",
       "status": "surveyed",
       "since": "—"
     },
@@ -204,6 +275,16 @@
       "status": "live",
       "since": "2026"
     },
+    "37153": {
+      "name": "Richmond",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37155": {
+      "name": "Robeson",
+      "status": "surveyed",
+      "since": "—"
+    },
     "37157": {
       "name": "Rockingham",
       "status": "surveyed",
@@ -214,6 +295,11 @@
       "status": "live",
       "since": "2026"
     },
+    "37161": {
+      "name": "Rutherford",
+      "status": "surveyed",
+      "since": "—"
+    },
     "37163": {
       "name": "Sampson",
       "status": "live",
@@ -221,13 +307,28 @@
     },
     "37165": {
       "name": "Scotland",
-      "status": "live",
-      "since": "2026"
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37167": {
+      "name": "Stanly",
+      "status": "surveyed",
+      "since": "—"
     },
     "37169": {
       "name": "Stokes",
       "status": "live",
       "since": "2026"
+    },
+    "37171": {
+      "name": "Surry",
+      "status": "surveyed",
+      "since": "—"
+    },
+    "37175": {
+      "name": "Transylvania",
+      "status": "surveyed",
+      "since": "—"
     },
     "37179": {
       "name": "Union",
@@ -243,11 +344,6 @@
       "name": "Wake",
       "status": "live",
       "since": "2026"
-    },
-    "37185": {
-      "name": "Warren",
-      "status": "surveyed",
-      "since": "—"
     },
     "37189": {
       "name": "Watauga",
@@ -271,8 +367,8 @@
     },
     "37197": {
       "name": "Yadkin",
-      "status": "live",
-      "since": "2026"
+      "status": "surveyed",
+      "since": "—"
     }
   }
 }
