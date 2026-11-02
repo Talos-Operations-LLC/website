@@ -152,14 +152,19 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-
   .access h2 { font-size: 52px; }
   .eyebrow { margin-bottom: 16px; }
   .access-copy { margin-bottom: 22px; }
-  .home-footer { padding-top: 30px; }
-  .footer-top { grid-template-columns: 1fr 1fr; gap: 30px; padding-bottom: 34px; }
-  .footer-identity { grid-column: 1 / -1; }
-  .footer-contact { justify-self: start; grid-column: 1 / -1; }
-  .footer-explore { flex-direction: row !important; border: 0; padding-left: 0; }
-  .footer-bottom { flex-wrap: wrap; gap: 22px; padding-bottom: 25px; }
-  .footer-bottom > span { width: 100%; }
-  .footer-bottom nav { margin-left: 0; }
+  .home-footer { padding-top: 24px; }
+  .footer-top { grid-template-columns: minmax(0, 1fr); gap: 0; padding-bottom: 8px; }
+  .footer-identity { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+  .footer-brand { font-size: 21px; white-space: nowrap; }
+  .footer-identity p { font-size: 10px; margin: 0; white-space: nowrap; }
+  .footer-top nav { gap: 0; }
+  .footer-top nav a { width: 100%; min-height: 44px; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; white-space: nowrap; }
+  .footer-contact { justify-self: stretch; }
+  .footer-explore { border: 0; padding-left: 0; }
+  .footer-bottom { flex-wrap: nowrap; justify-content: space-between; gap: 10px; padding-top: 0; padding-bottom: max(24px, env(safe-area-inset-bottom)); font-size: 9px; }
+  .footer-bottom > span { width: auto; white-space: nowrap; }
+  .footer-bottom nav { margin-left: 0; gap: 14px; }
+  .footer-bottom nav a { min-height: 44px; display: flex; align-items: center; font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
