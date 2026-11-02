@@ -45,9 +45,10 @@ To compare against what is live now, check out `main` in a second folder, run
 
 ## Generated files: never hand-edit
 
-- **`public/demo/`** — the product demo at `/demo`. Built by a script in the
-  hoa-tool repo; run it with this repo's `public/` folder as the checkout path:
-  `python tools/demo/build_demo.py C:\talos-website\public <data dir>`.
+- **`public/demo/`** — the product demo at `/demo`. Built by
+  `tools/demo/build_demo.py` in the Themis repo (its GitHub remote is still named
+  hoa-tool). Run it from that repo, passing this repo's `public/` folder first and the
+  data folder second: `python tools/demo/build_demo.py <this repo>/public <data dir>`.
   It replaces `public/demo/` wholesale, so hand edits are lost; `docs/demo.md` lists
   the two site-integration edits to re-apply.
 - **`public/assets/data/county-map.json`** — the pre-projected county map used by
