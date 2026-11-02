@@ -1,3 +1,5 @@
+import { multiply, axisAngle, fromCamera, dragRotation, slerp, matrix } from './globe-rotation.js';
+
 /* ============================================================================
    Fee Simple hero field.
    A dotted globe, every continent in the blue glow, spins, turns to North
@@ -23,11 +25,12 @@
 
    The pointer: moving the mouse across the field pushes nearby dots aside
    and they spring back, so a sweep leaves a wake. Pressing and dragging
-   spins the globe like a trackball, with a little coast on release. Touch
-   is left alone so phones still scroll.
+   rotates the globe freely like a trackball, with a little coast on release.
+   Dragging pauses the tour, which resumes after ten seconds without interaction.
+   Touch supports horizontal dragging while leaving vertical page scrolling free.
 
    Performance choices (each tunable):
-   - every dot is a precomputed unit vector; projecting it is four multiplies
+   - every dot is a precomputed unit vector, rotated by one shared matrix
    - the far side of the globe and anything outside the box are skipped
    - roughly 15k dots on desktop (10k drawn after culling), half that on phones
    - devicePixelRatio up to 2 on WebGL (crisp on Retina), 1.5 on the 2D fallback
@@ -123,7 +126,7 @@ async function startHero() {
 
   // ---- the globe -------------------------------------------------------------
   // Orthographic view of a unit sphere. Each dot keeps its unit vector; a frame
-  // rotates it by the camera's longitude (around the pole) then latitude (tilt):
+  // applies the camera quaternion as a rotation matrix, including free roll:
   //   x  = east-west on screen, y = north-south, zc = toward the viewer (hidden if <= 0)
   const D2R = Math.PI / 180;
   const US_LON = -98.2, US_LAT = 38.8;      // where the zoom lands
@@ -296,53 +299,93 @@ async function startHero() {
     }
   }
 
-  // ---- the pointer: push and spin --------------------------------------------
-  // Push: dots within PUSH_R of the cursor are shoved away from it, and carried
-  // along when it is moving; a spring pulls each one back (p.ox/oy is the
-  // displacement, p.vx/vy its velocity, css px). Spin: press and drag turns the
-  // globe like a trackball. The spin offset fades out as the camera lands so
-  // the zoom always ends on the US, and fades back in on the pull-back.
-  const PUSH_R = 0.12;                      // push radius, as a fraction of the box width
-  const PUSH_F = 3200;                      // shove away from the cursor, px/s^2 at its centre
-  const PUSH_V = 9;                         // how much of the cursor's own speed dots pick up, 1/s
-  const SPRING_K = 90, SPRING_C = 11;       // the return: stiffness and damping
-  const LAT_MAX = 60;                       // how far the globe can be tipped, degrees
+  const PUSH_R = 0.12, PUSH_F = 3200, PUSH_V = 9;
+  const SPRING_K = 90, SPRING_C = 11;
   const mouse = { on: false, x: -1e4, y: -1e4, vx: 0, vy: 0, t: 0 };
-  const drag = { on: false, x: 0, y: 0, t: 0, lon: 0, lat: 0, vlon: 0, vlat: 0 };
-  let zoomFrom = null;                      // the longitude the current zoom started from
-  const clampLat = v => v < -LAT_MAX ? -LAT_MAX : v > LAT_MAX ? LAT_MAX : v;
-  const clampV = v => v < -3000 ? -3000 : v > 3000 ? 3000 : v;
+  const drag = { on: false, pointerId: null, x: 0, y: 0, t: 0, velocity: [0, 0, 0] };
+  let exploring = false, holdUntil = 0, pullback = null, resetting = null;
+  let interactionUntil = 0;
+  let orientation = fromCamera(-58 + SPIN * 6, GLOBE_LAT);
+  const ROT = new Float64Array(9);
+  const clampV = v => Math.max(-3000, Math.min(3000, v));
+
+  function pointerPosition(e) {
+    const rect = canvas.getBoundingClientRect();
+    return [(e.clientX - rect.left) * W / rect.width, (e.clientY - rect.top) * H / rect.height];
+  }
+  function stopMomentum() {
+    drag.velocity.fill(0);
+  }
+  function setExploring(value) {
+    exploring = value;
+    hero.dataset.exploring = String(value);
+    interactionUntil = performance.now() + 10000;
+    stopMomentum(); resetting = null;
+    sceneTime = 0;
+    holdUntil = performance.now() + 1400;
+    if (value) {
+      orientation = [...CAM.q];
+      pullback = reduced || CAM.z === 0 ? null : { z: CAM.z, start: performance.now(), duration: 650 };
+    }
+    if (reduced) frame(performance.now());
+  }
+  function resetOrientation() {
+    if (!exploring) setExploring(true);
+    stopMomentum();
+    const target = fromCamera(-58, GLOBE_LAT);
+    if (reduced) { orientation = target; frame(performance.now()); }
+    else resetting = { from: [...orientation], to: target, start: performance.now() };
+  }
   function onDown(e) {
-    if (reduced || e.pointerType === 'touch' || e.button !== 0) return;
-    drag.on = true; drag.x = e.clientX; drag.y = e.clientY; drag.t = e.timeStamp;
-    drag.vlon = drag.vlat = 0;
-    try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* no capture: the drag still works inside the box */ }
+    if (e.button !== 0 || drag.on || (!exploring && CAM.z > 0.15)) return;
+    const [x, y] = pointerPosition(e);
+    if (!exploring) setExploring(true);
+    orientation = [...CAM.q];
+    sceneTime = 0; zoomFrom = null;
+    if (!pullback && CAM.z > 0) pullback = { z: CAM.z, start: performance.now(), duration: 350 };
+    drag.on = true; drag.pointerId = e.pointerId; drag.x = x; drag.y = y; drag.t = e.timeStamp;
+    stopMomentum(); resetting = null;
+    interactionUntil = performance.now() + 10000;
+    holdUntil = performance.now() + 6000;
+    try { canvas.setPointerCapture(e.pointerId); } catch {}
     e.preventDefault();
   }
   function onMove(e) {
-    if (e.pointerType === 'touch') return;
-    const now = e.timeStamp, x = e.offsetX, y = e.offsetY;
+    if (e.pointerType === 'touch' && !exploring) return;
+    if (drag.on && e.pointerId !== drag.pointerId) return;
+    interactionUntil = performance.now() + 10000;
+    const [x, y] = pointerPosition(e), now = e.timeStamp;
     if (mouse.on) {
-      const dt = Math.max(0.004, (now - mouse.t) / 1000);
+      const dt = Math.max(0.008, (now - mouse.t) / 1000);
       mouse.vx = clampV((x - mouse.x) / dt); mouse.vy = clampV((y - mouse.y) / dt);
     }
     mouse.x = x; mouse.y = y; mouse.t = now; mouse.on = true;
-    if (drag.on) {
+    if (!drag.on) return;
+    const centerX = W / 2 - CAM.cx * CAM.R, centerY = H / 2 + CAM.cy * CAM.R;
+    const delta = dragRotation(drag.x - centerX, drag.y - centerY, x - centerX, y - centerY, CAM.R);
+    orientation = multiply(delta, orientation);
+    const length = Math.hypot(delta[0], delta[1], delta[2]);
+    if (length > 1e-6) {
       const dt = Math.max(0.004, (now - drag.t) / 1000);
-      const k = 57.2958 / CAM.R;                       // a pixel of drag = the angle it spans at the rim
-      const dlon = -(e.clientX - drag.x) * k, dlat = (e.clientY - drag.y) * k;
-      if (CAM.z < 0.5) {                               // only while the globe is up
-        drag.lon += dlon; drag.lat = clampLat(drag.lat + dlat);
-        drag.vlon = drag.vlon * 0.4 + (dlon / dt) * 0.6;
-        drag.vlat = drag.vlat * 0.4 + (dlat / dt) * 0.6;
-      }
-      drag.x = e.clientX; drag.y = e.clientY; drag.t = now;
+      const speed = 2 * Math.atan2(length, delta[3]) / dt;
+      const weight = 0.6;
+      for (let i = 0; i < 3; i++) drag.velocity[i] += (delta[i] / length * speed - drag.velocity[i]) * weight;
+      drag.t = now;
     }
+    drag.x = x; drag.y = y;
+    holdUntil = performance.now() + 6000;
+    if (reduced) frame(performance.now());
   }
-  function onUp(e) { if (e.pointerType !== 'touch') drag.on = false; }
-  function onLeave(e) {
-    if (e.pointerType !== 'touch') { mouse.on = false; mouse.x = mouse.y = -1e4; mouse.vx = mouse.vy = 0; }
+  function onUp(e) {
+    if (e.pointerId !== drag.pointerId) return;
+    if (e.type !== 'pointerup' || e.timeStamp - drag.t > 100) stopMomentum();
+    drag.on = false; drag.pointerId = null;
+    interactionUntil = performance.now() + 10000;
+    mouse.vx = mouse.vy = 0;
+    holdUntil = performance.now() + 6000;
+    try { canvas.releasePointerCapture(e.pointerId); } catch {}
   }
+  function onLeave() { mouse.on = false; mouse.vx = mouse.vy = 0; }
   function attachPointer(el) {
     el.addEventListener('pointerdown', onDown);
     el.addEventListener('pointermove', onMove);
@@ -350,17 +393,40 @@ async function startHero() {
     el.addEventListener('pointercancel', onUp);
     el.addEventListener('lostpointercapture', onUp);
     el.addEventListener('pointerleave', onLeave);
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { setExploring(false); return; }
+      if (e.key === 'Home') { e.preventDefault(); resetOrientation(); return; }
+      if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'q', 'e'].includes(e.key)) return;
+      e.preventDefault();
+      if (!exploring) setExploring(true);
+      interactionUntil = performance.now() + 10000;
+      resetting = null; stopMomentum();
+      const angle = 0.12;
+      const delta = e.key === 'ArrowLeft' ? axisAngle(0, 1, 0, -angle)
+        : e.key === 'ArrowRight' ? axisAngle(0, 1, 0, angle)
+        : e.key === 'ArrowUp' ? axisAngle(1, 0, 0, -angle)
+        : e.key === 'ArrowDown' ? axisAngle(1, 0, 0, angle)
+        : axisAngle(0, 0, 1, e.key === 'q' ? angle : -angle);
+      orientation = multiply(delta, orientation);
+      if (reduced) frame(performance.now());
+    });
   }
-  // per frame: hold the globe still while it is held, let it coast after release
-  function spinStep(dt) {
-    if (drag.on) { if (CAM.z < 0.5) drag.lon += SPIN * dt; return; }   // cancels the auto spin under the hand
-    if (CAM.z >= 0.5) { drag.vlon = drag.vlat = 0; return; }
-    if (!drag.vlon && !drag.vlat) return;
-    drag.lon += drag.vlon * dt;
-    drag.lat = clampLat(drag.lat + drag.vlat * dt);
-    const f = Math.exp(-dt * 2.2);                     // friction
-    drag.vlon *= f; drag.vlat *= f;
-    if (Math.abs(drag.vlon) < 0.05 && Math.abs(drag.vlat) < 0.05) drag.vlon = drag.vlat = 0;
+  function spinStep(dt, ms) {
+    if (resetting) {
+      const amount = Math.min(1, (ms - resetting.start) / 650);
+      orientation = slerp(resetting.from, resetting.to, easeInOut(amount));
+      if (amount === 1) resetting = null;
+      return;
+    }
+    if (drag.on || CAM.z > 0.15 || pullback || reduced) return;
+    const speed = Math.hypot(...drag.velocity);
+    if (speed > 0.008) {
+      const decay = Math.exp(-dt * 1.8);
+      orientation = multiply(axisAngle(...drag.velocity, speed * (1 - decay) / 1.8), orientation);
+      for (let i = 0; i < 3; i++) drag.velocity[i] *= decay;
+    } else if (!exploring && ms >= holdUntil) {
+      orientation = multiply(orientation, axisAngle(0, 1, 0, SPIN * D2R * dt));
+    }
   }
 
   function layout() {
@@ -376,37 +442,38 @@ async function startHero() {
     R_GLOBE = BH * 0.46;                               // on the globe: the sphere fits the box
   }
 
-  // ---- the camera's loop -----------------------------------------------------
-  // globe 5.5 (spinning), zoom in 4.2, hold the US 9, pull back 4.2  (~23s)
-  const T_GLOBE = 5.5, T_ZOOM = 4.2, T_HOLD = 9, T_BACK = 4.2;
+  const T_GLOBE = 6, T_ZOOM = 4.2, T_HOLD = 9, T_BACK = 4.2;
   const T_LOOP = T_GLOBE + T_ZOOM + T_HOLD + T_BACK;
-  // The page opens on the globe with 3s of spin before the first zoom, and the
-  // spin is timed so the US is just left of centre when the zoom begins.
-  const T_START = T_GLOBE - 3;
-  const SPIN_LON0 = -58 + SPIN * T_GLOBE;
-  const easeInOut = u => u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
-  const clamp01 = u => u < 0 ? 0 : u > 1 ? 1 : u;
+  const easeInOut = u => u < 0.5 ? 2 * u * u : 1 - (1 - u) * (1 - u) * 2;
+  const clamp01 = u => Math.max(0, Math.min(1, u));
   const smooth = (a, b, u) => { u = clamp01((u - a) / (b - a)); return u * u * (3 - 2 * u); };
-  const dlon = (a, b) => ((b - a + 540) % 360) - 180;   // shortest turn from a to b
-  const CAM = { lon0: 0, lat0: 0, R: 1, cx: 0, cy: 0, z: 0 };   // z: 0 globe .. 1 landed
-  function camera(t) {
-    const spin = SPIN_LON0 - SPIN * t;
-    const free = spin + drag.lon;                      // the globe as the viewer left it
-    let u = (t % T_LOOP + T_LOOP) % T_LOOP, z, lon;
-    if (u < T_GLOBE) { z = 0; lon = free; zoomFrom = null; }
-    else if ((u -= T_GLOBE) < T_ZOOM) {
+  const LAND_Q = fromCamera(US_LON, US_LAT);
+  const CAM = { q: [...orientation], R: 1, cx: 0, cy: 0, z: 0 };
+  let sceneTime = 0, zoomFrom = null;
+  function camera(ms) {
+    let u = sceneTime % T_LOOP, z;
+    if (pullback) {
+      const amount = Math.min(1, (ms - pullback.start) / pullback.duration);
+      z = pullback.z * (1 - easeInOut(amount));
+      CAM.q = orientation;
+      if (amount === 1) pullback = null;
+    } else if (exploring || u < T_GLOBE) {
+      z = 0; CAM.q = orientation; zoomFrom = null;
+    } else if ((u -= T_GLOBE) < T_ZOOM) {
       z = easeInOut(u / T_ZOOM);
-      if (zoomFrom === null) zoomFrom = free;          // where the globe was when the zoom began
-      lon = zoomFrom + dlon(zoomFrom, US_LON) * z;
+      if (!zoomFrom) zoomFrom = [...orientation];
+      CAM.q = slerp(zoomFrom, LAND_Q, z);
+    } else if ((u -= T_ZOOM) < T_HOLD) {
+      z = 1; CAM.q = LAND_Q;
+    } else {
+      z = 1 - easeInOut((u - T_HOLD) / T_BACK);
+      CAM.q = slerp(LAND_Q, orientation, 1 - z);
     }
-    else if ((u -= T_ZOOM) < T_HOLD) { z = 1; lon = US_LON; }
-    else { z = 1 - easeInOut((u - T_HOLD) / T_BACK); lon = US_LON + dlon(US_LON, free) * (1 - z); }
-    CAM.z = z; CAM.lon0 = lon;
-    CAM.lat0 = GLOBE_LAT + drag.lat * (1 - z) + (US_LAT - GLOBE_LAT) * z;
+    CAM.z = z;
     CAM.R = Math.exp(Math.log(R_GLOBE) + (Math.log(R_LAND) - Math.log(R_GLOBE)) * z);
     CAM.cx = UC[0] * z; CAM.cy = UC[1] * z;
   }
-  function landed() { CAM.z = 1; CAM.lon0 = US_LON; CAM.lat0 = US_LAT; CAM.R = R_LAND; CAM.cx = UC[0]; CAM.cy = UC[1]; }
+  function landed() { CAM.z = 1; CAM.q = LAND_Q; CAM.R = R_LAND; CAM.cx = UC[0]; CAM.cy = UC[1]; }
 
   // ---- render ----------------------------------------------------------------
   // frame() moves the camera, projects every dot and writes what the drawing
@@ -416,22 +483,26 @@ async function startHero() {
   let lastMs = 0, cursor = '';
   function frame(ms) {
     const dt = lastMs ? Math.min(0.05, (ms - lastMs) / 1000) : 1 / 60;
-    if (ms - lastMs > 500) zoomFrom = null;            // back from a hidden tab: re-aim the zoom
     lastMs = ms;
-    const t = ms / 1000 + T_START;
-    if (reduced) landed(); else { spinStep(dt); camera(t); }
-    const { lon0, lat0, R, cx, cy, z } = CAM;
-    const c0 = Math.cos(lon0 * D2R), s0 = Math.sin(lon0 * D2R);
-    const cL = Math.cos(lat0 * D2R), sL = Math.sin(lat0 * D2R);
+    const t = ms / 1000;
+    if (!reduced && exploring && !drag.on && ms >= interactionUntil) setExploring(false);
+    if (reduced && !exploring) landed();
+    else {
+      spinStep(dt, ms);
+      if (!exploring && !drag.on && ms >= holdUntil && !pullback) sceneTime += dt;
+      camera(ms);
+    }
+    const { R, cx, cy, z } = CAM;
+    matrix(CAM.q, ROT);
     const X0 = W / 2 - cx * R, Y0 = H / 2 + cy * R;    // screen = X0 + x*R, Y0 - y*R
 
     // the hand: grab while the globe is up, nothing once landed
-    const cur = reduced ? '' : z < 0.5 ? (drag.on ? 'grabbing' : 'grab') : '';
+    const cur = drag.on ? 'grabbing' : exploring || z <= 0.15 ? 'grab' : '';
     if (cur !== cursor) { cursor = cur; canvas.style.cursor = cur; }
 
     const detail = smooth(0.2, 0.8, z);                // the fine US dots arrive with the zoom
     const dim = 1 - smooth(0.5, 0.95, z);              // the rest of the world fades out as the camera lands
-    const dotMul = 0.62 + 0.38 * z;                    // dots grow with the camera
+    const dotMul = 0.82 + 0.18 * z;                    // dots grow with the camera
     const wob = 0.35 + 0.65 * z;                       // drift: calm on the globe
     const formAmount = reduced ? 1 : smooth(0.85, 1, z);
 
@@ -448,7 +519,7 @@ async function startHero() {
     }
 
     // the pointer's push: only while it is over the field; its speed goes stale fast
-    const push = !reduced && mouse.on;
+    const push = !reduced && mouse.on && !drag.on;
     if (push && ms - mouse.t > 60) mouse.vx = mouse.vy = 0;
     const PR = Math.max(40, BW * PUSH_R), PR2 = PR * PR;
     const EDGE_Y = Math.max(EDGE, BH * PAD_Y);             // above and below the box, dots fade over the whole overflow
@@ -456,11 +527,12 @@ async function startHero() {
 
     for (let i = 0, o = 0; i < P.length; i++, o += 5) {
       const p = P[i];
-      const x = p.pz * c0 - p.px * s0, tt = p.px * c0 + p.pz * s0;
-      const y = cL * p.py - sL * tt, zc = sL * p.py + cL * tt;
+      const x = ROT[0] * p.pz + ROT[1] * p.py + ROT[2] * p.px;
+      const y = ROT[3] * p.pz + ROT[4] * p.py + ROT[5] * p.px;
+      const zc = ROT[6] * p.pz + ROT[7] * p.py + ROT[8] * p.px;
       let a = 0;
       if (zc > 0.02) {                                 // the near side only
-        a = p.alpha * (0.3 + 0.7 * zc) * (1 + 0.5 * (1 - z));   // limb shading; brighter on the globe
+        a = p.alpha * (0.3 + 0.7 * zc) * (1 + 0.85 * (1 - z));   // limb shading; brighter on the globe
         a *= p.us ? (p.coarse ? 1 : detail) : dim;
       }
       if (a < 0.01) { p.x = -1e4; DYN[o] = -1e4; DYN[o + 1] = -1e4; DYN[o + 3] = 0; DYN[o + 4] = 0; continue; }
@@ -504,6 +576,41 @@ async function startHero() {
   // the sphere's body fades away as it outgrows the box, instead of being clipped
   function discFade(R) { const k = (R_GLOBE * 1.3 - R) / (R_GLOBE * 0.3); return k < 0 ? 0 : k > 1 ? 1 : k; }
 
+  const globeGrid = [];
+  function spherePoint(lon, lat) {
+    const c = Math.cos(lat * D2R);
+    return [c * Math.sin(lon * D2R), Math.sin(lat * D2R), c * Math.cos(lon * D2R)];
+  }
+  for (let latitude = -60; latitude <= 60; latitude += 30) {
+    for (let longitude = -180; longitude < 180; longitude += 4) {
+      globeGrid.push(...spherePoint(longitude, latitude), ...spherePoint(longitude + 4, latitude));
+    }
+  }
+  for (let longitude = -180; longitude < 180; longitude += 30) {
+    for (let latitude = -88; latitude < 88; latitude += 4) {
+      globeGrid.push(...spherePoint(longitude, latitude), ...spherePoint(longitude, latitude + 4));
+    }
+  }
+  function drawGlobeGrid(z, X0, Y0, R) {
+    const alpha = (1 - z) * discFade(R) * 0.13;
+    if (alpha < 0.001) return;
+    if (gl) lineBegin(0.65);
+    else { ctx.beginPath(); ctx.lineWidth = 0.65; ctx.strokeStyle = 'rgba(100,160,240,' + alpha + ')'; }
+    for (let i = 0; i < globeGrid.length; i += 6) {
+      const ax = globeGrid[i], ay = globeGrid[i + 1], az = globeGrid[i + 2];
+      const bx = globeGrid[i + 3], by = globeGrid[i + 4], bz = globeGrid[i + 5];
+      if (ROT[6] * ax + ROT[7] * ay + ROT[8] * az < 0.035 || ROT[6] * bx + ROT[7] * by + ROT[8] * bz < 0.035) continue;
+      const x1 = X0 + (ROT[0] * ax + ROT[1] * ay + ROT[2] * az) * R;
+      const y1 = Y0 - (ROT[3] * ax + ROT[4] * ay + ROT[5] * az) * R;
+      const x2 = X0 + (ROT[0] * bx + ROT[1] * by + ROT[2] * bz) * R;
+      const y2 = Y0 - (ROT[3] * bx + ROT[4] * by + ROT[5] * bz) * R;
+      if (gl) lineAdd(x1, y1, x2, y2);
+      else { ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); }
+    }
+    if (gl) lineFlush(0.39, 0.63, 0.94, alpha);
+    else ctx.stroke();
+  }
+
   // the 2D-canvas fallback: the same frame, one sprite at a time
   function draw2D(z, X0, Y0, R, formAmount, t) {
     ctx.globalCompositeOperation = 'source-over';
@@ -512,16 +619,18 @@ async function startHero() {
     // the sphere's body: a faint disc and rim so the globe reads against the dark
     if (z < 0.999) {
       const g = ctx.createRadialGradient(X0, Y0, R * 0.25, X0, Y0, R);
-      g.addColorStop(0,   'rgba(30,52,110,0.30)');
-      g.addColorStop(0.8, 'rgba(18,30,72,0.18)');
+      g.addColorStop(0,   'rgba(30,65,130,0.42)');
+      g.addColorStop(0.8, 'rgba(18,42,88,0.28)');
       g.addColorStop(1,   'rgba(10,16,40,0)');
       ctx.globalAlpha = (1 - z) * discFade(R);
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(X0, Y0, R, 0, Math.PI * 2); ctx.fill();
       ctx.lineWidth = 1;
-      ctx.strokeStyle = 'rgba(120,160,255,0.12)';
+      ctx.strokeStyle = 'rgba(120,180,255,0.45)';
       ctx.stroke();
     }
+    ctx.globalAlpha = 1;
+    drawGlobeGrid(z, X0, Y0, R);
     ctx.globalCompositeOperation = 'lighter';          // additive: overlaps bloom
     for (let i = 0, o = 0; i < P.length; i++, o += 5) {
       const a = DYN[o + 3];
@@ -626,16 +735,19 @@ async function startHero() {
   void main() {
     vec2 p = gl_FragCoord.xy / uDpr; p.y = uRes.y - p.y;          // css px, y down
     float r = length(p - uC) / uR;
-    vec3 c1 = vec3(30.0, 52.0, 110.0) / 255.0, c2 = vec3(18.0, 30.0, 72.0) / 255.0, c3 = vec3(10.0, 16.0, 40.0) / 255.0;
-    vec3 rgb; float a;                                             // the radial gradient, r 0.25 -> 1
-    if (r < 0.25)      { rgb = c1; a = 0.30; }
-    else if (r < 0.85) { float u = (r - 0.25) / 0.6;  rgb = mix(c1, c2, u); a = mix(0.30, 0.18, u); }
-    else if (r < 1.0)  { float u = (r - 0.85) / 0.15; rgb = mix(c2, c3, u); a = mix(0.18, 0.0, u); }
-    else               { rgb = c3; a = 0.0; }
-    float rim = 0.12 * (1.0 - smoothstep(0.3, 0.9, abs(r - 1.0) * uR));   // the 1px stroke on the edge
-    vec3 col = rgb * a * (1.0 - rim) + vec3(120.0, 160.0, 255.0) / 255.0 * rim;
-    a += rim * (1.0 - a);
-    gl_FragColor = vec4(col * uA, a * uA);
+    vec2 v = (p - uC) / uR;
+    float front = sqrt(max(0.0, 1.0 - r * r));
+    vec3 normal = vec3(v.x, -v.y, front);
+    float light = max(0.0, dot(normal, normalize(vec3(-0.55, 0.65, 0.8))));
+    float inside = 1.0 - smoothstep(0.995, 1.005, r);
+    vec3 ocean = mix(vec3(0.008, 0.015, 0.035), vec3(0.035, 0.09, 0.19), light);
+    float body = (0.48 + light * 0.18) * inside;
+    float atmosphere = exp(-abs(r - 1.0) * 46.0) * (0.12 + 0.20 * light);
+    float rim = (1.0 - smoothstep(0.35, 1.2, abs(r - 1.0) * uR)) * (0.22 + 0.32 * light);
+    float halo = exp(-pow((r - 1.015) / 0.065, 2.0)) * smoothstep(0.98, 1.01, r) * 0.06;
+    vec3 col = ocean * body + vec3(0.22, 0.55, 1.0) * (atmosphere + halo) + vec3(0.55, 0.78, 1.0) * rim;
+    float alpha = min(1.0, body + atmosphere + rim + halo);
+    gl_FragColor = vec4(col * uA, alpha * uA);
   }`;
   function shader(type, src) {
     const s = gl.createShader(type);
@@ -730,7 +842,8 @@ async function startHero() {
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       gl.disableVertexAttribArray(d.aPos);
     }
-    gl.blendFunc(gl.ONE, gl.ONE);                        // additive: overlaps bloom
+    gl.blendFunc(gl.ONE, gl.ONE);
+    drawGlobeGrid(z, X0, Y0, R);
     // every dot, one call
     const q = G.dot;
     gl.useProgram(q.p);
@@ -773,7 +886,7 @@ async function startHero() {
   makeWhite();
   build();
   DYN = new Float32Array(P.length * 5);
-  LQ.arr = new Float32Array(Math.max(LINKS.length, 1024) * 18);
+  LQ.arr = new Float32Array(Math.max(LINKS.length, 2048) * 18);
   if (gl) {
     try { initGL(); uploadStatic(); }
     catch (err) {                                        // a driver that can't take the shaders: use 2D

@@ -13,6 +13,8 @@ const jsonld = [
   }
 ];
 const description = 'Fee Simple: the highest and most complete form of parcel diligence.';
+const headline = 'The highest and most complete form of parcel diligence.';
+const words = headline.split(' ');
 ---
 <Base title="Fee Simple — complete parcel diligence" description={description} jsonld={jsonld} bare
   viewport="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -29,19 +31,19 @@ const description = 'Fee Simple: the highest and most complete form of parcel di
     <main id="main">
       <section class="hero">
         <div class="hero-copy shell">
-          <h1 class="claim">The highest and most complete form of <span>parcel diligence.</span></h1>
+          <h1 class="claim" aria-label={headline}>{words.map((word, index) => <Fragment><span class:list={['word-mask', { 'claim-accent': index >= 7 }]} aria-hidden="true"><span class="claim-word" style={`--word-delay: ${220 + index * 65}ms`}>{word}</span></span>{index < words.length - 1 ? ' ' : ''}</Fragment>)}</h1>
         </div>
-        <div class="map" role="img" aria-label="Animated globe rotating and zooming into the United States">
-          <canvas id="field" aria-hidden="true"></canvas>
+        <div class="map" role="group" aria-label="Interactive globe and United States map">
+          <canvas id="field" tabindex="0" role="img" aria-label="Interactive globe. Drag or use arrow keys to rotate. Q and E roll the globe. Home resets; Escape resumes the tour."></canvas>
         </div>
       </section>
 
       <section class="access shell" id="early-access" aria-labelledby="access-title">
-        <div class="access-heading">
+        <div class="access-heading" data-reveal="left">
           <p class="eyebrow">FEE SIMPLE / EARLY ACCESS</p>
           <h2 id="access-title">Request<br>early access.</h2>
         </div>
-        <div class="access-form">
+        <div class="access-form" data-reveal="up" data-reveal-delay="120">
           <p class="access-copy">Enter your email. <span>We'll reach out to set up access.</span></p>
           <form name="early-access" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
             <input type="hidden" name="form-name" value="early-access">
@@ -56,27 +58,30 @@ const description = 'Fee Simple: the highest and most complete form of parcel di
       </section>
     </main>
 
-    <footer class="home-footer shell" id="footer">
+    <footer class="home-footer shell" id="footer" data-reveal="line">
       <div class="footer-top">
-        <div class="footer-identity">
+        <div class="footer-identity" data-reveal="up" data-reveal-delay="60">
           <a class="footer-brand" href="/">Fee Simple<span>.</span></a>
           <p>A Talos Operations product.</p>
         </div>
-        <nav class="footer-explore" aria-label="Explore">
+        <nav class="footer-explore" aria-label="Explore" data-reveal="up" data-reveal-delay="140">
           <a href="/coverage.html">Coverage <span aria-hidden="true">↗</span></a>
           <a href="/learn/">Learn <span aria-hidden="true">↗</span></a>
         </nav>
-        <nav class="footer-contact" aria-label="Contact">
+        <nav class="footer-contact" aria-label="Contact" data-reveal="up" data-reveal-delay="220">
           <a href="mailto:info@talosoperations.com">info@talosoperations.com <span aria-hidden="true">↗</span></a>
           <a href="https://www.linkedin.com/company/talos_operations/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
         </nav>
       </div>
-      <div class="footer-bottom">
+      <div class="footer-bottom" data-reveal="up" data-reveal-delay="280">
         <span>© {new Date().getFullYear()} Talos Operations LLC</span>
         <nav aria-label="Legal"><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a></nav>
       </div>
     </footer>
   </div>
 
-  <Fragment slot="end"><script is:inline type="module" src="/assets/js/hero.js"></script></Fragment>
+  <Fragment slot="end">
+    <script is:inline type="module" src="/assets/js/hero.js"></script>
+    <script is:inline type="module" src="/assets/js/home-motion.js"></script>
+  </Fragment>
 </Base>

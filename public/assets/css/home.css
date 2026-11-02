@@ -14,19 +14,25 @@ a, button { -webkit-tap-highlight-color: transparent; }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-offset: 5px; }
 .shell { width: min(1240px, calc(100% - 96px)); margin-inline: auto; }
 .home-header {
+  position: relative;
   margin-top: 26px;
   min-height: 76px;
   display: flex;
   align-items: center;
   gap: 30px;
-  border: 1px solid #303743;
+  border: 1px solid transparent;
   padding-inline: 24px;
   border-radius: 9px;
 }
+.home-header::before { content: ''; position: absolute; inset: -1px; border: 1px solid #303743; border-radius: inherit; pointer-events: none; animation: frame-enter 1s .05s cubic-bezier(.16, 1, .3, 1) both; }
+.home-header > .home-brand { animation: header-enter .75s .12s cubic-bezier(.16, 1, .3, 1) both; }
+.home-header > nav { animation: header-enter .75s .24s cubic-bezier(.16, 1, .3, 1) both; }
 .home-brand { font-size: 25px; font-weight: 600; letter-spacing: -1.2px; white-space: nowrap; }
 .home-brand span, .footer-brand span { color: var(--highlight); }
 .home-header nav { margin-left: auto; }
-.demo-button { display: flex; align-items: center; gap: 25px; padding: 12px 17px; background: #f5f6f9; color: #111319; border-radius: 5px; font-size: 12px; font-weight: 500; }
+.demo-button { display: flex; align-items: center; gap: 25px; padding: 12px 17px; background: #f5f6f9; color: #111319; border-radius: 5px; font-size: 12px; font-weight: 500; transition: transform .2s ease-out; }
+.demo-button:hover { transform: translateY(-2px); }
+.demo-button:active { transform: translateY(0); }
 .demo-button span, .access button > span:last-child { display: inline-block; transition: transform .2s ease-out; }
 .demo-button:hover span, .access button:hover > span:last-child { transform: translate(2px, -2px); }
 .hero { position: relative; padding-bottom: 33.5px; }
@@ -39,11 +45,13 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-
   line-height: 1.06;
   text-wrap: balance;
   margin: 0 auto;
-  animation: arrive .85s .1s cubic-bezier(.16, 1, .3, 1) both;
 }
-.claim span { color: #95b8eb; }
-.map { background: var(--bg); width: min(100%, 1000px); height: 470px; margin: 26px auto -3px; position: relative; overflow: clip; }
-#field { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.claim-accent { color: #95b8eb; }
+.word-mask { display: inline-block; overflow: clip; vertical-align: top; padding-bottom: .13em; margin-bottom: -.13em; }
+.claim-word { display: inline-block; transform-origin: left bottom; animation: word-enter .9s var(--word-delay) cubic-bezier(.16, 1, .3, 1) both; }
+.map { background: var(--bg); width: min(100%, 1000px); height: 470px; margin: 26px auto -3px; position: relative; overflow: clip; animation: globe-enter 1.5s .45s cubic-bezier(.16, 1, .3, 1) both; }
+#field { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; }
+.map:has(#field:focus-visible) { box-shadow: inset 0 0 0 1px #303743; border-radius: 8px; }
 .access { padding-block: 80px; display: grid; grid-template-columns: .9fr 1.1fr; gap: 110px; align-items: center; scroll-margin-top: 30px; }
 .access-heading { padding-left: 24px; border-left: 2px solid #84b6ff; }
 .eyebrow { font: 10px/1.5 var(--mono); letter-spacing: .08em; color: var(--highlight); margin-bottom: 24px; }
@@ -58,7 +66,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-
 .access input:focus-visible { outline: 1px solid var(--highlight); outline-offset: 4px; }
 .access button { display: flex; align-items: center; justify-content: center; gap: 25px; flex-shrink: 0; background: #a3c7ff; color: #10141b; padding: 12px 16px; border: 0; border-radius: 3px; font: 12px/1.5 Inter, sans-serif; cursor: pointer; }
 .access button > span:last-child { font-size: 22px; line-height: 1; }
-.home-footer { border-top: 1px solid #262a32; padding-top: 32px; }
+.home-footer { position: relative; border-top: 1px solid transparent; padding-top: 32px; }
+.home-footer::before { content: ''; position: absolute; top: -1px; left: 0; right: 0; height: 1px; background: #262a32; transform-origin: left; }
+.home-footer.is-revealed::before { animation: rule-enter .9s cubic-bezier(.16, 1, .3, 1) both; }
 .footer-top { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; padding-bottom: 44px; }
 .footer-brand { font-size: 24px; font-weight: 550; letter-spacing: -1px; }
 .footer-identity p { color: var(--subtle); font-size: 12px; margin-top: 8px; }
@@ -66,16 +76,56 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-
 .footer-top nav a { display: flex; gap: 40px; justify-content: space-between; }
 .footer-contact { justify-self: end; }
 .footer-explore { padding-left: 30px; border-left: 1px solid #252c38; }
-.footer-top nav a span { color: #737e92; }
+.footer-top nav a span { color: #737e92; transition: transform .2s ease-out; }
+.footer-top nav a:hover span { transform: translate(3px, -3px); }
 .footer-top a:hover, .footer-bottom a:hover { color: var(--highlight); }
 .footer-bottom { display: flex; align-items: center; gap: 40px; padding-block: 12px 40px; font: 10px/1.6 var(--mono); color: var(--subtle); }
 .footer-bottom nav { display: flex; gap: 24px; margin-left: auto; }
 .skip { position: fixed; z-index: 20; top: 8px; left: 8px; padding: 10px; background: #fff; color: #000; transform: translateY(-200%); }
 .skip:focus { transform: none; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
-@keyframes arrive {
-  from { opacity: 0; transform: translateY(22px); }
-  to { opacity: 1; transform: none; }
+@keyframes frame-enter {
+  from { clip-path: inset(0 100% 0 0); opacity: 0; }
+  to { clip-path: inset(0); opacity: 1; }
+}
+@keyframes header-enter {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes word-enter {
+  from { opacity: 0; transform: translateY(115%) rotate(3deg); }
+  to { opacity: 1; transform: translateY(0) rotate(0); }
+}
+@keyframes globe-enter {
+  from { opacity: 0; transform: translateY(38px) scale(.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes rule-enter {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@media (min-width: 901px) {
+  .shell { width: min(calc(100% - 64px), clamp(1040px, calc(70vw - 240px), 1840px)); }
+  .home-header { margin-top: clamp(16px, 1.5svh, 28px); min-height: clamp(58px, calc(3vw + 4px), 88px); padding-inline: clamp(18px, 1.2vw, 32px); }
+  .home-brand { font-size: clamp(21px, calc(1.1vw + 1px), 32px); }
+  .demo-button { padding: clamp(10px, .6vw, 16px) clamp(14px, 1vw, 26px); font-size: clamp(12px, .55vw, 17px); gap: 20px; }
+  .hero { padding-bottom: clamp(16px, 1.6svh, 28px); }
+  .hero-copy { padding-top: clamp(24px, 2.3svh, 48px); }
+  .claim { max-width: clamp(840px, calc(50vw - 60px), 1440px); font-size: clamp(48px, min(calc(4vw - 12px), 7.5svh), 100px); }
+  .map { width: min(88%, 1500px); height: clamp(220px, min(34svh, calc(22vw - 100px)), 500px); margin-top: clamp(14px, 1.5svh, 30px); }
+  .access { padding-block: clamp(34px, 3svh, 56px); gap: clamp(48px, calc(4vw - 24px), 104px); }
+  .access h2 { font-size: clamp(40px, 2.7vw, 72px); }
+  .access-heading { padding-left: clamp(18px, 1vw, 30px); }
+  .eyebrow { margin-bottom: clamp(16px, 1svh, 22px); font-size: clamp(10px, .45vw, 14px); }
+  .access-copy { margin-bottom: clamp(18px, 1.5svh, 28px); font-size: clamp(12px, calc(.65vw + .3px), 18px); }
+  .access-form { padding-bottom: 12px; }
+  .access input[type=email] { font-size: clamp(16px, .7vw, 22px); }
+  .access button { padding: clamp(12px, .7vw, 20px) clamp(16px, .9vw, 26px); font-size: clamp(12px, .55vw, 17px); }
+  .home-footer { padding-top: clamp(22px, 2svh, 36px); }
+  .footer-top { padding-bottom: clamp(24px, 2svh, 36px); }
+  .footer-brand { font-size: clamp(21px, 1vw, 30px); }
+  .footer-identity p, .footer-top nav { font-size: clamp(12px, .55vw, 16px); }
+  .footer-bottom { padding-bottom: 24px; font-size: clamp(11px, .45vw, 14px); }
 }
 @media (max-width: 900px) {
   .shell { width: calc(100% - 48px); }
@@ -111,6 +161,5 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .claim { animation: none; }
-  .home * { transition: none !important; }
+  .home *, .home *::before, .home *::after { animation: none !important; transition: none !important; }
 }
