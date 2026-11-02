@@ -1,46 +1,5 @@
 /* Fee Simple: styles for the /learn/ and /for/ pages, the hub and 404.
-   The home, coverage, privacy and terms pages still carry their own copies of the
-   tokens, nav and footer rules inline; keep them in sync until those merge in here. */
-:root {
-  --bg: #E4E4E1;
-  --ink: #1A1A1A;
-  --mute: #6B6B6B;
-  --rule: #C9C9C6;
-  --accent: #1F4FD8;
-  --accent-dark: #163CA8;
-  --btn: #111111;
-  --paper: #F4F4F2;
-  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
-  --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { color-scheme: light; }
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: 16px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-}
-a { color: inherit; text-decoration: none; }
-.wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
-
-/* ---------- nav ---------- */
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 22px 0;
-  border-bottom: 1px solid var(--rule);
-}
-.wordmark { font-weight: 600; font-size: 17px; letter-spacing: -0.01em; }
-.links { display: flex; gap: 20px; font-family: var(--mono); font-size: 13px; }
-.links a { color: var(--ink); }
-.links a:hover { color: var(--accent); }
-.links a.active { color: var(--accent); }
-
+   Theme, header and footer come from site.css. */
 /* ---------- buttons ---------- */
 .btn {
   display: inline-block;
@@ -123,28 +82,14 @@ a { color: inherit; text-decoration: none; }
 .learn .library a:hover { color: var(--accent); }
 .library .blurb { display: block; margin-top: 4px; font-size: 15px; color: var(--mute); }
 
-/* ---------- footer ---------- */
-.footer {
-  font-family: var(--mono); font-size: 12px; color: var(--mute);
-  text-align: center;
-  border-top: 1px solid var(--rule);
-  margin-top: 96px;
-  padding: 28px 0 40px;
-}
-.footer a:hover { color: var(--accent); }
-.footer a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
 /* ---------- responsive ---------- */
 @media (max-width: 720px) {
-  .nav { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .links { gap: 4px; flex-wrap: wrap; margin-left: -8px; }
   .learn { margin-top: 40px; }
   .answer { font-size: 18px; }
   .learn h2 { margin-top: 44px; }
   .cta-box { padding: 22px; }
   .cta-box .btn { display: block; text-align: center; }
   .sample th { width: 42%; }
-  .links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }
   .learn .related ul { margin-top: 4px; }
   .learn .related li + li { margin-top: 0; }
   .learn .related a { display: flex; align-items: center; min-height: 44px; }

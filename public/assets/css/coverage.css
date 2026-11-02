@@ -1,0 +1,100 @@
+/* Fee Simple coverage page: headline, counts, the county map and its stats.
+   Theme, header and footer come from site.css. */
+/* ---------- headline ---------- */
+  .headline {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(38px, 6vw, 64px);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    text-align: center;
+    max-width: 820px;
+    margin: 72px auto 18px;
+  }
+  .headline i { font-style: italic; }
+  .counts {
+    font-family: var(--mono); font-size: 13px;
+    text-align: center;
+    display: flex; justify-content: center; gap: 18px;
+    margin-bottom: 40px;
+  }
+  .counts .live { color: var(--accent); }
+  .counts .surveyed { color: var(--mute); }
+
+  /* ---------- map ---------- */
+  .map-wrap {
+    position: relative; overflow: hidden;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+  }
+  .map-wrap svg.map { display: block; width: 100%; height: auto; cursor: grab; }
+  .map-wrap svg.map:active { cursor: grabbing; }
+  .nation-fill { fill: var(--paper); stroke: none; }
+  .county { fill: transparent; stroke: var(--rule); stroke-width: 0.3; }
+  .county.surveyed { fill: var(--mute); fill-opacity: 0.3; stroke: var(--mute); stroke-width: 0.4; }
+  .county.live { fill: var(--accent); stroke: var(--accent-dark); stroke-width: 0.5; }
+  .county:hover { fill: var(--rule); }
+  .county.surveyed:hover { fill: var(--mute); fill-opacity: 0.5; }
+  .county.live:hover { fill: var(--accent-dark); }
+  .state-line { fill: none; stroke: var(--rule); stroke-width: 0.7; pointer-events: none; }
+  .nation-line { fill: none; stroke: var(--mute); stroke-width: 0.8; pointer-events: none; }
+  .map-controls { position: absolute; top: 12px; right: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .map-controls button {
+    width: 34px; height: 34px;
+    border: 1px solid var(--mute); background: var(--paper); color: var(--ink);
+    border-radius: 3px;
+    font-family: var(--mono); font-size: 15px; cursor: pointer;
+  }
+  .map-controls button:hover { background: var(--btn); color: #fff; border-color: var(--btn); }
+  .map-controls button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .legend {
+    position: absolute; left: 12px; bottom: 12px;
+    border: 1px solid var(--rule); background: var(--paper);
+    border-radius: 3px;
+    padding: 10px 14px;
+    font-family: var(--mono); font-size: 11px; color: var(--ink);
+    display: grid; gap: 6px;
+  }
+  .legend .row { display: flex; align-items: center; gap: 8px; }
+  .legend .sw { width: 16px; height: 11px; border: 1px solid var(--rule); flex: none; }
+  .sw.live { background: var(--accent); border-color: var(--accent-dark); }
+  .sw.surveyed { background: rgba(139,147,167,0.3); border-color: var(--mute); }
+  .sw.none { background: var(--paper); }
+  .tooltip {
+    position: absolute; pointer-events: none;
+    border: 1px solid var(--mute); background: var(--paper);
+    border-radius: 3px;
+    padding: 8px 12px; display: none; max-width: 250px; z-index: 10;
+    font-family: var(--mono); font-size: 12px; color: var(--ink);
+  }
+  .tooltip .t-name { font-weight: 500; }
+  .tooltip .t-status { color: var(--mute); margin-top: 2px; }
+  .tooltip .t-status.live { color: var(--accent); }
+
+  /* ---------- stats ---------- */
+  .stats {
+    display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+    font-family: var(--mono);
+    margin: 40px auto 0;
+    text-align: center;
+  }
+  .stats .num { font-size: 28px; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .stats .lbl { font-size: 11px; color: var(--mute); margin-top: 6px; }
+
+  .motto {
+    font-family: var(--mono); font-size: 12px; color: var(--mute);
+    text-align: center;
+    margin-top: 80px;
+  }
+  .motto a:hover { color: var(--ink); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 720px) {
+    .headline { margin: 48px auto 14px; }
+    .legend { position: static; border: none; border-top: 1px solid var(--rule); border-radius: 0; }
+    /* On phones, pin the county label to the map's top-left corner instead of following the finger. */
+    .tooltip { left: 8px !important; top: 8px !important; }
+    .stats { gap: 28px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

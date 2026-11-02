@@ -1,12 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import Footer from '../components/Footer.astro';
-// Particle home positions inside the continental US. GENERATED DATA — never
-// hand-edit. Provenance: US Census TIGER geometry via us-atlas@3.0.1
-// (states-10m), AK/HI/PR removed, Albers USA projection, grid-sampled at
-// ~4.6px with jitter, point-in-polygon tested (d3-geo geoContains).
-import points from '../data/hero-points.json';
-
 const jsonld = [
   {
     "@context": "https://schema.org",
@@ -26,451 +20,49 @@ const description = 'Fee Simple: the highest and most complete form of parcel di
   description={description}
   jsonld={jsonld}
   bare
+  fontStylesheet="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
   viewport="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
 <Fragment slot="head">
-<style is:inline>
-  :root {
-    --bg: #030409;
-    --ink: #e9edf6;
-    --mute: #8b93a7;
-    --rule: #1c2130;
-    --blue: #4d7cff;
-    --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-    --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
-    color-scheme: dark;
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans);
-         -webkit-font-smoothing: antialiased; }
-  a { color: inherit; text-decoration: none; }
-
-  .page { max-width: 1100px; margin: 0 auto;
-    padding-left: max(16px, env(safe-area-inset-left, 0px));
-    padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-
-  .chrome { display: flex; justify-content: space-between; align-items: baseline;
-    padding-top: calc(22px + env(safe-area-inset-top, 0px)); padding-bottom: 22px; }
-  .wordmark { font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
-  .nav { font-family: var(--mono); font-size: 13px; display: flex; gap: 20px; }
-  .nav a { color: var(--mute); }
-  .nav a:hover { color: var(--ink); }
-  .nav a:focus-visible { outline: 1px solid var(--blue); outline-offset: 3px; }
-
-  .claim { font-weight: 600; font-size: clamp(36px, 6vw, 80px); line-height: 1.04;
-    letter-spacing: -0.03em; margin: clamp(32px, 7vh, 88px) 0 0; max-width: 13em;
-    text-wrap: balance; }
-  .claim i { font-style: normal; color: var(--mute); }
-
-  /* The canvas sizes itself to this box, so the box sets the map's size. */
-  .map { position: relative; width: 100%; max-width: 720px; aspect-ratio: 16 / 9; max-height: 36svh;
-    margin: clamp(24px, 5vh, 48px) auto 0; }
-  #field { position: absolute; inset: 0; display: block; }
-
-  .cta { margin-top: clamp(24px, 4vh, 40px); text-align: center; }
-  .cta form { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-  .cta input[type="email"] { font-family: var(--mono); font-size: 14px; color: var(--ink);
-    background: #0b0e17; border: 1px solid var(--mute); border-radius: 3px;
-    padding: 11px 14px; width: 300px; max-width: 100%; }
-  .cta input[type="email"]::placeholder { color: var(--mute); }
-  .cta input[type="email"]:focus { outline: 2px solid var(--blue); outline-offset: 1px; }
-  .cta button { font-family: var(--mono); font-size: 14px; line-height: 1.5; cursor: pointer;
-    background: var(--ink); color: var(--bg); border: 1px solid var(--ink); border-radius: 3px;
-    padding: 11px 20px; }
-  .cta button:hover { background: var(--blue); border-color: var(--blue); color: #fff; }
-  .hidden { display: none; }
-  .caption { font-family: var(--mono); font-size: 12px; color: var(--mute); margin: 14px 0 0; }
-
-  .footer { margin-top: clamp(32px, 6vh, 64px); padding: 28px 0 calc(36px + env(safe-area-inset-bottom, 0px));
-    border-top: 1px solid var(--rule); text-align: center;
-    font-family: var(--mono); font-size: 12px; line-height: 1.9; color: var(--mute); }
-  .footer a { color: var(--mute); }
-  .footer a:hover { color: var(--ink); }
-
-  @media (max-width: 620px) {
-    .nav { gap: 4px; margin-right: -8px; }
-    .nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }
-    .cta form { flex-direction: column; align-items: stretch; }
-    .cta input[type="email"] { width: 100%; }
-  }
-</style>
+<link rel="stylesheet" href="/assets/css/home.css">
 </Fragment>
 
-<div class="page">
-  <header class="chrome">
-    <div class="wordmark">Fee Simple</div>
-    <nav class="nav" aria-label="Primary">
-      <a href="/learn/">[learn]</a>
-      <a href="/coverage.html">[coverage]</a>
-    </nav>
-  </header>
+<a class="skip" href="#main">Skip to main content</a>
+<header class="home-header home-container">
+  <a class="brand" href="/" aria-label="Fee Simple home">Fee Simple<span class="brand-dot">.</span></a>
+  <nav class="home-nav" aria-label="Primary">
+    <a class="nav-demo" href="/demo/">Explore the demo <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
 
-  <main>
-    <h1 class="claim">The highest and most complete form of <i>parcel diligence.</i></h1>
-    <div class="map">
+<main id="main">
+  <section class="hero">
+    <div class="hero-copy home-container">
+      <h1 class="claim">The highest and most complete form of <span>parcel diligence.</span></h1>
+    </div>
+    <div class="map" role="img" aria-label="Animated globe rotating and zooming into the United States">
       <canvas id="field" aria-hidden="true"></canvas>
     </div>
-    <div class="cta" id="early-access">
-      <form name="early-access" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
-        <input type="hidden" name="form-name" value="early-access">
-        <p class="hidden" aria-hidden="true">
-          <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
-        </p>
-        <label for="email" class="hidden">Email</label>
-        <input type="email" id="email" name="email" placeholder="you@association.org" required autocomplete="email">
-        <button type="submit">send</button>
-      </form>
-      <p class="caption">Enter your email — we'll reach out to set up access.</p>
-    </div>
-  </main>
+    <div class="hero-floor home-container"><span class="mono">A TALOS OPERATIONS PRODUCT</span></div>
+  </section>
 
-  <Footer />
-</div>
+  <section class="signup home-container" id="early-access" aria-label="Request early access">
+    <form name="early-access" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="early-access">
+      <p hidden aria-hidden="true">
+        <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+      </p>
+      <label for="email" class="visually-hidden">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@association.org" required autocomplete="email">
+      <button type="submit">send</button>
+    </form>
+    <p class="caption">Enter your email — we'll reach out to set up access.</p>
+  </section>
+</main>
+
+<div class="home-container"><Footer /></div>
 
 <Fragment slot="end">
-<script is:inline type="application/json" id="hero-points" set:html={JSON.stringify(points)} />
-<script is:inline>
-/* ============================================================================
-   Fee Simple hero field.
-   Particles sit inside the continental US (US Census TIGER geometry via
-   us-atlas, Albers USA projection, precomputed). Ambient only — no pointer
-   or user interaction; the field breathes on its own:
-   FORMED map -> dissolve -> floating CLOUD -> reform (21s loop).
-
-   Palette: one theme, the Fee Simple blues — cyan-blue -> electric blue only,
-   warped into irregular clusters by coarse noise; additive blending blooms
-   dense regions toward white. Depth (random z) drives size, brightness and
-   drift so big bright points hang over tiny dim ones.
-
-   Performance choices (lag fixes, each tunable):
-   - ~3.7k particles on desktop (every 4th point), ~1.8k on phones
-   - devicePixelRatio capped at 1.5 (glow hides pixels)
-   - all link lines batched into ONE stroked path per frame
-   No network, no libraries.
-   ========================================================================== */
-'use strict';
-
-// DATA.pts is a flat array of x,y pairs in a 960x600 plane, inlined at build time.
-const DATA = JSON.parse(document.getElementById('hero-points').textContent);
-
-const canvas = document.getElementById('field');
-// The field fills its box, not the window, so content can sit around it.
-const hero = canvas.parentElement;
-const ctx = canvas.getContext('2d');
-const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-// ---- color: the blue band --------------------------------------------------
-// Hue lives in [196, 234]: cyan-blue -> pure blue, nothing past blue (no
-// violet). The angular ramp gives loose structure; noise breaks it into blotches.
-const BAND_LO = 196, BAND_HI = 234;
-const HUE_RAMP = [203, 218, 231, 210, 199, 224, 203];   // sweep within the band
-function hueAt(a01) {
-  const f = a01 * (HUE_RAMP.length - 1), i = Math.floor(f), u = f - i;
-  return HUE_RAMP[i] + (HUE_RAMP[i + 1] - HUE_RAMP[i]) * u;
-}
-const CELL = 110, GRID = new Map();
-function cellVal(ix, iy) {
-  const k = ix + ',' + iy;
-  let v = GRID.get(k);
-  if (v === undefined) { v = Math.random(); GRID.set(k, v); }
-  return v;
-}
-function noise2(x, y) {
-  const gx = x / CELL, gy = y / CELL, ix = Math.floor(gx), iy = Math.floor(gy);
-  const fx = gx - ix, fy = gy - iy, sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy);
-  const a = cellVal(ix, iy), b = cellVal(ix + 1, iy), c = cellVal(ix, iy + 1), d = cellVal(ix + 1, iy + 1);
-  return a + (b - a) * sx + (c - a) * sy + (a - b - c + d) * sx * sy;
-}
-function hslToRgb(h, s, l) {
-  h = ((h % 360) + 360) % 360;
-  const c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs((h / 60) % 2 - 1)), m = l - c / 2;
-  let r = 0, g = 0, b = 0;
-  if (h < 60) { r = c; g = x; } else if (h < 120) { r = x; g = c; }
-  else if (h < 180) { g = c; b = x; } else if (h < 240) { g = x; b = c; }
-  else if (h < 300) { r = x; b = c; } else { r = c; b = x; }
-  return [(r + m) * 255 | 0, (g + m) * 255 | 0, (b + m) * 255 | 0];
-}
-
-// ---- glow sprites ----------------------------------------------------------
-// 24 sprites spanning the blue band; particles drawImage these additively.
-const SPRITES = [], BUCKETS = 24, SPR = 28;
-function makeSprites() {
-  SPRITES.length = 0;
-  for (let b = 0; b < BUCKETS; b++) {
-    const off = document.createElement('canvas');
-    off.width = off.height = SPR;
-    const c = off.getContext('2d');
-    const hue = BAND_LO + (b / (BUCKETS - 1)) * (BAND_HI - BAND_LO);
-    const [r, g, bl] = hslToRgb(hue, 0.85, 0.62);
-    const grad = c.createRadialGradient(SPR/2, SPR/2, 0, SPR/2, SPR/2, SPR/2);
-    grad.addColorStop(0,    'rgba(255,255,255,0.9)');            // hot core
-    grad.addColorStop(0.18, 'rgba(' + r + ',' + g + ',' + bl + ',0.85)');
-    grad.addColorStop(0.5,  'rgba(' + r + ',' + g + ',' + bl + ',0.1)');
-    grad.addColorStop(1,    'rgba(' + r + ',' + g + ',' + bl + ',0)');
-    c.fillStyle = grad;
-    c.fillRect(0, 0, SPR, SPR);
-    SPRITES.push(off);
-  }
-}
-function bucketFor(hue) {
-  const h = Math.max(BAND_LO, Math.min(BAND_HI, hue));
-  return Math.round((h - BAND_LO) / (BAND_HI - BAND_LO) * (BUCKETS - 1));
-}
-// white endpoint sprite for the "connecting the country" pulses
-let WHITE;
-function makeWhite() {
-  WHITE = document.createElement('canvas');
-  WHITE.width = WHITE.height = SPR;
-  const c = WHITE.getContext('2d');
-  const grad = c.createRadialGradient(SPR/2, SPR/2, 0, SPR/2, SPR/2, SPR/2);
-  grad.addColorStop(0,    'rgba(255,255,255,0.95)');
-  grad.addColorStop(0.2,  'rgba(255,255,255,0.9)');
-  grad.addColorStop(0.55, 'rgba(255,255,255,0.25)');
-  grad.addColorStop(1,    'rgba(255,255,255,0)');
-  c.fillStyle = grad;
-  c.fillRect(0, 0, SPR, SPR);
-}
-
-// ---- particles -------------------------------------------------------------
-let W = 0, H = 0, dpr = 1, scale = 1, ox = 0, oy = 0;
-const P = [];
-const LINKS = [];        // [i, j] pairs; drawn as one batched path
-const ADJ = [];          // walk graph: per-particle neighbor indices (spatial hash)
-
-function build() {
-  P.length = 0;
-  const src = DATA.pts;
-  let cx = 0, cy = 0, n = src.length / 2;
-  for (let i = 0; i < src.length; i += 2) { cx += src[i]; cy += src[i + 1]; }
-  cx /= n; cy /= n;
-  // Sparse on purpose: the map should read as a starfield, not a solid mass.
-  // desktop: every 4th point (~3.7k); phones: every 8th (~1.8k)
-  const stride = (innerWidth < 640 ? 8 : 4) * 2;
-  for (let i = 0; i < src.length; i += stride) {
-    const r = Math.random;
-    const mx = src[i], my = src[i + 1];
-    const ang = Math.atan2(-(my - cy), -(mx - cx));
-    const a01 = ((ang / (Math.PI * 2)) % 1 + 1) % 1;
-    const hue = hueAt(a01) + (noise2(mx, my) - 0.5) * 30 + (r() * 2 - 1) * 5;
-    const z = r();                                   // depth: 0 far/dim, 1 near/bright
-    P.push({
-      mx, my,
-      bucket: bucketFor(hue),
-      size: (0.6 + Math.pow(r(), 3.2) * 2.2) * (0.5 + z * 0.8),
-      alpha: 0.14 + z * 0.5,
-      sx: 0, sy: 0,
-      a1: r() * Math.PI * 2, a2: r() * Math.PI * 2,
-      f1: 0.22 + r() * 0.35, f2: 0.16 + r() * 0.3,
-      amp: (1.0 + r() * 2.0) * (0.5 + z),
-      lag: r(),
-      tw: r() * Math.PI * 2,
-      ig: Infinity,                                  // white-wave ignition time
-      x: 0, y: 0
-    });
-  }
-  // the web: ~1 in 3 particles linked to its nearest neighbor in map space.
-  // Drawn faint blue always; segments light up white when both ends are flashing.
-  LINKS.length = 0;
-  for (let i = 0; i < P.length; i += 3) {
-    let best = -1, bd = 17 * 17;
-    for (let j = Math.max(0, i - 300); j < Math.min(P.length, i + 300); j++) {
-      if (j === i) continue;
-      const dx = P[i].mx - P[j].mx, dy = P[i].my - P[j].my, d = dx * dx + dy * dy;
-      if (d < bd) { bd = d; best = j; }
-    }
-    if (best >= 0) LINKS.push([i, best]);
-  }
-  // walk graph: every particle's 3 nearest neighbors within 18 map units,
-  // found with a spatial hash (index order is not spatial, so no windows here)
-  const CS = 18, HASH = new Map();
-  const key = (gx, gy) => gx * 4096 + gy;
-  for (let i = 0; i < P.length; i++) {
-    const k = key((P[i].mx / CS) | 0, (P[i].my / CS) | 0);
-    let b = HASH.get(k); if (!b) { b = []; HASH.set(k, b); }
-    b.push(i);
-  }
-  ADJ.length = 0;
-  for (let i = 0; i < P.length; i++) {
-    const gx = (P[i].mx / CS) | 0, gy = (P[i].my / CS) | 0;
-    const cand = [];
-    for (let ax = -1; ax <= 1; ax++) for (let ay = -1; ay <= 1; ay++) {
-      const b = HASH.get(key(gx + ax, gy + ay));
-      if (b) for (const j of b) {
-        if (j === i) continue;
-        const dx = P[i].mx - P[j].mx, dy = P[i].my - P[j].my, d = dx * dx + dy * dy;
-        if (d < CS * CS) cand.push([d, j]);
-      }
-    }
-    cand.sort((a, b) => a[0] - b[0]);
-    ADJ.push(cand.slice(0, 3).map(c => c[1]));
-  }
-}
-
-// ---- localized white pulls ---------------------------------------------------
-// While the country is formed, county-sized pockets flash white: a random spot
-// ignites and blooms outward over a small radius, every point inside flashes,
-// then cools back to blue. Several pockets stagger across the map at once.
-let nextPulse = 0;
-const FLASH = 1.5, F_IN = 0.18;                    // node flash lifetime / attack
-const STEP = 0.055;                                // seconds per hop along a string
-const STRINGS = [];                                // active strings: {seq:[idx], t0}
-function flashAt(p, t) {
-  const g = t - p.ig;
-  if (g <= 0 || g >= FLASH) return 0;
-  return g < F_IN ? g / F_IN : 1 - (g - F_IN) / (FLASH - F_IN);
-}
-// A "string" is a random walk along the web: white crawls node-to-node,
-// lighting each node and the edge behind it, then fades like a cooling wire.
-function walk(start, maxLen, visited) {
-  const seq = [start];
-  visited.add(start);
-  let cur = start;
-  while (seq.length < maxLen) {
-    const nbrs = ADJ[cur].filter(j => !visited.has(j));
-    if (!nbrs.length) break;
-    cur = nbrs[(Math.random() * nbrs.length) | 0];
-    visited.add(cur);
-    seq.push(cur);
-  }
-  return seq;
-}
-function spawnString(t) {
-  const start = (Math.random() * P.length) | 0;
-  const visited = new Set();
-  const main = walk(start, 30 + (Math.random() * 20 | 0), visited);
-  if (main.length < 6) return;                     // isolated node; skip
-  const t0 = t + 0.05;
-  const strings = [{ seq: main, t0 }];
-  // one branch off the middle of the main string
-  const bi = (main.length * (0.3 + Math.random() * 0.4)) | 0;
-  const branch = walk(main[bi], 10 + (Math.random() * 10 | 0), visited);
-  if (branch.length > 4) strings.push({ seq: branch, t0: t0 + bi * STEP });
-  for (const s of strings) {
-    for (let k = 0; k < s.seq.length; k++) {
-      const p = P[s.seq[k]];
-      const busy = t - p.ig > 0 && t - p.ig < FLASH;
-      if (!busy) p.ig = s.t0 + k * STEP;
-    }
-    STRINGS.push(s);
-  }
-}
-
-function layout() {
-  dpr = Math.min(devicePixelRatio || 1, 1.5);        // glow hides pixels; capped for speed
-  W = hero.clientWidth; H = hero.clientHeight;
-  canvas.width = W * dpr; canvas.height = H * dpr;
-  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  scale = Math.min(W * 0.94 / DATA.w, H * 0.92 / DATA.h);
-  ox = (W - DATA.w * scale) / 2;
-  oy = (H - DATA.h * scale) / 2;
-  for (const p of P) {
-    p.sx = W * (0.06 + Math.random() * 0.88);
-    p.sy = H * (0.05 + Math.random() * 0.9);
-  }
-}
-
-// ---- breathing cycle -------------------------------------------------------
-// hold 7 formed, 3.5 dissolve, 7 cloud, 3.5 reform (21s loop)
-const T_HOLD = 7, T_MOVE = 3.5, T_LOOP = (T_HOLD + T_MOVE) * 2;
-// Start the loop mid-CLOUD so the page opens on chaos that assembles into the
-// US (~3s of drift, then reform) — order out of chaos is the product story.
-const T_OFFSET = T_HOLD + T_MOVE + 4;
-const easeInOut = u => u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
-function phaseAt(t, lag) {
-  let u = (t % T_LOOP + T_LOOP) % T_LOOP;
-  const spread = 1.2;
-  if (u < T_HOLD) return 0;
-  u -= T_HOLD;
-  if (u < T_MOVE) return easeInOut(Math.min(1, Math.max(0, (u - lag * spread) / (T_MOVE - spread))));
-  u -= T_MOVE;
-  if (u < T_HOLD) return 1;
-  u -= T_HOLD;
-  return 1 - easeInOut(Math.min(1, Math.max(0, (u - lag * spread) / (T_MOVE - spread))));
-}
-
-// ---- render ----------------------------------------------------------------
-const lerp = (a, b, u) => a + (b - a) * u;
-
-function frame(ms) {
-  const t = ms / 1000;
-  ctx.globalCompositeOperation = 'source-over';
-  ctx.globalAlpha = 1;
-  ctx.clearRect(0, 0, W, H);
-  ctx.globalCompositeOperation = 'lighter';          // additive: overlaps bloom
-
-  // spawn white strings while the country is (mostly) formed
-  const formAmount = reduced ? 0 : 1 - phaseAt(t + T_OFFSET, 0.5);
-  if (!reduced && formAmount > 0.85 && t >= nextPulse && STRINGS.length < 8) {
-    spawnString(t);
-    nextPulse = t + 0.9 + Math.random() * 0.8;
-  }
-  // retire strings whose last node has fully cooled
-  for (let k = STRINGS.length - 1; k >= 0; k--) {
-    const s = STRINGS[k];
-    if (t > s.t0 + s.seq.length * STEP + FLASH) STRINGS.splice(k, 1);
-  }
-
-  for (const p of P) {
-    const ph = reduced ? 0 : phaseAt(t + T_OFFSET, p.lag);
-    const fx = reduced ? 0 : Math.sin(t * p.f1 + p.a1) * p.amp * (1 + ph * 2.0);
-    const fy = reduced ? 0 : Math.cos(t * p.f2 + p.a2) * p.amp * (1 + ph * 2.0);
-    p.x = lerp(p.mx * scale + ox, p.sx, ph) + fx;
-    p.y = lerp(p.my * scale + oy, p.sy, ph) + fy;
-
-    const tw = reduced ? 1 : 0.78 + 0.22 * Math.sin(t * 1.25 + p.tw);
-    ctx.globalAlpha = p.alpha * tw;
-    const s = p.size * 3.2;
-    ctx.drawImage(SPRITES[p.bucket], p.x - s / 2, p.y - s / 2, s, s);
-
-    // white overlay on flashing nodes: small flare so the LINE stays the star
-    const gm = flashAt(p, t);
-    if (gm > 0) {
-      ctx.globalAlpha = Math.min(1, gm * (0.35 + p.alpha * 0.8));
-      const gs = s * 1.1;
-      ctx.drawImage(WHITE, p.x - gs / 2, p.y - gs / 2, gs, gs);
-    }
-  }
-  ctx.globalAlpha = 1;
-
-  // the blue web, ONE batched path
-  ctx.lineWidth = 0.5;
-  // Links stretch across the box once the map dissolves; only show them formed.
-  ctx.strokeStyle = 'rgba(105,145,255,' + 0.03 * (reduced ? 1 : formAmount) + ')';
-  ctx.beginPath();
-  for (const [i, j] of LINKS) {
-    ctx.moveTo(P[i].x, P[i].y);
-    ctx.lineTo(P[j].x, P[j].y);
-  }
-  ctx.stroke();
-
-  // white strings: draw each walk's consecutive edges where both ends still
-  // glow — a filament crawling the web with a cooling tail behind it
-  if (!reduced && STRINGS.length) {
-    ctx.lineWidth = 0.9;
-    ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-    ctx.beginPath();
-    for (const s of STRINGS) {
-      for (let k = 1; k < s.seq.length; k++) {
-        const A = P[s.seq[k - 1]], B = P[s.seq[k]];
-        if (flashAt(A, t) > 0.08 && flashAt(B, t) > 0.08) {
-          ctx.moveTo(A.x, A.y);
-          ctx.lineTo(B.x, B.y);
-        }
-      }
-    }
-    ctx.stroke();
-  }
-
-  if (!reduced) requestAnimationFrame(frame);
-}
-
-makeSprites();
-makeWhite();
-build();
-layout();
-addEventListener('resize', () => { layout(); if (reduced) frame(0); });
-if (reduced) { frame(0); } else { requestAnimationFrame(frame); }
-</script>
+<script is:inline type="module" src="/assets/js/hero.js"></script>
 </Fragment>
 </Base>

@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { learnPages, pathOf } from '../../lib/pages';
-import '../../styles/site.css';
 
 const pages = await learnPages();
 const itemList = {
@@ -20,6 +19,9 @@ const itemList = {
 const description = 'How North Carolina property records work: owner lookups, deed indexes, record lag, mailing-address checks, and the HOA collections process, described step by step.';
 ---
 <Base title="Learn — Fee Simple" description={description} path="/learn/" jsonld={[itemList]} active="learn">
+<Fragment slot="head">
+<link rel="stylesheet" href="/assets/css/content.css">
+</Fragment>
   <main>
   <article class="learn">
 

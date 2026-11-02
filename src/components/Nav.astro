@@ -1,21 +1,22 @@
 ---
 interface Props {
-  active?: 'home' | 'coverage' | 'learn';
+  active?: 'coverage' | 'learn';
 }
 const { active } = Astro.props;
+// The wordmark is the way home, so there is no [home] link.
 const links = [
-  { key: 'home', href: '/', label: '[home]' },
   { key: 'coverage', href: '/coverage.html', label: '[coverage]' },
   { key: 'learn', href: '/learn/', label: '[learn]' },
+  { key: 'demo', href: '/demo/', label: '[demo]' },
 ];
 ---
-<nav class="nav" aria-label="Primary">
-  <a class="wordmark" href="/">Fee Simple</a>
-  <div class="links">
+<header class="chrome">
+  <a class="wordmark" href="/" aria-label="Fee Simple home">Fee Simple</a>
+  <nav class="nav" aria-label="Primary">
     {links.map((l) =>
       l.key === active
         ? <a href={l.href} class="active" aria-current="page">{l.label}</a>
         : <a href={l.href}>{l.label}</a>
     )}
-  </div>
-</nav>
+  </nav>
+</header>

@@ -2,7 +2,6 @@
 import { render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { faqJsonld, linkTitles, pathOf, type Entry, type Section } from '../lib/pages';
-import '../styles/site.css';
 
 interface Props {
   entry: Entry;
@@ -25,6 +24,9 @@ if (missing.length) throw new Error(`${entry.id}: related page(s) not found: ${m
   jsonld={p.faqJsonld ? [faqJsonld(p.faq)] : []}
   active={section === 'learn' ? 'learn' : undefined}
 >
+<Fragment slot="head">
+<link rel="stylesheet" href="/assets/css/content.css">
+</Fragment>
   <main>
   <article class="learn">
 

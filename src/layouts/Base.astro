@@ -12,17 +12,19 @@ interface Props {
   // robots tag so nobody lifts the noindex without knowing why it is there.
   noindex?: string;
   jsonld?: object[];
-  active?: 'home' | 'coverage' | 'learn';
+  active?: 'coverage' | 'learn';
   // The dark homepage brings its own chrome; every other page takes the
   // light-theme nav and footer.
   bare?: boolean;
   viewport?: string;
+  fontStylesheet?: string;
 }
 
 const FONTS = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;600;700&display=swap';
 const {
   title, description, path, ogType = 'website', noindex, jsonld = [], active,
   bare = false, viewport = 'width=device-width, initial-scale=1.0',
+  fontStylesheet = FONTS,
 } = Astro.props;
 const url = path ? new URL(path, Astro.site).href : undefined;
 ---
@@ -33,8 +35,8 @@ const url = path ? new URL(path, Astro.site).href : undefined;
 <meta name="viewport" content={viewport}>
 <title>{title}</title>
 <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
-<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
 {noindex && <meta name="robots" content="noindex">}
 {noindex && <Fragment set:html={`<!-- ${noindex} -->`} />}
 {description && <meta name="description" content={description}>}
@@ -45,8 +47,9 @@ const url = path ? new URL(path, Astro.site).href : undefined;
 {url && <meta property="og:url" content={url}>}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href={FONTS} rel="stylesheet">
+<link href={fontStylesheet} rel="stylesheet">
 {jsonld.map((d) => <script is:inline type="application/ld+json" set:html={JSON.stringify(d, null, 2)} />)}
+<link rel="stylesheet" href="/assets/css/site.css">
 <slot name="head" />
 </head>
 <body>

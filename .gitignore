@@ -18,3 +18,9 @@ screens/
 
 # Astro
 .astro/
+
+# Local assistant/browser state and Python caches
+.gstack/
+.claude/
+__pycache__/
+*.py[cod]
