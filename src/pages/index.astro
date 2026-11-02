@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import Footer from '../components/Footer.astro';
 const jsonld = [
   {
     "@context": "https://schema.org",
@@ -15,54 +14,70 @@ const jsonld = [
 ];
 const description = 'Fee Simple: the highest and most complete form of parcel diligence.';
 ---
-<Base
-  title="Fee Simple — complete parcel diligence"
-  description={description}
-  jsonld={jsonld}
-  bare
+<Base title="Fee Simple — complete parcel diligence" description={description} jsonld={jsonld} bare
   fontStylesheet="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;650;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
-  viewport="width=device-width, initial-scale=1.0, viewport-fit=cover"
->
-<Fragment slot="head">
-<link rel="stylesheet" href="/assets/css/home.css">
-</Fragment>
+  viewport="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <Fragment slot="head">
+    <link rel="stylesheet" href="/assets/css/home.css">
+  </Fragment>
+  <div class="home">
+    <a class="skip" href="#main">Skip to main content</a>
+    <header class="home-header shell">
+      <a href="/" class="home-brand" aria-label="Fee Simple home">Fee Simple<span>.</span></a>
+      <nav aria-label="Primary"><a href="/demo/" class="demo-button">Explore the demo <span aria-hidden="true">↗</span></a></nav>
+    </header>
 
-<a class="skip" href="#main">Skip to main content</a>
-<header class="home-header home-container">
-  <a class="brand" href="/" aria-label="Fee Simple home">Fee Simple<span class="brand-dot">.</span></a>
-  <nav class="home-nav" aria-label="Primary">
-    <a class="nav-demo" href="/demo/">Explore the demo <span aria-hidden="true">↗</span></a>
-  </nav>
-</header>
+    <main id="main">
+      <section class="hero">
+        <div class="hero-copy shell">
+          <h1 class="claim">The highest and most complete form of <span>parcel diligence.</span></h1>
+        </div>
+        <div class="map" role="img" aria-label="Animated globe rotating and zooming into the United States">
+          <canvas id="field" aria-hidden="true"></canvas>
+        </div>
+      </section>
 
-<main id="main">
-  <section class="hero">
-    <div class="hero-copy home-container">
-      <h1 class="claim">The highest and most complete form of <span>parcel diligence.</span></h1>
-    </div>
-    <div class="map" role="img" aria-label="Animated globe rotating and zooming into the United States">
-      <canvas id="field" aria-hidden="true"></canvas>
-    </div>
-    <div class="hero-floor home-container"><span class="mono">A TALOS OPERATIONS PRODUCT</span></div>
-  </section>
+      <section class="access shell" id="early-access" aria-labelledby="access-title">
+        <div class="access-heading">
+          <p class="eyebrow">FEE SIMPLE / EARLY ACCESS</p>
+          <h2 id="access-title">Request<br>early access.</h2>
+        </div>
+        <div class="access-form">
+          <p class="access-copy">Enter your email. <span>We'll reach out to set up access.</span></p>
+          <form name="early-access" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value="early-access">
+            <p hidden aria-hidden="true">
+              <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
+            </p>
+            <label for="email" class="visually-hidden">Email address</label>
+            <input id="email" name="email" type="email" placeholder="you@association.org" autocomplete="email" required>
+            <button type="submit" aria-label="Request early access"><span class="submit-text">Get access</span><span aria-hidden="true">↗</span></button>
+          </form>
+        </div>
+      </section>
+    </main>
 
-  <section class="signup home-container" id="early-access" aria-label="Request early access">
-    <form name="early-access" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
-      <input type="hidden" name="form-name" value="early-access">
-      <p hidden aria-hidden="true">
-        <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
-      </p>
-      <label for="email" class="visually-hidden">Email</label>
-      <input type="email" id="email" name="email" placeholder="you@association.org" required autocomplete="email">
-      <button type="submit">send</button>
-    </form>
-    <p class="caption">Enter your email — we'll reach out to set up access.</p>
-  </section>
-</main>
+    <footer class="home-footer shell" id="footer">
+      <div class="footer-top">
+        <div class="footer-identity">
+          <a class="footer-brand" href="/">Fee Simple<span>.</span></a>
+          <p>A Talos Operations product.</p>
+        </div>
+        <nav class="footer-explore" aria-label="Explore">
+          <a href="/coverage.html">Coverage <span aria-hidden="true">↗</span></a>
+          <a href="/learn/">Learn <span aria-hidden="true">↗</span></a>
+        </nav>
+        <nav class="footer-contact" aria-label="Contact">
+          <a href="mailto:info@talosoperations.com">info@talosoperations.com <span aria-hidden="true">↗</span></a>
+          <a href="https://www.linkedin.com/company/talos_operations/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© {new Date().getFullYear()} Talos Operations LLC</span>
+        <nav aria-label="Legal"><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a></nav>
+      </div>
+    </footer>
+  </div>
 
-<div class="home-container"><Footer /></div>
-
-<Fragment slot="end">
-<script is:inline type="module" src="/assets/js/hero.js"></script>
-</Fragment>
+  <Fragment slot="end"><script is:inline type="module" src="/assets/js/hero.js"></script></Fragment>
 </Base>

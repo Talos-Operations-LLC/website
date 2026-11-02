@@ -39,8 +39,8 @@ Astro, built to static HTML. One dependency (`astro`, exact pin). See `BUILD.md`
 | County statuses and displayed statistics | `public/assets/data/coverage.json` |
 | Learn and audience articles | `src/content/learn/`, `src/content/for/` |
 | Learn page layout | `src/components/Article.astro`, `public/assets/css/content.css` |
-| Homepage header | `src/pages/index.astro`, `public/assets/css/home.css` |
-| Other page headers and shared footer | `src/components/Nav.astro`, `src/components/Footer.astro`; their styles in `public/assets/css/site.css` (homepage footer overrides in `home.css`) |
+| Homepage header and footer | `src/pages/index.astro`, `public/assets/css/home.css` |
+| Other page headers and footers | `src/components/Nav.astro`, `src/components/Footer.astro`; their styles in `public/assets/css/site.css`. Coverage, Learn, Privacy, and Terms use home-only navigation. |
 | Legal text | `src/pages/privacy.astro`, `src/pages/terms.astro` |
 | Sitemap, robots, llms.txt | Built from `src/lib/site.ts` and the content entries |
 
