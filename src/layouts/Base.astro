@@ -13,6 +13,7 @@ interface Props {
   noindex?: string;
   jsonld?: object[];
   active?: 'coverage' | 'learn';
+  homeOnly?: boolean;
   // The homepage brings its own header and footer placement; every other
   // marketing page uses the shared navigation and footer below.
   bare?: boolean;
@@ -20,11 +21,12 @@ interface Props {
   fontStylesheet?: string;
 }
 
-const FONTS = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;600;700&display=swap';
+const FONTS = 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;450;500;550;600;650;700&display=swap';
 const {
   title, description, path, ogType = 'website', noindex, jsonld = [], active,
   bare = false, viewport = 'width=device-width, initial-scale=1.0',
   fontStylesheet = FONTS,
+  homeOnly = active === 'coverage' || active === 'learn',
 } = Astro.props;
 const url = path ? new URL(path, Astro.site).href : undefined;
 ---
@@ -55,9 +57,9 @@ const url = path ? new URL(path, Astro.site).href : undefined;
 <body>
 {bare ? <slot /> : (
 <div class="wrap">
-<Nav active={active} />
+<Nav active={active} homeOnly={homeOnly} />
 <slot />
-<Footer />
+<Footer minimal={homeOnly} />
 </div>
 )}
 <slot name="end" />

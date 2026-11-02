@@ -1,56 +1,43 @@
-/* Fee Simple: shared theme, header, footer and page container for every page.
-   The shared layout links this file first; each page's own stylesheet adds its rules on top. */
+/* Shared Signal theme and navigation. Page styles build on these tokens. */
 :root {
-  --bg: #151b27;
-  --ink: #e6eaf2;
-  --mute: #8b93a7;
-  --rule: #2c3446;
-  --blue: #4d7cff;
-  --accent: var(--blue);
-  --accent-dark: #7a9cff;
-  --paper: #1d2433;
-  --btn: #2f5be0;
+  --bg: #000;
+  --ink: #ebedf4;
+  --mute: #929bad;
+  --rule: #262a32;
+  --blue: #94c8ff;
+  --accent: #95b8eb;
+  --accent-dark: #c4dcff;
+  --paper: #0b0e17;
+  --btn: #a3c7ff;
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
-  --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
   color-scheme: dark;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: 16px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-}
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
-
-/* the page container: .page on the home page, .wrap everywhere else */
-.page, .wrap { max-width: 1100px; margin: 0 auto;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-
-/* ---------- header: the wordmark is the way home ---------- */
-.chrome { display: flex; justify-content: space-between; align-items: baseline;
-  padding: calc(22px + env(safe-area-inset-top, 0px)) 0 22px; }
-.wordmark { font-weight: 600; font-size: 18px; letter-spacing: -0.01em; }
-.wordmark:hover { color: var(--blue); }
-.nav { font-family: var(--mono); font-size: 13px; display: flex; gap: 20px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-offset: 5px; }
+.page, .wrap { width: min(1240px, calc(100% - 96px)); margin: 0 auto; }
+.chrome { display: flex; justify-content: space-between; align-items: center; gap: 30px; min-height: 76px; margin-top: 26px; padding: 14px 24px; border: 1px solid #303743; border-radius: 9px; }
+.wordmark { font-weight: 600; font-size: 25px; letter-spacing: -1.2px; white-space: nowrap; line-height: 1.6; }
+.wordmark span { color: #8fbbff; }
+a.wordmark:hover { color: var(--blue); }
+.nav { font-family: var(--mono); font-size: 13px; display: flex; align-items: center; gap: 20px; }
 .nav a { color: var(--mute); }
 .nav a:hover, .nav a.active { color: var(--ink); }
-.nav a:focus-visible { outline: 1px solid var(--blue); outline-offset: 3px; }
-
-/* ---------- footer ---------- */
-.footer { margin-top: clamp(32px, 6vh, 64px); padding: 28px 0 calc(36px + env(safe-area-inset-bottom, 0px));
-  border-top: 1px solid var(--rule); text-align: center;
-  font-family: var(--mono); font-size: 12px; line-height: 1.9; color: var(--mute); }
+.nav .home-link { display: inline-flex; align-items: center; gap: 14px; background: #f5f6f9; color: #111319; border-radius: 5px; padding: 12px 17px; font: 500 12px/1.6 var(--sans); white-space: nowrap; }
+.nav .home-link:hover { background: #dceaff; color: #111319; }
+.footer { margin-top: 80px; padding: 30px 0 40px; border-top: 1px solid var(--rule); font: 10px/1.6 var(--mono); color: var(--mute); }
 .footer a { color: var(--mute); }
-.footer a:hover { color: var(--ink); }
-.footer a:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-
+.footer a:hover { color: var(--accent); }
+@media (max-width: 900px) {
+  .page, .wrap { width: calc(100% - 48px); }
+}
 @media (max-width: 620px) {
-  .chrome { flex-wrap: wrap; gap: 8px; }
-  .nav { gap: 4px; margin-right: -8px; }
-  .nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; }
+  .page, .wrap { width: calc(100% - 36px); }
+  .chrome { min-height: 84px; margin-top: 18px; padding: 18px; gap: 14px; flex-wrap: wrap; }
+  .wordmark { font-size: 21px; }
+  .nav { gap: 12px; }
+  .nav .home-link { padding: 11px 12px; font-size: 11px; gap: 10px; }
+  .footer { margin-top: 56px; padding-bottom: 30px; }
 }

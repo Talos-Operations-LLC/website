@@ -12,8 +12,8 @@ after a build is exactly what visitors get.
 - **`src/content/`** — the /learn/ and /for/ pages as Markdown, one file each. The
   front matter holds the title, description, FAQ, related links and noindex reason.
 - **`src/layouts/` and `src/components/`** — the shared head, nav and footer.
-  Marketing pages share the head and footer. The homepage defines its own header
-  in `src/pages/index.astro`; the other pages use `src/components/Nav.astro`.
+  Marketing pages share the head. The homepage defines its own header and footer
+  in `src/pages/index.astro`; the other pages use `Nav.astro` and `Footer.astro`.
 - **`public/`** — copied into `dist/` byte for byte. Nothing in it is processed.
   Stylesheets, scripts and data live here under `assets/` as plain files; nothing is
   bundled. The layout links `site.css` (theme, header, footer) on every page and each
