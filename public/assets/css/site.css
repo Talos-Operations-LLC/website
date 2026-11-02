@@ -9,6 +9,8 @@
   --accent-dark: #c4dcff;
   --paper: #0b0e17;
   --btn: #a3c7ff;
+  --highlight: #8fbbff;
+  --subtle: #8e97a8;
   --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
   color-scheme: dark;
@@ -30,8 +32,36 @@ a.wordmark:hover { color: var(--blue); }
 .footer { margin-top: 80px; padding: 30px 0 40px; border-top: 1px solid var(--rule); font: 10px/1.6 var(--mono); color: var(--mute); }
 .footer a { color: var(--mute); }
 .footer a:hover { color: var(--accent); }
+/* The full footer, shared with the homepage: brand, explore and contact columns, then the legal row. */
+.wrap > .home-footer { margin-top: 80px; }
+.home-footer { position: relative; border-top: 1px solid transparent; padding-top: 32px; }
+.home-footer::before { content: ''; position: absolute; top: -1px; left: 0; right: 0; height: 1px; background: #262a32; transform-origin: left; }
+.footer-top { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; padding-bottom: 44px; }
+.footer-brand { font-size: 24px; font-weight: 550; letter-spacing: -1px; }
+.footer-brand span { color: var(--highlight); }
+.footer-identity p { color: var(--subtle); font-size: 12px; margin-top: 8px; }
+.footer-top nav { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; font: 11px/1.6 var(--mono); }
+.footer-top nav a { display: flex; gap: 40px; justify-content: space-between; }
+.footer-contact { justify-self: end; }
+.footer-explore { padding-left: 30px; border-left: 1px solid #252c38; }
+.footer-top nav a span { color: #737e92; transition: transform .2s ease-out; }
+.footer-top nav a:hover span { transform: translate(3px, -3px); }
+.footer-top a:hover, .footer-bottom a:hover { color: var(--highlight); }
+.footer-bottom { display: flex; align-items: center; gap: 40px; padding-block: 12px 40px; font: 10px/1.6 var(--mono); color: var(--subtle); }
+.footer-bottom nav { display: flex; gap: 24px; margin-left: auto; }
+@media (min-width: 901px) {
+  /* Every page's header takes the homepage header's size and width at each desktop width. */
+  .page, .wrap { width: min(calc(100% - 64px), clamp(1040px, calc(70vw - 240px), 1840px)); }
+  :root { --chrome-top: clamp(16px, 1.5svh, 28px); --chrome-height: clamp(58px, calc(3vw + 4px), 88px); }
+  .chrome { margin-top: var(--chrome-top); min-height: var(--chrome-height); padding: 0 clamp(18px, 1.2vw, 32px); }
+  .wordmark { font-size: clamp(21px, calc(1.1vw + 1px), 32px); }
+  .nav { font-size: clamp(12px, .55vw, 17px); }
+  .nav .home-link { padding: clamp(10px, .6vw, 16px) clamp(14px, 1vw, 26px); font-size: clamp(12px, .55vw, 17px); }
+}
 @media (max-width: 900px) {
   .page, .wrap { width: calc(100% - 48px); }
+  .footer-top { gap: 24px; }
+  .footer-top nav a { gap: 15px; }
 }
 @media (max-width: 620px) {
   .page, .wrap { width: calc(100% - 36px); }
@@ -40,4 +70,18 @@ a.wordmark:hover { color: var(--blue); }
   .nav { gap: 12px; }
   .nav .home-link { padding: 11px 12px; font-size: 11px; gap: 10px; }
   .footer { margin-top: 56px; padding-bottom: 30px; }
+  .wrap > .home-footer { margin-top: 56px; }
+  .home-footer { padding-top: 24px; }
+  .footer-top { grid-template-columns: minmax(0, 1fr); gap: 0; padding-bottom: 8px; }
+  .footer-identity { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+  .footer-brand { font-size: 21px; white-space: nowrap; }
+  .footer-identity p { font-size: 10px; margin: 0; white-space: nowrap; }
+  .footer-top nav { gap: 0; }
+  .footer-top nav a { width: 100%; min-height: 44px; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; white-space: nowrap; }
+  .footer-contact { justify-self: stretch; }
+  .footer-explore { border: 0; padding-left: 0; }
+  .footer-bottom { flex-wrap: nowrap; justify-content: space-between; gap: 10px; padding-top: 0; padding-bottom: max(24px, env(safe-area-inset-bottom)); font-size: 9px; }
+  .footer-bottom > span { width: auto; white-space: nowrap; }
+  .footer-bottom nav { margin-left: 0; gap: 14px; }
+  .footer-bottom nav a { min-height: 44px; display: flex; align-items: center; font-size: 10px; }
 }

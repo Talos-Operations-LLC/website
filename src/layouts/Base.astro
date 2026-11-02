@@ -59,7 +59,7 @@ const url = path ? new URL(path, Astro.site).href : undefined;
 <div class="wrap">
 <Nav active={active} homeOnly={homeOnly} />
 <slot />
-<Footer minimal={homeOnly} />
+<Footer full={homeOnly} />
 </div>
 )}
 <slot name="end" />

@@ -14,26 +14,26 @@
 .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
 
 /* ---------- learn article ---------- */
-.learn { max-width: 760px; margin: 75px auto 0; }
+.learn { max-width: 760px; margin: clamp(36px, 3.5vw, 64px) auto 0; font-size: 15px; line-height: 1.65; }
 .crumb { font-family: var(--mono); font-size: 13px; color: var(--mute); }
 .crumb a:hover { color: var(--accent); }
 .learn h1 {
   font-family: var(--sans);
   font-weight: 500;
-  font-size: clamp(36px, 4.6vw, 64px);
+  font-size: clamp(32px, calc(2.2vw + 8px), 52px);
   line-height: 1.06;
   letter-spacing: -.055em;
   margin-top: 18px;
 }
 .answer {
-  font-size: 19px;
+  font-size: 17px;
   line-height: 1.55;
   margin-top: 24px;
   padding-left: 24px;
   border-left: 2px solid var(--accent);
 }
-.learn h2 { font-size: 24px; font-weight: 500; line-height: 1.3; letter-spacing: -.035em; margin-top: 52px; }
-.learn h3 { font-size: 17px; font-weight: 600; line-height: 1.4; margin-top: 28px; }
+.learn h2 { font-size: 21px; font-weight: 500; line-height: 1.3; letter-spacing: -.035em; margin-top: 44px; }
+.learn h3 { font-size: 16px; font-weight: 600; line-height: 1.4; margin-top: 26px; }
 .learn p, .learn ul, .learn ol { margin-top: 14px; }
 .learn ul, .learn ol { padding-left: 22px; }
 .learn li + li { margin-top: 6px; }
@@ -75,25 +75,25 @@
 .learn .related a:hover { color: var(--accent); }
 
 /* hub: intro + page list */
-.lede { font-size: 19px; line-height: 1.55; color: var(--mute); margin-top: 18px; }
+.lede { font-size: 17px; line-height: 1.55; color: var(--mute); margin-top: 16px; }
 .learn .library { list-style: none; padding-left: 0; margin-top: 40px; border-top: 1px solid var(--rule); }
 .learn .library li { margin-top: 0; padding: 26px 0; border-bottom: 1px solid var(--rule); }
-.learn .library a { display: flex; justify-content: space-between; gap: 24px; font-size: 21px; font-weight: 500; line-height: 1.35; letter-spacing: -.025em; color: var(--ink); text-decoration: none; }
+.learn .library a { display: flex; justify-content: space-between; gap: 24px; font-size: 19px; font-weight: 500; line-height: 1.35; letter-spacing: -.025em; color: var(--ink); text-decoration: none; }
 .learn .library a::after { content: '↗'; color: var(--accent); flex-shrink: 0; }
 .learn .library a:hover { color: var(--accent); }
-.library .blurb { display: block; margin-top: 4px; font-size: 15px; color: var(--mute); }
+.library .blurb { display: block; margin-top: 4px; font-size: 14px; color: var(--mute); }
 .learn-hub { max-width: 900px; }
-.learn-hub h1 { font-size: clamp(42px, 5.6vw, 80px); letter-spacing: -.062em; text-align: center; }
-.learn-hub .lede { max-width: 650px; margin: 24px auto 0; text-align: center; }
-.learn-hub .library { margin-top: 64px; }
+.learn-hub h1 { font-size: clamp(36px, calc(2.8vw + 8px), 64px); letter-spacing: -.062em; text-align: center; }
+.learn-hub .lede { max-width: 650px; margin: 20px auto 0; text-align: center; }
+.learn-hub .library { margin-top: 48px; }
 
 /* ---------- responsive ---------- */
 @media (max-width: 720px) {
-  .learn { margin-top: 40px; }
-  .learn-hub h1 { font-size: clamp(36px, 9.9vw, 57px); }
+  .learn { margin-top: 36px; font-size: 16px; }
+  .learn-hub h1 { font-size: clamp(32px, 8.8vw, 48px); }
   .learn .library a { font-size: 18px; }
-  .learn-hub .library { margin-top: 42px; }
-  .answer { font-size: 18px; }
+  .learn-hub .library { margin-top: 36px; }
+  .answer { font-size: 17px; }
   .learn h2 { margin-top: 44px; }
   .cta-box { padding: 22px; }
   .cta-box .btn { display: block; text-align: center; }

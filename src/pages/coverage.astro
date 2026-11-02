@@ -5,6 +5,7 @@ import Base from '../layouts/Base.astro';
 <Fragment slot="head">
 <link rel="stylesheet" href="/assets/css/coverage.css">
 </Fragment>
+  <main class="stage" id="main">
   <h1 class="headline">Coverage, <span>by county.</span></h1>
   <div class="counts" id="counts" role="status">Loading coverage…</div>
   <noscript><p>Enable JavaScript to view the interactive coverage map.</p></noscript>
@@ -24,11 +25,10 @@ import Base from '../layouts/Base.astro';
     <div class="tooltip" id="tooltip"></div>
   </div>
 
-  <div class="stats" id="stats"></div>
-
   <p class="motto">
     <a href="https://www.nationalarchives.gov.uk/education/resources/domesday-book/" target="_blank" rel="noopener noreferrer">"One record, without appeal."</a>
   </p>
+  </main>
 <Fragment slot="end">
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
