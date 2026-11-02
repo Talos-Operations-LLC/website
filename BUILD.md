@@ -12,7 +12,8 @@ after a build is exactly what visitors get.
 - **`src/content/`** — the /learn/ and /for/ pages as Markdown, one file each. The
   front matter holds the title, description, FAQ, related links and noindex reason.
 - **`src/layouts/` and `src/components/`** — the shared head, nav and footer.
-  Every page uses them, so a nav or footer change is made once.
+  Marketing pages share the head and footer. The homepage defines its own header
+  in `src/pages/index.astro`; the other pages use `src/components/Nav.astro`.
 - **`public/`** — copied into `dist/` byte for byte. Nothing in it is processed.
   Stylesheets, scripts and data live here under `assets/` as plain files; nothing is
   bundled. The layout links `site.css` (theme, header, footer) on every page and each
@@ -20,7 +21,7 @@ after a build is exactly what visitors get.
 
 ## Run it locally
 
-Needs Node 22 or newer.
+Needs Node 22.23.4 or newer, as specified in `package.json`.
 
 ```
 npm ci              # install the exact versions in package-lock.json
@@ -39,8 +40,8 @@ python3 tools/check_site.py   # links, data files, sitemap, robots, llms.txt, ho
 diff -rq public dist          # every file in public/ must appear unchanged
 ```
 
-To compare against what is live now, check out `main` in a second folder and diff
-its files against `dist/`.
+To compare against what is live now, check out `main` in a second folder, run
+`npm ci` and `npm run build` there, then compare the two `dist/` folders.
 
 ## Generated files: never hand-edit
 
