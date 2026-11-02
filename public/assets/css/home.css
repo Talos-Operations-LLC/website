@@ -105,27 +105,29 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-
   to { transform: scaleX(1); }
 }
 @media (min-width: 901px) {
+  .home { min-height: 100svh; display: flex; flex-direction: column; }
+  .home > main { flex: 1; display: flex; flex-direction: column; }
   .shell { width: min(calc(100% - 64px), clamp(1040px, calc(70vw - 240px), 1840px)); }
-  .home-header { margin-top: clamp(16px, 1.5svh, 28px); min-height: clamp(58px, calc(3vw + 4px), 88px); padding-inline: clamp(18px, 1.2vw, 32px); }
+  .home-header { flex-shrink: 0; margin-top: clamp(16px, 1.5svh, 28px); min-height: clamp(58px, calc(3vw + 4px), 88px); padding-inline: clamp(18px, 1.2vw, 32px); }
   .home-brand { font-size: clamp(21px, calc(1.1vw + 1px), 32px); }
   .demo-button { padding: clamp(10px, .6vw, 16px) clamp(14px, 1vw, 26px); font-size: clamp(12px, .55vw, 17px); gap: 20px; }
-  .hero { padding-bottom: clamp(16px, 1.6svh, 28px); }
-  .hero-copy { padding-top: clamp(24px, 2.3svh, 48px); }
+  .hero { flex: 1; display: flex; flex-direction: column; padding-bottom: clamp(12px, 1.6svh, 28px); }
+  .hero-copy { padding-top: clamp(16px, calc(4svh - 12px), 48px); }
   .claim { max-width: clamp(840px, calc(50vw - 60px), 1440px); font-size: clamp(48px, min(calc(4vw - 12px), 7.5svh), 100px); }
-  .map { width: min(88%, 1500px); height: clamp(220px, min(34svh, calc(22vw - 100px)), 500px); margin-top: clamp(14px, 1.5svh, 30px); }
-  .access { padding-block: clamp(34px, 3svh, 56px); gap: clamp(48px, calc(4vw - 24px), 104px); }
+  .map { flex: 1; width: min(88%, 1500px); height: auto; min-height: 180px; margin-top: clamp(14px, 1.5svh, 30px); }
+  .access { flex-shrink: 0; padding-block: clamp(18px, calc(8svh - 40px), 56px); gap: clamp(48px, calc(4vw - 24px), 104px); }
   .access h2 { font-size: clamp(40px, 2.7vw, 72px); }
   .access-heading { padding-left: clamp(18px, 1vw, 30px); }
-  .eyebrow { margin-bottom: clamp(16px, 1svh, 22px); font-size: clamp(10px, .45vw, 14px); }
+  .eyebrow { margin-bottom: clamp(10px, calc(2svh - 4px), 22px); font-size: clamp(10px, .45vw, 14px); }
   .access-copy { margin-bottom: clamp(18px, 1.5svh, 28px); font-size: clamp(12px, calc(.65vw + .3px), 18px); }
   .access-form { padding-bottom: 12px; }
   .access input[type=email] { font-size: clamp(16px, .7vw, 22px); }
   .access button { padding: clamp(12px, .7vw, 20px) clamp(16px, .9vw, 26px); font-size: clamp(12px, .55vw, 17px); }
-  .home-footer { padding-top: clamp(22px, 2svh, 36px); }
-  .footer-top { padding-bottom: clamp(24px, 2svh, 36px); }
+  .home-footer { flex-shrink: 0; padding-top: clamp(14px, 2svh, 36px); }
+  .footer-top { padding-bottom: clamp(14px, 2svh, 36px); }
   .footer-brand { font-size: clamp(21px, 1vw, 30px); }
   .footer-identity p, .footer-top nav { font-size: clamp(12px, .55vw, 16px); }
-  .footer-bottom { padding-bottom: 24px; font-size: clamp(11px, .45vw, 14px); }
+  .footer-bottom { padding-bottom: clamp(12px, 2svh, 24px); font-size: clamp(11px, .45vw, 14px); }
 }
 @media (max-width: 900px) {
   .shell { width: calc(100% - 48px); }
