@@ -1,0 +1,76 @@
+{
+  "displayFieldName": "OWNER",
+  "fieldAliases": {
+    "PIN_NUM": "PIN_NUM",
+    "SITE_ADDRESS": "SITE_ADDRESS",
+    "REID": "REID"
+  },
+  "geometryType": "esriGeometryPolygon",
+  "spatialReference": {
+    "wkid": 4326,
+    "latestWkid": 4326
+  },
+  "fields": [
+    {
+      "name": "PIN_NUM",
+      "type": "esriFieldTypeString",
+      "alias": "PIN_NUM",
+      "length": 11
+    },
+    {
+      "name": "SITE_ADDRESS",
+      "type": "esriFieldTypeString",
+      "alias": "SITE_ADDRESS",
+      "length": 77
+    },
+    {
+      "name": "REID",
+      "type": "esriFieldTypeString",
+      "alias": "REID",
+      "length": 20
+    }
+  ],
+  "features": [
+    {
+      "attributes": {
+        "PIN_NUM": "0796433732",
+        "SITE_ADDRESS": "4604 ZALDIVAR WAY",
+        "REID": "0337336"
+      },
+      "geometry": {
+        "rings": [
+          [
+            [
+              -78.68148189802594,
+              35.84800220748812
+            ],
+            [
+              -78.68151976686802,
+              35.84798122667138
+            ],
+            [
+              -78.68155430119248,
+              35.84795511873566
+            ],
+            [
+              -78.68158481175958,
+              35.8479244047459
+            ],
+            [
+              -78.68187789760864,
+              35.84804387779408
+            ],
+            [
+              -78.68180822212582,
+              35.848137993981084
+            ],
+            [
+              -78.68148189802594,
+              35.84800220748812
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

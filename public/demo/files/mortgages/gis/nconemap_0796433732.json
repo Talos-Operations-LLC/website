@@ -1,0 +1,496 @@
+{
+  "objectIdFieldName": "objectid",
+  "globalIdFieldName": "",
+  "geometryType": "esriGeometryPolygon",
+  "spatialReference": {
+    "wkid": 102719,
+    "latestWkid": 2264
+  },
+  "fields": [
+    {
+      "name": "objectid",
+      "alias": "OBJECTID",
+      "type": "esriFieldTypeOID"
+    },
+    {
+      "name": "parno",
+      "alias": "Parcel Number",
+      "type": "esriFieldTypeString",
+      "length": 100
+    },
+    {
+      "name": "altparno",
+      "alias": "Alternate Parcel Number",
+      "type": "esriFieldTypeString",
+      "length": 25
+    },
+    {
+      "name": "ownname",
+      "alias": "Owner Name",
+      "type": "esriFieldTypeString",
+      "length": 200
+    },
+    {
+      "name": "improvval",
+      "alias": "Improved Value\n",
+      "type": "esriFieldTypeDouble"
+    },
+    {
+      "name": "landval",
+      "alias": "Land Value\n",
+      "type": "esriFieldTypeDouble"
+    },
+    {
+      "name": "parval",
+      "alias": "Parcel Value\n",
+      "type": "esriFieldTypeDouble"
+    },
+    {
+      "name": "mailadd",
+      "alias": "Mailing Address",
+      "type": "esriFieldTypeString",
+      "length": 200
+    },
+    {
+      "name": "munit",
+      "alias": "Mailing Address Unit Number",
+      "type": "esriFieldTypeString",
+      "length": 25
+    },
+    {
+      "name": "mcity",
+      "alias": "Mailing Address City",
+      "type": "esriFieldTypeString",
+      "length": 100
+    },
+    {
+      "name": "mstate",
+      "alias": "Mailing Address State",
+      "type": "esriFieldTypeString",
+      "length": 2
+    },
+    {
+      "name": "mzip",
+      "alias": "Mailing Address Zip",
+      "type": "esriFieldTypeString",
+      "length": 15
+    },
+    {
+      "name": "siteadd",
+      "alias": "Full Site Address",
+      "type": "esriFieldTypeString",
+      "length": 200
+    },
+    {
+      "name": "sunit",
+      "alias": "Site Address Unit Number",
+      "type": "esriFieldTypeString",
+      "length": 25
+    },
+    {
+      "name": "scity",
+      "alias": "Site Address City",
+      "type": "esriFieldTypeString",
+      "length": 100
+    },
+    {
+      "name": "gisacres",
+      "alias": "GIS Acres",
+      "type": "esriFieldTypeDouble"
+    },
+    {
+      "name": "struct",
+      "alias": "Structure Indicator",
+      "type": "esriFieldTypeString",
+      "length": 1
+    },
+    {
+      "name": "multistruc",
+      "alias": "Multiple Structures",
+      "type": "esriFieldTypeString",
+      "length": 1
+    },
+    {
+      "name": "saledate",
+      "alias": "Last Sale Date\n",
+      "type": "esriFieldTypeDate",
+      "length": 8
+    },
+    {
+      "name": "saledatetx",
+      "alias": "Last Sale Date Text",
+      "type": "esriFieldTypeString",
+      "length": 25
+    },
+    {
+      "name": "legdecfull",
+      "alias": "Full Legal Description",
+      "type": "esriFieldTypeString",
+      "length": 254
+    },
+    {
+      "name": "parusecode",
+      "alias": "Tax Parcel Use Code",
+      "type": "esriFieldTypeString",
+      "length": 50
+    },
+    {
+      "name": "parusedesc",
+      "alias": "Tax Parcel Use Code Description",
+      "type": "esriFieldTypeString",
+      "length": 125
+    },
+    {
+      "name": "parusecd2",
+      "alias": "Second Tax Parcel Use Code",
+      "type": "esriFieldTypeString",
+      "length": 25
+    },
+    {
+      "name": "parusedsc2",
+      "alias": "Second Tax Parcel Use Description",
+      "type": "esriFieldTypeString",
+      "length": 125
+    },
+    {
+      "name": "parvaltype",
+      "alias": "Type of Value Reported",
+      "type": "esriFieldTypeString",
+      "length": 50
+    },
+    {
+      "name": "owntype",
+      "alias": "Owner Type",
+      "type": "esriFieldTypeString",
+      "length": 50
+    },
+    {
+      "name": "recareano",
+      "alias": "Record Area Number",
+      "type": "esriFieldTypeDouble"
+    },
+    {
+      "name": "recareatx",
+      "alias": "Record Area Text",
+      "type": "esriFieldTypeString",
+      "length": 25
+    },
+    {
+      "name": "revisedate",
+      "alias": "Revised Date",
+      "type": "esriFieldTypeDate",
+      "length": 8
+    },
+    {
+      "name": "sourceref",
+      "alias": "Source Document Reference",
+      "type": "esriFieldTypeString",
+      "length": 50
+    },
+    {
+      "name": "sourcedate",
+      "alias": "Source Document Date",
+      "type": "esriFieldTypeDate",
+      "length": 8
+    },
+    {
+      "name": "sourcedatx",
+      "alias": "Source Document Date Text",
+      "type": "esriFieldTypeString",
+      "length": 25
+    },
+    {
+      "name": "subdivisio",
+      "alias": "Subdivision Name",
+      "type": "esriFieldTypeString",
+      "length": 50
+    },
+    {
+      "name": "nparno",
+      "alias": "National Parcel Number",
+      "type": "esriFieldTypeString",
+      "length": 100
+    },
+    {
+      "name": "cntyname",
+      "alias": "County Name",
+      "type": "esriFieldTypeString",
+      "length": 50
+    },
+    {
+      "name": "cntyfips",
+      "alias": "County FIPS Code",
+      "type": "esriFieldTypeString",
+      "length": 3
+    },
+    {
+      "name": "stfips",
+      "alias": "State FIPS Code",
+      "type": "esriFieldTypeString",
+      "length": 2
+    },
+    {
+      "name": "stcntyfips",
+      "alias": "State-County FIPS Code",
+      "type": "esriFieldTypeString",
+      "length": 5
+    },
+    {
+      "name": "gnisid",
+      "alias": "GNIS Identifier",
+      "type": "esriFieldTypeInteger"
+    },
+    {
+      "name": "sourceagnt",
+      "alias": "Information Source",
+      "type": "esriFieldTypeString",
+      "length": 100
+    },
+    {
+      "name": "transfdate",
+      "alias": "Transform Date",
+      "type": "esriFieldTypeDate",
+      "length": 8
+    },
+    {
+      "name": "maddpref",
+      "alias": "Mailing Address Prefix",
+      "type": "esriFieldTypeString",
+      "length": 5
+    },
+    {
+      "name": "maddrno",
+      "alias": "Mailing Address Number",
+      "type": "esriFieldTypeString",
+      "length": 10
+    },
+    {
+      "name": "maddstname",
+      "alias": "Mailing Street Full Name",
+      "type": "esriFieldTypeString",
+      "length": 100
+    },
+    {
+      "name": "maddstr",
+      "alias": "Mailing Address Street Name",
+      "type": "esriFieldTypeString",
+      "length": 50
+    },
+    {
+      "name": "maddstsuf",
+      "alias": "Mailing Address Street Suffix",
+      "type": "esriFieldTypeString",
+      "length": 10
+    },
+    {
+      "name": "maddsttyp",
+      "alias": "Mailing Address Street Type",
+      "type": "esriFieldTypeString",
+      "length": 10
+    },
+    {
+      "name": "ownfrst",
+      "alias": "Owner First Name",
+      "type": "esriFieldTypeString",
+      "length": 100
+    },
+    {
+      "name": "ownlast",
+      "alias": "Owner Last Name",
+      "type": "esriFieldTypeString",
+      "length": 100
+    },
+    {
+      "name": "revdatetx",
+      "alias": "Revised Date text",
+      "type": "esriFieldTypeString",
+      "length": 25
+    },
+    {
+      "name": "reviseyear",
+      "alias": "Revised Year",
+      "type": "esriFieldTypeString",
+      "length": 25
+    },
+    {
+      "name": "saddno",
+      "alias": "Site Address Number",
+      "type": "esriFieldTypeString",
+      "length": 10
+    },
+    {
+      "name": "saddpref",
+      "alias": "Site Address Prefix",
+      "type": "esriFieldTypeString",
+      "length": 5
+    },
+    {
+      "name": "saddstname",
+      "alias": "Site Address Street Name",
+      "type": "esriFieldTypeString",
+      "length": 100
+    },
+    {
+      "name": "saddstr",
+      "alias": "Site Address Street Name",
+      "type": "esriFieldTypeString",
+      "length": 50
+    },
+    {
+      "name": "saddstsuf",
+      "alias": "Site Address Street Suffix",
+      "type": "esriFieldTypeString",
+      "length": 10
+    },
+    {
+      "name": "saddsttyp",
+      "alias": "Site Address Street Type",
+      "type": "esriFieldTypeString",
+      "length": 10
+    },
+    {
+      "name": "sstate",
+      "alias": "Site Address State",
+      "type": "esriFieldTypeString",
+      "length": 25
+    },
+    {
+      "name": "stname",
+      "alias": "State Name",
+      "type": "esriFieldTypeString",
+      "length": 2
+    },
+    {
+      "name": "subowntype",
+      "alias": "Subsurface Owner Type",
+      "type": "esriFieldTypeString",
+      "length": 50
+    },
+    {
+      "name": "subsurfown",
+      "alias": "Subsurface Owner",
+      "type": "esriFieldTypeString",
+      "length": 200
+    },
+    {
+      "name": "szip",
+      "alias": "Site Address Zip",
+      "type": "esriFieldTypeString",
+      "length": 25
+    },
+    {
+      "name": "structno",
+      "alias": "Number of Structures",
+      "type": "esriFieldTypeInteger"
+    },
+    {
+      "name": "structyear",
+      "alias": "Structure Year",
+      "type": "esriFieldTypeInteger"
+    },
+    {
+      "name": "ownname2",
+      "alias": "Full Second Owner Name",
+      "type": "esriFieldTypeString",
+      "length": 200
+    },
+    {
+      "name": "presentval",
+      "alias": "Present Use Value",
+      "type": "esriFieldTypeString",
+      "length": 1
+    },
+    {
+      "name": "mapref",
+      "alias": "Map Reference",
+      "type": "esriFieldTypeString",
+      "length": 50
+    },
+    {
+      "name": "Shape__Area",
+      "alias": "st_area(shape)",
+      "type": "esriFieldTypeDouble"
+    },
+    {
+      "name": "Shape__Length",
+      "alias": "st_perimeter(shape)",
+      "type": "esriFieldTypeDouble"
+    }
+  ],
+  "features": [
+    {
+      "attributes": {
+        "objectid": 33811192,
+        "parno": "0796433732",
+        "altparno": "0337336",
+        "ownname": "MORAN, KEVIN J MORAN, SHARON H",
+        "improvval": 456639.0,
+        "landval": 200000.0,
+        "parval": 656639.0,
+        "mailadd": "4604 ZALDIVAR WAY",
+        "munit": "",
+        "mcity": "RALEIGH NC 27612-4814",
+        "mstate": "",
+        "mzip": "",
+        "siteadd": "4604 ZALDIVAR WAY",
+        "sunit": "",
+        "scity": "RALEIGH",
+        "gisacres": 0.09179734,
+        "struct": "Y",
+        "multistruc": "N",
+        "saledate": 1401944400000,
+        "saledatetx": "2014-06-05T00:00:00Z",
+        "legdecfull": "LO6 COPPER RIDGE TOWNHOMES BM2005 -01707",
+        "parusecode": "RHS",
+        "parusedesc": "R",
+        "parusecd2": "01",
+        "parusedsc2": "SINGLFAM",
+        "parvaltype": "Assessed",
+        "owntype": "",
+        "recareano": 0.08,
+        "recareatx": "",
+        "revisedate": null,
+        "sourceref": "Deed Book/Page 015681/00991",
+        "sourcedate": 1401944400000,
+        "sourcedatx": "",
+        "subdivisio": "",
+        "nparno": "37183_0796433732",
+        "cntyname": "Wake",
+        "cntyfips": "183",
+        "stfips": "37",
+        "stcntyfips": "37183",
+        "gnisid": 1008592,
+        "sourceagnt": "Wake County Assessor",
+        "transfdate": 1778994000000,
+        "maddpref": "",
+        "maddrno": "",
+        "maddstname": "",
+        "maddstr": "",
+        "maddstsuf": "",
+        "maddsttyp": "",
+        "ownfrst": "",
+        "ownlast": "",
+        "revdatetx": "",
+        "reviseyear": "",
+        "saddno": "4604",
+        "saddpref": "",
+        "saddstname": "ZALDIVAR",
+        "saddstr": "ZALDIVAR",
+        "saddstsuf": "",
+        "saddsttyp": "WAY",
+        "sstate": "NC",
+        "stname": "NC",
+        "subowntype": "",
+        "subsurfown": "",
+        "szip": "",
+        "structno": 1,
+        "structyear": 2006,
+        "ownname2": "",
+        "presentval": "",
+        "mapref": "",
+        "Shape__Area": 4003.2463964317544,
+        "Shape__Length": 287.6627417867002
+      }
+    }
+  ]
+}

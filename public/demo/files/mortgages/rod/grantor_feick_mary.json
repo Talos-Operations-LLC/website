@@ -1,0 +1,112 @@
+[
+  {
+    "doc": "012230-02359",
+    "book_page": "012230/02359",
+    "pages": 3,
+    "recorded": "10/24/2006 12:00 AM",
+    "type": "DEED",
+    "grantor": "FEICK MARY CECELIA, FEICK WILLIAM CHARLES",
+    "grantee": "LEFEVRE JOHN P, LEFEVRE BARBARA R",
+    "legal": "LT 53 WATERFORD GREEN"
+  },
+  {
+    "doc": "012239-00198",
+    "book_page": "012239/00198",
+    "pages": 5,
+    "recorded": "10/30/2006 12:00 AM",
+    "type": "DEED OF TRUST",
+    "grantor": "FEICK MARY CECELIA, FEICK WILLIAM C",
+    "grantee": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS INC, MERS",
+    "legal": "COPPER RIDGE TOWNHOMES"
+  },
+  {
+    "doc": "012252-01707",
+    "book_page": "012252/01707",
+    "pages": 2,
+    "recorded": "11/06/2006 12:00 AM",
+    "type": "CERTIFICATE OF SATISFACTION",
+    "grantor": "FEICK MARY CECELIA, FEICK WILLIAM CHARLES, CHASE HOME FIN LLC, CHASE MANHATTAN MTG CORP",
+    "grantee": "STIENSTRA CONSTANCE R /TR, CHASE MANHATTAN MTG CORP",
+    "legal": "CAN 9725-1538"
+  },
+  {
+    "doc": "012606-00470",
+    "book_page": "012606/00470",
+    "pages": 4,
+    "recorded": "06/18/2007 12:00 AM",
+    "type": "MODIFICATION",
+    "grantor": "FEICK MARY C, FEICK WILLIAM C, PULTE MTG LLC",
+    "grantee": "FEICK WILLIAM C, FEICK MARY C, PULTE MTG LLC",
+    "legal": "12239-198"
+  },
+  {
+    "doc": "014322-00695",
+    "book_page": "014322/00695",
+    "pages": 5,
+    "recorded": "04/13/2011 12:00 AM",
+    "type": "DEED OF TRUST",
+    "grantor": "FEICK MARY CECELIA, FEICK WILLIAM C",
+    "grantee": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS INC, MERS",
+    "legal": "COPPER RIDGE TOWNHOMES"
+  },
+  {
+    "doc": "014329-00639",
+    "book_page": "014329/00639",
+    "pages": 2,
+    "recorded": "04/21/2011 12:00 AM",
+    "type": "CERTIFICATE OF SATISFACTION",
+    "grantor": "FEICK MARY CECELIA, FEICK WILLIAM C, MORTGAGE ELECTRONIC REGISTRATION SYSTEMS INC, MERS",
+    "grantee": "STILL DEBRA W /TR, MORTGAGE ELECTRONIC REGISTRATION SYSTEMS INC, MERS, PULTE MTG LLC",
+    "legal": "CAN 12239-198"
+  },
+  {
+    "doc": "015681-00991",
+    "book_page": "015681/00991",
+    "pages": 3,
+    "recorded": "06/05/2014 12:00 AM",
+    "type": "DEED",
+    "grantor": "FEICK MARY CECELIA, FEICK WILLIAM C.",
+    "grantee": "MORAN KEVIN J., MORAN SHARON H.",
+    "legal": "COPPER RIDGE TOWNHOMES"
+  },
+  {
+    "doc": "015713-01092",
+    "book_page": "015713/01092",
+    "pages": 2,
+    "recorded": "07/08/2014 12:00 AM",
+    "type": "SATISFACTION",
+    "grantor": "FEICK MARY CECELIA, FEICK WILLIAM C, CITIMORTGAGE, INC.",
+    "grantee": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC.",
+    "legal": "14322-695"
+  },
+  {
+    "doc": "015729-01953",
+    "book_page": "015729/01953",
+    "pages": 5,
+    "recorded": "07/24/2014 12:00 AM",
+    "type": "DEED OF TRUST",
+    "grantor": "FEICK MARY C, FEICK WILLIAM C",
+    "grantee": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC.",
+    "legal": "LOT 154 IRON GATE"
+  },
+  {
+    "doc": "018161-00764",
+    "book_page": "018161/00764",
+    "pages": 5,
+    "recorded": "10/30/2020 12:00 AM",
+    "type": "DEED OF TRUST",
+    "grantor": "FEICK MARY C., FEICK WILLIAM C.",
+    "grantee": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC.",
+    "legal": "LOT 154 IRON GATE"
+  },
+  {
+    "doc": "018190-01545",
+    "book_page": "018190/01545",
+    "pages": 1,
+    "recorded": "11/17/2020 12:00 AM",
+    "type": "SATISFACTION",
+    "grantor": "FEICK MARY C., FEICK WILLIAM C., MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC., BRANCH BANKING AND TRUST COMPANY",
+    "grantee": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC., BRANCH BANKING AND TRUST COMPANY",
+    "legal": "15729-1953"
+  }
+]

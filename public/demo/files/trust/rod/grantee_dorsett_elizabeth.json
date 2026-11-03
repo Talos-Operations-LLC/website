@@ -1,0 +1,42 @@
+[
+  {
+    "doc": "012570-01950",
+    "book_page": "012570/01950",
+    "pages": 3,
+    "recorded": "05/29/2007 12:00 AM",
+    "type": "DEED",
+    "grantor": "MINEAR MEREDITH /A IN F, PULTE HOME CORP /BY A IN F",
+    "grantee": "DORSETT ELIZABETH E, SOLAKOGLU DENIZ",
+    "legal": "COPPER RIDGE TOWNHOMES"
+  },
+  {
+    "doc": "012747-01890",
+    "book_page": "012747/01890",
+    "pages": 3,
+    "recorded": "09/12/2007 12:00 AM",
+    "type": "MODIFICATION",
+    "grantor": "SOLAKOGLU DENIZ, DORSETT ELIZABETH E, PULTE MTG LLC",
+    "grantee": "DORSETT ELIZABETH E, SOLAKOGLU DENIZ, PULTE MTG LLC",
+    "legal": "12570-1953"
+  },
+  {
+    "doc": "012747-01893",
+    "book_page": "012747/01893",
+    "pages": 3,
+    "recorded": "09/12/2007 12:00 AM",
+    "type": "MODIFICATION",
+    "grantor": "SOLAKOGLU DENIZ, DORSETT ELIZABETH E, PULTE MTG LLC",
+    "grantee": "DORSETT ELIZABETH E, SOLAKOGLU DENIZ, PULTE MTG LLC",
+    "legal": "12570-1972"
+  },
+  {
+    "doc": "016856-02353",
+    "book_page": "016856/02353",
+    "pages": 2,
+    "recorded": "07/26/2017 12:00 AM",
+    "type": "DEED",
+    "grantor": "DORSETT WILLIAM S., DORSETT MARGIE H.",
+    "grantee": "DORSETT ELIZABETH ERIN",
+    "legal": "LOT 8 STONEBRIDGE"
+  }
+]

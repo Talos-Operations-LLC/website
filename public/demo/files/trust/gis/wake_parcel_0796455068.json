@@ -1,0 +1,76 @@
+{
+  "displayFieldName": "OWNER",
+  "fieldAliases": {
+    "PIN_NUM": "PIN_NUM",
+    "SITE_ADDRESS": "SITE_ADDRESS",
+    "REID": "REID"
+  },
+  "geometryType": "esriGeometryPolygon",
+  "spatialReference": {
+    "wkid": 4326,
+    "latestWkid": 4326
+  },
+  "fields": [
+    {
+      "name": "PIN_NUM",
+      "type": "esriFieldTypeString",
+      "alias": "PIN_NUM",
+      "length": 11
+    },
+    {
+      "name": "SITE_ADDRESS",
+      "type": "esriFieldTypeString",
+      "alias": "SITE_ADDRESS",
+      "length": 77
+    },
+    {
+      "name": "REID",
+      "type": "esriFieldTypeString",
+      "alias": "REID",
+      "length": 20
+    }
+  ],
+  "features": [
+    {
+      "attributes": {
+        "PIN_NUM": "0796455068",
+        "SITE_ADDRESS": "4605 MANASSA POPE LN",
+        "REID": "0337413"
+      },
+      "geometry": {
+        "rings": [
+          [
+            [
+              -78.68078776470769,
+              35.85165278186977
+            ],
+            [
+              -78.68092800505269,
+              35.85163610806907
+            ],
+            [
+              -78.68097310342597,
+              35.85188750515679
+            ],
+            [
+              -78.68096679248984,
+              35.851888255237114
+            ],
+            [
+              -78.6808994036585,
+              35.85189474000579
+            ],
+            [
+              -78.68083179256453,
+              35.85189821085375
+            ],
+            [
+              -78.68078776470769,
+              35.85165278186977
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

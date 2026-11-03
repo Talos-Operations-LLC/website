@@ -1,0 +1,122 @@
+[
+  {
+    "doc": "012570-01953",
+    "book_page": "012570/01953",
+    "pages": 5,
+    "recorded": "05/29/2007 12:00 AM",
+    "type": "DEED OF TRUST",
+    "grantor": "DORSETT ELIZABETH E, SOLAKOGLU DENIZ",
+    "grantee": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS INC, MERS",
+    "legal": "LT 33 TOWNES AT CRABTREE"
+  },
+  {
+    "doc": "012570-01972",
+    "book_page": "012570/01972",
+    "pages": 5,
+    "recorded": "05/29/2007 12:00 AM",
+    "type": "DEED OF TRUST",
+    "grantor": "DORSETT ELIZABETH E, SOLAKOGLU DENIZ",
+    "grantee": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS INC, MERS",
+    "legal": "LT 33 TOWNES AT CRABTREE"
+  },
+  {
+    "doc": "012604-00186",
+    "book_page": "012604/00186",
+    "pages": 3,
+    "recorded": "06/15/2007 12:00 AM",
+    "type": "DEED",
+    "grantor": "DORSETT ELIZABETH E",
+    "grantee": "FLYNN LINDY SUZANNE",
+    "legal": "LT 66 RIVERWALK"
+  },
+  {
+    "doc": "012644-02068",
+    "book_page": "012644/02068",
+    "pages": 2,
+    "recorded": "07/09/2007 12:00 AM",
+    "type": "CERTIFICATE OF SATISFACTION",
+    "grantor": "DORSETT ELIZABETH E, BANK OF AMERICA NA",
+    "grantee": "BANK OF AMERICA NA, PRLAP INC /TR",
+    "legal": "CAN 9091-2068"
+  },
+  {
+    "doc": "012747-01890",
+    "book_page": "012747/01890",
+    "pages": 3,
+    "recorded": "09/12/2007 12:00 AM",
+    "type": "MODIFICATION",
+    "grantor": "DORSETT ELIZABETH E, SOLAKOGLU DENIZ, PULTE MTG LLC",
+    "grantee": "DORSETT ELIZABETH E, SOLAKOGLU DENIZ, PULTE MTG LLC",
+    "legal": "12570-1953"
+  },
+  {
+    "doc": "012747-01893",
+    "book_page": "012747/01893",
+    "pages": 3,
+    "recorded": "09/12/2007 12:00 AM",
+    "type": "MODIFICATION",
+    "grantor": "DORSETT ELIZABETH E, SOLAKOGLU DENIZ, PULTE MTG LLC",
+    "grantee": "SOLAKOGLU DENIZ, DORSETT ELIZABETH E, PULTE MTG LLC",
+    "legal": "12570-1972"
+  },
+  {
+    "doc": "014157-02571",
+    "book_page": "014157/02571",
+    "pages": 1,
+    "recorded": "11/16/2010 12:00 AM",
+    "type": "CERTIFICATE OF SATISFACTION",
+    "grantor": "DORSETT ELIZABETH E, SOLAKOGLU DENIZ, MORTGAGE ELECTRONIC REGISTRATION SYSTEMS INC, MERS",
+    "grantee": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS INC, MERS",
+    "legal": "CAN 12570-1953"
+  },
+  {
+    "doc": "014163-00891",
+    "book_page": "014163/00891",
+    "pages": 4,
+    "recorded": "11/19/2010 12:00 AM",
+    "type": "DEED",
+    "grantor": "DORSETT ELIZABETH E, SOLAKOGLU DENIZ, SOLAKOGLU ELIZABETH D",
+    "grantee": "SOLAKOGLU DENIZ, SOLAKOGLU ELIZABETH D",
+    "legal": "COPPER RIDGE TOWNHOMES"
+  },
+  {
+    "doc": "014170-00986",
+    "book_page": "014170/00986",
+    "pages": 5,
+    "recorded": "11/24/2010 12:00 AM",
+    "type": "SUBORDINATION",
+    "grantor": "DORSETT ELIZABETH E, SOLAKOGLU DENIZ, MORTGAGE ELECTRONIC REGISTRATION SYSTEMS INC, MERS",
+    "grantee": "BANK OF AMERICA NA",
+    "legal": "12570-1972"
+  },
+  {
+    "doc": "015590-01645",
+    "book_page": "015590/01645",
+    "pages": 1,
+    "recorded": "02/28/2014 12:00 AM",
+    "type": "SATISFACTION",
+    "grantor": "DORSETT ELIZABETH E, SOLAKOGLU DENIZ, MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC.",
+    "grantee": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC.",
+    "legal": "12570-1972"
+  },
+  {
+    "doc": "016856-02355",
+    "book_page": "016856/02355",
+    "pages": 5,
+    "recorded": "07/26/2017 12:00 AM",
+    "type": "DEED OF TRUST",
+    "grantor": "DORSETT ELIZABETH ERIN",
+    "grantee": "DORSETT WILLIAM SIDNEY, DORSETT MARGIE HARRIS",
+    "legal": "LOT 8 STONEBRIDGE"
+  },
+  {
+    "doc": "018625-00295",
+    "book_page": "018625/00295",
+    "pages": 2,
+    "recorded": "07/30/2021 12:00 AM",
+    "type": "SATISFACTION",
+    "grantor": "DORSETT ELIZABETH ERIN, DORSETT WILLIAM SIDNEY, DORSETT MARGIE HARRIS",
+    "grantee": "DORSETT WILLIAM SIDNEY, DORSETT MARGIE HARRIS",
+    "legal": "16856-2355"
+  }
+]

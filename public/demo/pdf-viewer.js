@@ -1,36 +1,73 @@
 let pdfGeneration=0;
-window.renderPdf=async function(container,file,title){
+window.renderPdf=async function(container,file,title,toolbar=null){
+ container.pdfCleanup?.();
  const generation=String(++pdfGeneration);
  container.dataset.pdfGeneration=generation;
  container.innerHTML='<div class="pdf-loading">Opening original document…</div>';
+ let pdf,loadingTask,renderTask,resizeObserver,resizeTimer,disposed=false;
+ const dialog=container.closest('dialog');
+ const onClose=()=>{if(!dialog.open)dispose()};
+ const active=()=>!disposed&&generation===container.dataset.pdfGeneration&&container.isConnected;
+ function dispose(){if(disposed)return;disposed=true;clearTimeout(resizeTimer);resizeObserver?.disconnect();renderTask?.cancel();dialog?.removeEventListener('close',onClose);if(loadingTask)loadingTask.destroy().catch(()=>{})}
+ container.pdfCleanup=dispose;
+ dialog?.addEventListener('close',onClose);
  try{
   const pdfjs=await import('./vendor/pdf.mjs');
+  if(!active())return;
   pdfjs.GlobalWorkerOptions.workerSrc='./vendor/pdf.worker.mjs';
-  const pdf=await pdfjs.getDocument({url:file,isEvalSupported:false}).promise;
-  if(generation!==container.dataset.pdfGeneration||!container.isConnected)return;
-  let number=1,zoom=1,rendering=false;
-  container.innerHTML=`<div class="pdf-tools"><div class="flex"><button class="icon-button" id="pdf-prev" aria-label="Previous page">‹</button><span id="pdf-page" class="mono"></span><button class="icon-button" id="pdf-next" aria-label="Next page">›</button></div><div class="flex"><button class="icon-button" id="pdf-minus" aria-label="Zoom out">−</button><span id="pdf-zoom" class="mono"></span><button class="icon-button" id="pdf-plus" aria-label="Zoom in">+</button><button class="button small" id="pdf-fit">Fit width</button></div></div><div class="pdf-pages"><canvas aria-label="${esc(title)}" role="img"></canvas></div>`;
-  const canvas=container.querySelector('canvas'),pages=container.querySelector('.pdf-pages');
+  loadingTask=pdfjs.getDocument({url:file,isEvalSupported:false});
+  pdf=await loadingTask.promise;
+  if(!active()){dispose();return}
+  let zoom=1,rendering=false,redrawPending=false;
+  const controlsMarkup=`<span class="pdf-page-count mono">${pdf.numPages} ${pdf.numPages===1?'page':'pages'}</span><div class="flex"><button class="icon-button" id="pdf-minus" aria-label="Zoom out" title="Zoom out">−</button><span id="pdf-zoom" class="mono">100%</span><button class="icon-button" id="pdf-plus" aria-label="Zoom in" title="Zoom in">+</button><button class="button small" id="pdf-fit">Fit width</button></div>`;
+  container.innerHTML=`${toolbar?'':'<div class="pdf-tools">'+controlsMarkup+'</div>'}<div class="pdf-pages">${Array.from({length:pdf.numPages},(_,i)=>`<figure class="pdf-sheet"><figcaption>Page ${i+1} of ${pdf.numPages}</figcaption><canvas aria-label="${esc(title)}, page ${i+1} of ${pdf.numPages}" role="img"></canvas></figure>`).join('')}</div>`;
+  if(toolbar)toolbar.innerHTML=controlsMarkup;
+  const controls=toolbar||container.querySelector('.pdf-tools');
+  const sheets=[...container.querySelectorAll('.pdf-sheet')];
   async function draw(){
-   if(rendering)return;rendering=true;
-   container.querySelectorAll('button').forEach(b=>b.disabled=true);
+   if(!active())return;
+   if(rendering){redrawPending=true;return}
+   rendering=true;
+   const scrollFraction=container.scrollTop/Math.max(1,container.scrollHeight-container.clientHeight);
+   controls.querySelectorAll('button').forEach(button=>button.disabled=true);
    try{
-    const page=await pdf.getPage(number),base=page.getViewport({scale:1});
-    const scale=Math.max(.2,(container.clientWidth-42)/base.width)*zoom;
-    const viewport=page.getViewport({scale}),ratio=Math.min(devicePixelRatio||1,2);
-    canvas.width=Math.floor(viewport.width*ratio);canvas.height=Math.floor(viewport.height*ratio);canvas.style.width=viewport.width+'px';canvas.style.height=viewport.height+'px';
-    canvas.setAttribute('aria-label',title+', page '+number+' of '+pdf.numPages);
-    await page.render({canvasContext:canvas.getContext('2d'),viewport,transform:ratio!==1?[ratio,0,0,ratio,0,0]:null}).promise;
-    container.querySelector('#pdf-page').textContent=number+' / '+pdf.numPages;
-    container.querySelector('#pdf-zoom').textContent=Math.round(zoom*100)+'%';
-    pages.scrollTo(0,0);
-   }finally{rendering=false;container.querySelectorAll('button').forEach(b=>b.disabled=false);container.querySelector('#pdf-prev').disabled=number===1;container.querySelector('#pdf-next').disabled=number===pdf.numPages}
+    const pages=await Promise.all(sheets.map((_,i)=>pdf.getPage(i+1)));
+    if(!active())return;
+    const fitWidth=Math.max(1,container.clientWidth-40);
+    const layouts=pages.map((page,i)=>{
+     const base=page.getViewport({scale:1}),viewport=page.getViewport({scale:fitWidth/base.width*zoom});
+     const ratio=Math.min(devicePixelRatio||1,2,Math.sqrt(6000000/(viewport.width*viewport.height)));
+     const canvas=sheets[i].querySelector('canvas');
+     canvas.width=Math.floor(viewport.width*ratio);canvas.height=Math.floor(viewport.height*ratio);
+     canvas.style.width=viewport.width+'px';canvas.style.height=viewport.height+'px';
+     return {page,canvas,viewport,ratio};
+    });
+    container.scrollTop=scrollFraction*Math.max(0,container.scrollHeight-container.clientHeight);
+    controls.querySelector('#pdf-zoom').textContent=Math.round(zoom*100)+'%';
+    for(const {page,canvas,viewport,ratio} of layouts){
+     if(!active())return;
+     renderTask=page.render({canvasContext:canvas.getContext('2d'),viewport,transform:ratio!==1?[ratio,0,0,ratio,0,0]:null});
+     await renderTask.promise;
+     canvas.dataset.rendered='true';
+    }
+   }catch(error){if(active()&&error.name!=='RenderingCancelledException')showError()}
+   finally{
+    rendering=false;renderTask=null;
+    if(active()){
+     controls.querySelectorAll('button').forEach(button=>button.disabled=false);
+     const minus=controls.querySelector('#pdf-minus'),plus=controls.querySelector('#pdf-plus');
+     if(minus)minus.disabled=zoom<=.5;if(plus)plus.disabled=zoom>=2.5;
+     if(redrawPending){redrawPending=false;draw()}
+    }else dispose();
+   }
   }
-  container.querySelector('#pdf-prev').onclick=()=>{if(number>1){number--;draw()}};
-  container.querySelector('#pdf-next').onclick=()=>{if(number<pdf.numPages){number++;draw()}};
-  container.querySelector('#pdf-plus').onclick=()=>{zoom=Math.min(2.5,zoom+.25);draw()};
-  container.querySelector('#pdf-minus').onclick=()=>{zoom=Math.max(.5,zoom-.25);draw()};
-  container.querySelector('#pdf-fit').onclick=()=>{zoom=1;draw()};
+  controls.querySelector('#pdf-plus').onclick=()=>{zoom=Math.min(2.5,zoom+.25);draw()};
+  controls.querySelector('#pdf-minus').onclick=()=>{zoom=Math.max(.5,zoom-.25);draw()};
+  controls.querySelector('#pdf-fit').onclick=()=>{zoom=1;draw()};
+  let width=container.clientWidth;
+  resizeObserver=new ResizeObserver(()=>{if(container.clientWidth===width)return;width=container.clientWidth;clearTimeout(resizeTimer);resizeTimer=setTimeout(draw,120)});
+  resizeObserver.observe(container);
   await draw();
- }catch(error){if(generation===container.dataset.pdfGeneration&&container.isConnected)container.innerHTML=`<div class="document-unavailable"><h2>Open the original PDF</h2><p>This browser could not render the document preview. The original saved file is available below.</p><a class="button" href="${esc(file)}" target="_blank" rel="noopener">Open saved PDF ↗</a></div>`}
+ }catch(error){if(active())showError();else dispose()}
+ function showError(){if(toolbar)toolbar.innerHTML='';container.innerHTML=`<div class="document-unavailable"><h2>Open the original PDF</h2><p>This browser could not render the document preview. The original saved file is available below.</p><a class="button" href="${esc(file)}" target="_blank" rel="noopener">Open saved PDF ↗</a></div>`;dispose()}
 };

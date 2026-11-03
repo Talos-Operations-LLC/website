@@ -2,6 +2,7 @@
 """Check the built site in dist/ without network access or writes.
 
 Run `npm run build` first. Requires Python 3.11+."""
+import hashlib
 import json
 import math
 import re
@@ -113,8 +114,8 @@ except (KeyError, TypeError, AttributeError) as exc:
 try:
     demo_manifest = PUBLIC / 'demo/manifest.js'
     records = json.loads(demo_manifest.read_text().split('=', 1)[1].strip().rstrip(';'))
-    if len(records) != 108:
-        error(demo_manifest, 'expected the 108 reviewed evidence files')
+    if len(records) != 595:
+        error(demo_manifest, 'expected the 595 reviewed evidence files')
     for record in records:
         target = check_link(PUBLIC / 'demo/index.html', record['path'], fragment=False)
         if target and target.is_file() and target.stat().st_size != record['bytes']:
@@ -123,6 +124,11 @@ try:
     actual_files = {str(path.relative_to(PUBLIC / 'demo')) for path in (PUBLIC / 'demo/files').rglob('*') if path.is_file()}
     if expected_files != actual_files:
         error(demo_manifest, 'evidence files differ from the reviewed manifest')
+    reviewed = json.loads((ROOT / 'docs/demo-review.json').read_text())['files']
+    published = {str(path.relative_to(PUBLIC / 'demo')): hashlib.sha256(path.read_bytes()).hexdigest()
+                 for path in (PUBLIC / 'demo').rglob('*') if path.is_file()}
+    if published != reviewed:
+        error(demo_manifest, 'snapshot differs from the public review hashes')
     for retired in ('data', 'workbench', 'ld-capture', 'demo.js'):
         if (PUBLIC / 'demo' / retired).exists():
             error(demo_manifest, f'retired demo artifact remains: {retired}')

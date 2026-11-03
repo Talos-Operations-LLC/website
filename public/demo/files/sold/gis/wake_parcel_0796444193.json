@@ -1,0 +1,68 @@
+{
+  "displayFieldName": "OWNER",
+  "fieldAliases": {
+    "PIN_NUM": "PIN_NUM",
+    "SITE_ADDRESS": "SITE_ADDRESS",
+    "REID": "REID"
+  },
+  "geometryType": "esriGeometryPolygon",
+  "spatialReference": {
+    "wkid": 4326,
+    "latestWkid": 4326
+  },
+  "fields": [
+    {
+      "name": "PIN_NUM",
+      "type": "esriFieldTypeString",
+      "alias": "PIN_NUM",
+      "length": 11
+    },
+    {
+      "name": "SITE_ADDRESS",
+      "type": "esriFieldTypeString",
+      "alias": "SITE_ADDRESS",
+      "length": 77
+    },
+    {
+      "name": "REID",
+      "type": "esriFieldTypeString",
+      "alias": "REID",
+      "length": 20
+    }
+  ],
+  "features": [
+    {
+      "attributes": {
+        "PIN_NUM": "0796444193",
+        "SITE_ADDRESS": "5036 ISABELLA CANNON DR",
+        "REID": "0337359"
+      },
+      "geometry": {
+        "rings": [
+          [
+            [
+              -78.68096649869013,
+              35.84910291563721
+            ],
+            [
+              -78.6812397653668,
+              35.84907410314466
+            ],
+            [
+              -78.68127038988524,
+              35.84918721134984
+            ],
+            [
+              -78.68098470769047,
+              35.84921734316353
+            ],
+            [
+              -78.68096649869013,
+              35.84910291563721
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -12,14 +12,16 @@ findings, chain, mortgages, documents, parcel map and record-pack export.
 
 The runtime is plain HTML, CSS and JavaScript. `records.js` supplies captured results,
 `model.js` builds property models, and `app.js` routes views. `property-view.*` renders
-Overview; `search-map.js` uses MapLibre, and property maps use Leaflet. PDF.js renders
+the property screens; `search-map.js` uses MapLibre, and property maps use Leaflet. PDF.js renders
 saved PDFs; JSZip exports records. Vendor licenses are included.
 
 ## Public snapshot
 
-The 108 evidence files are allowlisted by `manifest.js`. The source pack was reviewed
-with text scans, OCR of 74 PDF pages and 28 images, and visual checks of flagged pages.
-Four bank-account/loan-number regions in three instruments are permanently redacted.
+The 595 evidence files are allowlisted by `manifest.js`. The source pack was reviewed
+with text scans, OCR of 670 newly added PDF pages and 79 images, comparison against
+previously reviewed files, barcode detection, and visual checks of flagged pages.
+Financial account, loan, mortgage-system and related barcode identifiers in 53
+instruments are permanently redacted. The originals remain in the product repository.
 Parcel, tax-account, book/page and recorded instrument identifiers remain.
 Internal worksheet comparisons, machine/capture paths and the Zillow capture are
 excluded. The captured verdict statuses are preserved, including Needs review;
@@ -34,7 +36,8 @@ Restart clears all five demo-owned storage keys and restores the three saved pro
 Regenerate with `demo/export_public_snapshot.py <website checkout>` in the product
 repository after reviewing any changed records. Do not copy raw source captures.
 Run `npm run build` and `python3 tools/check_site.py`; the checks validate the exact
-manifest, evidence byte counts, retired-demo removal, links and hosting configuration.
+manifest, evidence byte counts, all snapshot hashes in docs/demo-review.json,
+retired-demo removal, links and hosting configuration.
 
 The demo stays out of search indexes and the sitemap. Its CSP allows only local code
 and the two Esri tile hosts used by the maps. Open `/demo/` to check Search, a property,

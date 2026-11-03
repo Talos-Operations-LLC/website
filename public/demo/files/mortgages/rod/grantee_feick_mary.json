@@ -1,0 +1,32 @@
+[
+  {
+    "doc": "012239-00195",
+    "book_page": "012239/00195",
+    "pages": 3,
+    "recorded": "10/30/2006 12:00 AM",
+    "type": "DEED",
+    "grantor": "MINEAR MEREDITH /A IN F, PULTE HOME CORP /BY A IN F",
+    "grantee": "FEICK MARY CECELIA, FEICK WILLIAM C",
+    "legal": "COPPER RIDGE TOWNHOMES"
+  },
+  {
+    "doc": "012606-00470",
+    "book_page": "012606/00470",
+    "pages": 4,
+    "recorded": "06/18/2007 12:00 AM",
+    "type": "MODIFICATION",
+    "grantor": "FEICK WILLIAM C, FEICK MARY C, PULTE MTG LLC",
+    "grantee": "FEICK MARY C, FEICK WILLIAM C, PULTE MTG LLC",
+    "legal": "12239-198"
+  },
+  {
+    "doc": "015729-01950",
+    "book_page": "015729/01950",
+    "pages": 3,
+    "recorded": "07/24/2014 12:00 AM",
+    "type": "DEED",
+    "grantor": "LEE AARON, LEE CHRISTY",
+    "grantee": "FEICK MARY C., FEICK WILLIAM C.",
+    "legal": "LOT 154 IRON GATE"
+  }
+]
