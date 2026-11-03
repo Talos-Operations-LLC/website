@@ -1,0 +1,2 @@
+# Captured records should not count as maintained HTML code.
+public/demo/files/**/*.html linguist-detectable=false

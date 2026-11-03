@@ -42,6 +42,9 @@ Run `npm run build` and `python3 tools/check_site.py`; the checks validate the e
 manifest, evidence byte counts, all snapshot hashes in docs/demo-review.json,
 retired-demo removal, links and hosting configuration.
 
+Captured HTML under public/demo/files/ is excluded from GitHub language statistics;
+the demo index remains application HTML.
+
 The demo stays out of search indexes and the sitemap. Its CSP allows only local code
 and the two Esri tile hosts used by the maps. Open `/demo/` to check Search, a property,
 a PDF, an export, Settings and Restart. The footer identifies captured demo records.
