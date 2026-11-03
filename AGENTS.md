@@ -1,6 +1,6 @@
 # Website
 
-Public website for Talos Operations LLC's Fee Simple product, plus the temporary
+Public website for Talos Operations LLC's Fee Simple product, plus the static
 product demo at `/demo`.
 
 Astro, built to static HTML by Netlify on every push to `main`. One dependency,
@@ -9,8 +9,7 @@ pinned. `BUILD.md` explains the build; `README.md` says where to edit.
 ## Site direction
 
 Home, Coverage, Learn, and the Demo link. The home page and its globe hero are the
-priority. The demo at `public/demo/` is the original sample-data demo, kept until
-the replacement being built separately arrives.
+priority. The demo at `public/demo/` is the Fee Simple workbench snapshot.
 
 `src/content/learn/` and `src/content/for/` are kept. Preserve their noindex
 settings on draft pages; do not delete this content. Privacy and Terms are footer
@@ -18,10 +17,10 @@ pages.
 
 ## Demo data
 
-`public/demo/data/` is entirely fictitious sample data: invented streets, owners,
-parcel numbers, book/page references and deed text. Nothing in it comes from a real
-parcel, person or recorded instrument, and it must stay that way. The demo is a
-public page. The set is generated, not hand-edited; see `docs/demo.md`.
+`public/demo/` contains five captured North Carolina public-record searches.
+Publish only the reviewed snapshot: 108 evidence files, static HTML captures,
+redacted financial account numbers, and no internal worksheet inputs or session data.
+Keep the public-data checks and noindex headers. See `docs/demo.md`.
 
 ## Structure
 

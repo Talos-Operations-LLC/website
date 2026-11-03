@@ -45,12 +45,11 @@ To compare against what is live now, check out `main` in a second folder, run
 
 ## Generated files: never hand-edit
 
-- **`public/demo/`** — the product demo at `/demo`. Built by
-  `tools/demo/build_demo.py` in the Themis repo (its GitHub remote is still named
-  hoa-tool). Run it from that repo, passing this repo's `public/` folder first and the
-  data folder second: `python tools/demo/build_demo.py <this repo>/public <data dir>`.
-  It replaces `public/demo/` wholesale, so hand edits are lost; `docs/demo.md` lists
-  the two site-integration edits to re-apply.
+- **`public/demo/`** — the captured Fee Simple workbench. Exported from the product
+  repository using `demo/export_public_snapshot.py <website checkout>` after a public-data
+  review. Requires Node, Beautiful Soup, and PyMuPDF. The exporter replaces this folder,
+  sanitizes captures, redacts reviewed financial identifiers, and regenerates file sizes.
+  Never copy the raw product-repository demo directory directly into this public repo.
 - **`public/assets/data/county-map.json`** — the pre-projected county map used by
   `/coverage.html`.
 - **`public/assets/data/hero-geometry.json`** — the homepage globe's dot positions

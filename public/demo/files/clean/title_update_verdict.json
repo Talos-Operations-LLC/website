@@ -1,0 +1,46 @@
+{
+  "reid": "0337412",
+  "pin": "0796455273",
+  "verdict": "CERTIFIED_CURRENT",
+  "good_thru": "2026-11-01T04:03:26-05:00",
+  "index_currency": [
+    "2026-10-30"
+  ],
+  "owners": [
+    "McQueen, Audrey"
+  ],
+  "doubts": [],
+  "owner_of_record": null,
+  "title_events": [],
+  "name_matched_instruments_reviewed": {
+    "McQueen, Audrey": 0
+  },
+  "dots": [
+    {
+      "book": "019707",
+      "page": "01728",
+      "recorded": "09/11/2024 12:00 AM",
+      "lender": "STATE EMPLOYEES' CREDIT UNION",
+      "status": "Open",
+      "document_id": "DOCC111791013",
+      "owners": [
+        "McQueen, Audrey"
+      ]
+    }
+  ],
+  "dispositions": [
+    {
+      "search": "owner0_TU-3_1",
+      "document_id": "DOCC111791013",
+      "doc_number": "019707-01728",
+      "kinds": [
+        "DEED OF TRUST"
+      ],
+      "kept": true,
+      "rule": "TU-18",
+      "reason": "deed of trust, Open until a satisfaction cites it",
+      "code": "",
+      "values": {}
+    }
+  ]
+}

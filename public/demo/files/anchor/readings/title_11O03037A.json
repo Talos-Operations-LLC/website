@@ -1,0 +1,103 @@
+{
+  "tag": "11O03037A",
+  "pin": "263900-48-7851",
+  "address": "10720 OLD BEULAH RD, KENLY",
+  "verdict": "CERTIFIED_CURRENT",
+  "good_thru": "2026-10-30",
+  "good_thru_source": "date the pack's four index searches were run (grantor and grantee, COCKRELL RANSOM and COCKRELL RANSOM WAYNE)",
+  "deed_in": {
+    "book": "06571",
+    "page": "0407",
+    "recorded": "11/02/2023 12:02:38 PM",
+    "instrument": "DEED",
+    "legal": "1.581 A PB 99/190",
+    "grantors": "COCKRELL RANSOM WAYNE; COCKRELL PATRICIA CREECH; COCKRELL PATRICIA LEE C.",
+    "grantees": "COCKRELL RANSOM WAYNE; COCKRELL PATRICIA CREECH"
+  },
+  "owners": [
+    {
+      "last": "Cockrell",
+      "first": "Ransom",
+      "middle": "Wayne"
+    },
+    {
+      "last": "Cockrell",
+      "first": "Patricia",
+      "middle": "Creech"
+    }
+  ],
+  "owner_of_record": "Ransom Wayne Cockrell and Patricia Creech Cockrell",
+  "title_events": [],
+  "dispositions": [
+    {
+      "doc": "06605/0889",
+      "type": "DEED",
+      "recorded": "01/22/2024",
+      "kept": false,
+      "rule": "TU-22(2c)",
+      "code": "DISCARD_LOCATION_MISMATCH",
+      "reason": "legal is 1.004 A & .883 A PB 61/57; the subject is 1.581 A PB 99/190 (these are parcels 11K99012L and 11O03037C)"
+    },
+    {
+      "doc": "06830/0470",
+      "type": "DEED",
+      "recorded": "02/25/2025",
+      "kept": false,
+      "rule": "TU-22(2c)",
+      "code": "DISCARD_LOCATION_MISMATCH",
+      "reason": "legal is .691 A PB 102/462, a lot out of 11O03037B conveyed to Gregory Wayne and Crystal W. Cockrell; not the subject"
+    },
+    {
+      "doc": "06571/0410",
+      "type": "DEED",
+      "recorded": "11/02/2023",
+      "kept": false,
+      "rule": "TU-22(2c)",
+      "code": "DISCARD_LOCATION_MISMATCH",
+      "reason": "legal is MULTIPLE TRS (the five farm and woodland tracts), recorded with the deed-in"
+    },
+    {
+      "doc": "06606/0237",
+      "type": "CORRECTIVE/SCRIVENERS AFFIDAVIT",
+      "recorded": "01/22/2024",
+      "kept": false,
+      "rule": "TU-7",
+      "code": "NOT_DEED_CLASS",
+      "reason": "corrects 6605/889, which is not the subject"
+    },
+    {
+      "doc": "04964/0061",
+      "type": "EASEMENT",
+      "recorded": "05/25/2017",
+      "kept": false,
+      "rule": "TU-7",
+      "code": "NOT_DEED_CLASS",
+      "reason": "predates the deed-in; shown as an index row only, easement analysis is in development"
+    }
+  ],
+  "dots": [
+    {
+      "book": "02016",
+      "page": "0787",
+      "recorded": "02/12/2001",
+      "lender": "First Union National Bank (index grantee: TRSTE INC -TR)",
+      "status": "Satisfied",
+      "sat_book": "05827",
+      "sat_page": "0823",
+      "sat_recorded": "01/29/2021",
+      "sat_detail": "Wells Fargo Bank, N.A., successor by merger to Wachovia f/k/a First Union, satisfied it on 01/29/2021; the satisfaction names 10720 Old Beulah Rd."
+    }
+  ],
+  "dot_notes": [
+    "Satisfaction 2020/212 (02/21/2001) releases DT Book 1075 Page 207, a deed of trust not in the pack's results; it shows an older loan was paid off."
+  ],
+  "name_matched_instruments_reviewed": {
+    "Cockrell, Ransom (grantor)": 12,
+    "Cockrell, Ransom (grantee)": 8
+  },
+  "how_to_check": [
+    "Johnston ROD (EagleWeb, public login): grantor search COCKRELL / RANSOM, recorded from 11/02/2023 to today; confirm no deed whose legal cites PB 99/190.",
+    "Open Book 6571 Page 407 and read the vesting clause: tenants by the entirety.",
+    "Open Book 5827 Page 823 and confirm it cites Book 2016 Page 787."
+  ]
+}

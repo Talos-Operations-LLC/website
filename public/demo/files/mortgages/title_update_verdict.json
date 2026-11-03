@@ -1,0 +1,432 @@
+{
+  "reid": "0337336",
+  "pin": "0796433732",
+  "verdict": "CERTIFIED_CURRENT",
+  "good_thru": "2026-11-01T04:11:27-05:00",
+  "index_currency": [
+    "2026-10-30"
+  ],
+  "owners": [
+    "Moran, Kevin",
+    "Moran, Sharon"
+  ],
+  "doubts": [],
+  "owner_of_record": null,
+  "title_events": [],
+  "name_matched_instruments_reviewed": {
+    "Moran, Kevin": 0,
+    "Moran, Sharon": 5
+  },
+  "dots": [
+    {
+      "book": "015681",
+      "page": "00994",
+      "recorded": "06/05/2014 12:00 AM",
+      "lender": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC.",
+      "status": "Satisfied",
+      "document_id": "DOCC109248750",
+      "owners": [
+        "Moran, Kevin",
+        "Moran, Sharon"
+      ],
+      "sat_book": "016432",
+      "sat_page": "01884"
+    },
+    {
+      "book": "016395",
+      "page": "01891",
+      "recorded": "05/24/2016 12:00 AM",
+      "lender": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC.",
+      "status": "Satisfied",
+      "document_id": "DOCC110191510",
+      "owners": [
+        "Moran, Sharon"
+      ],
+      "sat_book": "017925",
+      "sat_page": "01162"
+    },
+    {
+      "book": "017878",
+      "page": "01495",
+      "recorded": "05/21/2020 12:00 AM",
+      "lender": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC.",
+      "status": "Open",
+      "document_id": "DOCC110958245",
+      "owners": [
+        "Moran, Sharon"
+      ]
+    }
+  ],
+  "dispositions": [
+    {
+      "search": "owner0_TU-3_1",
+      "document_id": "DOCC109248750",
+      "doc_number": "015681-00994",
+      "kinds": [
+        "DEED OF TRUST"
+      ],
+      "kept": true,
+      "rule": "TU-18",
+      "reason": "deed of trust, Open until a satisfaction cites it",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner0_TU-3_1",
+      "document_id": "DOCC110212272",
+      "doc_number": "016432-01884",
+      "kinds": [
+        "SATISFACTION"
+      ],
+      "kept": true,
+      "rule": "TU-19",
+      "reason": "satisfaction, linked by the book-page it cites",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC109248750",
+      "doc_number": "015681-00994",
+      "kinds": [
+        "DEED OF TRUST"
+      ],
+      "kept": true,
+      "rule": "TU-18",
+      "reason": "deed of trust, Open until a satisfaction cites it",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC109364809",
+      "doc_number": "015931-00949",
+      "kinds": [
+        "DEED OF TRUST"
+      ],
+      "kept": false,
+      "rule": "TU-18",
+      "reason": "deed of trust on LOT 104 WEST OAKS, not COPPER RIDGE TOWNHOMES",
+      "code": "DISCARD_DOT_LOCATION_MISMATCH",
+      "values": {
+        "subject_subdivision": "COPPER RIDGE TOWNHOMES",
+        "hit_legal": "LOT 104 WEST OAKS"
+      }
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC109373745",
+      "doc_number": "015950-02606",
+      "kinds": [
+        "SATISFACTION"
+      ],
+      "kept": true,
+      "rule": "TU-19",
+      "reason": "satisfaction, linked by the book-page it cites",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110191510",
+      "doc_number": "016395-01891",
+      "kinds": [
+        "DEED OF TRUST"
+      ],
+      "kept": true,
+      "rule": "TU-18",
+      "reason": "deed of trust, Open until a satisfaction cites it",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110212272",
+      "doc_number": "016432-01884",
+      "kinds": [
+        "SATISFACTION"
+      ],
+      "kept": true,
+      "rule": "TU-19",
+      "reason": "satisfaction, linked by the book-page it cites",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110242175",
+      "doc_number": "016487-01429",
+      "kinds": [
+        "DEED OF TRUST"
+      ],
+      "kept": false,
+      "rule": "TU-18",
+      "reason": "deed of trust on LOT 104 WEST OAKS, not COPPER RIDGE TOWNHOMES",
+      "code": "DISCARD_DOT_LOCATION_MISMATCH",
+      "values": {
+        "subject_subdivision": "COPPER RIDGE TOWNHOMES",
+        "hit_legal": "LOT 104 WEST OAKS"
+      }
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110261910",
+      "doc_number": "016522-02176",
+      "kinds": [
+        "SATISFACTION"
+      ],
+      "kept": true,
+      "rule": "TU-19",
+      "reason": "satisfaction, linked by the book-page it cites",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110335533",
+      "doc_number": "016647-02369",
+      "kinds": [
+        "CERTIFICATE"
+      ],
+      "kept": false,
+      "rule": "TU-9",
+      "reason": "middle LEE conflicts with owner's H; not a conveyance",
+      "code": "DISCARD_NEAR_NAME_NOT_CONVEYANCE",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110335534",
+      "doc_number": "016647-02371",
+      "kinds": [
+        "DEED"
+      ],
+      "kept": false,
+      "rule": "TU-22(2c)",
+      "reason": "lot 41 in SWANS MILL, subject is lot 6 in COPPER RIDGE TOWNHOMES",
+      "code": "DISCARD_LOCATION_MISMATCH",
+      "values": {
+        "subject_lot": "6",
+        "hit_lot": "41",
+        "subject_subdivision": "COPPER RIDGE TOWNHOMES",
+        "hit_subdivision": "SWANS MILL",
+        "subject_plat": [
+          "2005",
+          "1705-1714"
+        ],
+        "hit_plat": [
+          "1992",
+          "1048"
+        ]
+      }
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110419260",
+      "doc_number": "016789-02016",
+      "kinds": [
+        "DEED"
+      ],
+      "kept": false,
+      "rule": "TU-22(2c)",
+      "reason": "lot 29 in TWIN CREEKS, subject is lot 6 in COPPER RIDGE TOWNHOMES",
+      "code": "DISCARD_LOCATION_MISMATCH",
+      "values": {
+        "subject_lot": "6",
+        "hit_lot": "29",
+        "subject_subdivision": "COPPER RIDGE TOWNHOMES",
+        "hit_subdivision": "TWIN CREEKS",
+        "subject_plat": [
+          "2005",
+          "1705-1714"
+        ],
+        "hit_plat": [
+          "1985",
+          "2075"
+        ]
+      }
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110436047",
+      "doc_number": "016820-01874",
+      "kinds": [
+        "SATISFACTION"
+      ],
+      "kept": true,
+      "rule": "TU-19",
+      "reason": "satisfaction, linked by the book-page it cites",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110453102",
+      "doc_number": "016851-00909",
+      "kinds": [
+        "CERTIFICATE"
+      ],
+      "kept": false,
+      "rule": "TU-9",
+      "reason": "middle LEE conflicts with owner's H; not a conveyance",
+      "code": "DISCARD_NEAR_NAME_NOT_CONVEYANCE",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110453103",
+      "doc_number": "016851-00912",
+      "kinds": [
+        "DEED"
+      ],
+      "kept": false,
+      "rule": "TU-22(2c)",
+      "reason": "lot 41 in SWANS MILL, subject is lot 6 in COPPER RIDGE TOWNHOMES",
+      "code": "DISCARD_LOCATION_MISMATCH",
+      "values": {
+        "subject_lot": "6",
+        "hit_lot": "41",
+        "subject_subdivision": "COPPER RIDGE TOWNHOMES",
+        "hit_subdivision": "SWANS MILL",
+        "subject_plat": [
+          "2005",
+          "1705-1714"
+        ],
+        "hit_plat": [
+          "1992",
+          "1048"
+        ]
+      }
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110464544",
+      "doc_number": "016872-01829",
+      "kinds": [
+        "SATISFACTION"
+      ],
+      "kept": false,
+      "rule": "TU-9",
+      "reason": "middle L conflicts with owner's H; not a conveyance",
+      "code": "DISCARD_NEAR_NAME_NOT_CONVEYANCE",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110481643",
+      "doc_number": "016905-01774",
+      "kinds": [
+        "DEED"
+      ],
+      "kept": false,
+      "rule": "TU-22(2c)",
+      "reason": "lot 98 in BROOKGREEN, subject is lot 6 in COPPER RIDGE TOWNHOMES",
+      "code": "DISCARD_LOCATION_MISMATCH",
+      "values": {
+        "subject_lot": "6",
+        "hit_lot": "98",
+        "subject_subdivision": "COPPER RIDGE TOWNHOMES",
+        "hit_subdivision": "BROOKGREEN",
+        "subject_plat": [
+          "2005",
+          "1705-1714"
+        ],
+        "hit_plat": [
+          "1991",
+          "750"
+        ]
+      }
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110680290",
+      "doc_number": "017283-02295",
+      "kinds": [
+        "DEED OF EASEMENT"
+      ],
+      "kept": false,
+      "rule": "TU-7",
+      "reason": "not deed-class: type DEED OF EASEMENT",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110861309",
+      "doc_number": "017660-01530",
+      "kinds": [
+        "SATISFACTION"
+      ],
+      "kept": false,
+      "rule": "TU-9",
+      "reason": "middle E conflicts with owner's H; not a conveyance",
+      "code": "DISCARD_NEAR_NAME_NOT_CONVEYANCE",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110958245",
+      "doc_number": "017878-01495",
+      "kinds": [
+        "DEED OF TRUST"
+      ],
+      "kept": true,
+      "rule": "TU-18",
+      "reason": "deed of trust, Open until a satisfaction cites it",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC110978385",
+      "doc_number": "017925-01162",
+      "kinds": [
+        "SATISFACTION"
+      ],
+      "kept": true,
+      "rule": "TU-19",
+      "reason": "satisfaction, linked by the book-page it cites",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOCC111754234",
+      "doc_number": "019630-02643",
+      "kinds": [
+        "SATISFACTION"
+      ],
+      "kept": false,
+      "rule": "TU-9",
+      "reason": "middle M conflicts with owner's H; not a conveyance",
+      "code": "DISCARD_NEAR_NAME_NOT_CONVEYANCE",
+      "values": {}
+    },
+    {
+      "search": "owner1_TU-3_1",
+      "document_id": "DOC847S1665",
+      "doc_number": "2026035787",
+      "kinds": [
+        "DEED"
+      ],
+      "kept": false,
+      "rule": "TU-22(2c)",
+      "reason": "lot 98 in BROOKGREEN, subject is lot 6 in COPPER RIDGE TOWNHOMES",
+      "code": "DISCARD_LOCATION_MISMATCH",
+      "values": {
+        "subject_lot": "6",
+        "hit_lot": "98",
+        "subject_subdivision": "COPPER RIDGE TOWNHOMES",
+        "hit_subdivision": "BROOKGREEN",
+        "subject_plat": [
+          "2005",
+          "1705-1714"
+        ],
+        "hit_plat": [
+          "1991",
+          "750"
+        ]
+      }
+    }
+  ]
+}

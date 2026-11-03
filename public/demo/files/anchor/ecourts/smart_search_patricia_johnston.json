@@ -1,0 +1,34 @@
+[
+  {
+    "party": "Cockrell, Patricia C / Patricia Creech",
+    "search": "Smart Search, name Cockrell, Patricia, location Johnston County, run 11/02/2026",
+    "cases": [
+      {
+        "case_number": "08E000620-500",
+        "style": "IN THE MATTER OF THE ESTATE OF LEOLA COOPER CREECH",
+        "filed": "08/13/2008",
+        "cells": [
+          "08/13/2008",
+          "Decedents' Estate - Small Estate",
+          "Disposed - Clerk of Superior Court 11/05/2008",
+          "Johnston Clerk of Superior Court"
+        ],
+        "roles": "Patricia C. Cockrell, affiant and beneficiary, 10720 Old Beulah Rd, Kenly"
+      },
+      {
+        "case_number": "26E001338-500",
+        "style": "IN THE MATTER OF THE ESTATE OF Ransom Wayne Cockrell",
+        "filed": "10/29/2026",
+        "cells": [
+          "10/29/2026",
+          "Decedents' Estate - Small Estate",
+          "Disposed - Clerk of Superior Court",
+          "Johnston Clerk of Superior Court"
+        ],
+        "roles": "Patricia Creech Cockrell, affiant"
+      }
+    ],
+    "civil_cases": 0,
+    "judgments": 0
+  }
+]

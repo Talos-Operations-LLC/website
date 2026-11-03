@@ -1,0 +1,168 @@
+{
+  "reid": "0337413",
+  "pin": "0796455068",
+  "verdict": "TITLE_MOVED",
+  "good_thru": "2026-11-01T04:01:31-05:00",
+  "index_currency": [
+    "2026-10-30"
+  ],
+  "owners": [
+    "Somers, Pamela"
+  ],
+  "doubts": [],
+  "owner_of_record": "Pamela Somers Trust",
+  "title_events": [
+    {
+      "document_id": "DOC905S3425",
+      "doc_number": "2026108243",
+      "kinds": [
+        "DEED",
+        "QUIT CLAIM DEED"
+      ],
+      "book_pages": [
+        {
+          "book": "020344",
+          "page": "00876"
+        },
+        {
+          "book": "020344",
+          "page": "00877"
+        },
+        {
+          "book": "020344",
+          "page": "00878"
+        }
+      ],
+      "recorded": "09/24/2026 03:02 PM",
+      "grantor": "Pamela Murray Somers A/K/A Pamela M. Somers (unmarried)",
+      "grantee": "Pamela Murray Somers, as trustee of the Pamela Somers Trust, dated 30 August, 2026, and any amendments thereto",
+      "self_transfer": true,
+      "new_owner_of_record": "Pamela Somers Trust",
+      "coverage": "FULL",
+      "uncovered": []
+    }
+  ],
+  "name_matched_instruments_reviewed": {
+    "Somers, Pamela": 1
+  },
+  "dots": [
+    {
+      "book": "015575",
+      "page": "02428",
+      "recorded": "02/06/2014 12:00 AM",
+      "lender": "WELLS FARGO BANK, N.A.",
+      "status": "Satisfied",
+      "document_id": "DOCC109198755",
+      "owners": [
+        "Somers, Pamela"
+      ],
+      "sat_book": "016285",
+      "sat_page": "00979"
+    },
+    {
+      "book": "016271",
+      "page": "02519",
+      "recorded": "01/21/2016 12:00 AM",
+      "lender": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC.",
+      "status": "Satisfied",
+      "document_id": "DOCC110119457",
+      "owners": [
+        "Somers, Pamela"
+      ],
+      "sat_book": "020127",
+      "sat_page": "02528"
+    },
+    {
+      "book": "020333",
+      "page": "00749",
+      "recorded": "09/10/2026 11:30 AM",
+      "lender": "BANK OF AMERICA, NA",
+      "status": "Open",
+      "document_id": "DOC903S15352",
+      "owners": [
+        "Somers, Pamela"
+      ]
+    }
+  ],
+  "dispositions": [
+    {
+      "search": "owner0_TU-3_1",
+      "document_id": "DOCC109198755",
+      "doc_number": "015575-02428",
+      "kinds": [
+        "DEED OF TRUST"
+      ],
+      "kept": true,
+      "rule": "TU-18",
+      "reason": "deed of trust, Open until a satisfaction cites it",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner0_TU-3_1",
+      "document_id": "DOCC110119457",
+      "doc_number": "016271-02519",
+      "kinds": [
+        "DEED OF TRUST"
+      ],
+      "kept": true,
+      "rule": "TU-18",
+      "reason": "deed of trust, Open until a satisfaction cites it",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner0_TU-3_1",
+      "document_id": "DOCC110127641",
+      "doc_number": "016285-00979",
+      "kinds": [
+        "SATISFACTION"
+      ],
+      "kept": true,
+      "rule": "TU-19",
+      "reason": "satisfaction, linked by the book-page it cites",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner0_TU-3_1",
+      "document_id": "DOC823S458",
+      "doc_number": "2026008089",
+      "kinds": [
+        "SATISFACTION"
+      ],
+      "kept": true,
+      "rule": "TU-19",
+      "reason": "satisfaction, linked by the book-page it cites",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner0_TU-3_1",
+      "document_id": "DOC903S15352",
+      "doc_number": "2026102779",
+      "kinds": [
+        "DEED OF TRUST"
+      ],
+      "kept": true,
+      "rule": "TU-18",
+      "reason": "deed of trust, Open until a satisfaction cites it",
+      "code": "",
+      "values": {}
+    },
+    {
+      "search": "owner0_TU-3_1",
+      "document_id": "DOC905S3425",
+      "doc_number": "2026108243",
+      "kinds": [
+        "DEED",
+        "QUIT CLAIM DEED"
+      ],
+      "kept": true,
+      "rule": "TU-22(1)",
+      "reason": "parcel id 0337413 on the hit is the subject's",
+      "code": "",
+      "values": {}
+    }
+  ]
+}

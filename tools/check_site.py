@@ -81,7 +81,7 @@ for path in PUBLIC.rglob('*.js'):
     links += re.findall(r'''\bfetch\(\s*["']([^"'\n]+)["']''', source)
     for link in set(links):
         # Browser fetch paths are relative to a document, not its script file.
-        check_link(PUBLIC / 'index.html', link, fragment=False)
+        check_link(PUBLIC / 'demo/index.html' if path.is_relative_to(PUBLIC / 'demo') else PUBLIC / 'index.html', link, fragment=False)
 
 
 def invalid_constant(value):
@@ -111,12 +111,23 @@ except (KeyError, TypeError, AttributeError) as exc:
     error(PUBLIC / 'assets/data', f'missing or malformed map/hero data: {exc}')
 
 try:
-    demo_manifest = PUBLIC / 'demo/data/index.json'
-    for run in data['index.json']['runs'].values():
-        for asset in run['files'].values():
-            check_link(demo_manifest, f'/demo/data/{run["dir"]}/{asset}', fragment=False)
-except (KeyError, TypeError, AttributeError) as exc:
-    error(PUBLIC / 'demo/data', f'missing or malformed demo data: {exc}')
+    demo_manifest = PUBLIC / 'demo/manifest.js'
+    records = json.loads(demo_manifest.read_text().split('=', 1)[1].strip().rstrip(';'))
+    if len(records) != 108:
+        error(demo_manifest, 'expected the 108 reviewed evidence files')
+    for record in records:
+        target = check_link(PUBLIC / 'demo/index.html', record['path'], fragment=False)
+        if target and target.is_file() and target.stat().st_size != record['bytes']:
+            error(demo_manifest, f"wrong byte count: {record['path']}")
+    expected_files = {record['path'] for record in records}
+    actual_files = {str(path.relative_to(PUBLIC / 'demo')) for path in (PUBLIC / 'demo/files').rglob('*') if path.is_file()}
+    if expected_files != actual_files:
+        error(demo_manifest, 'evidence files differ from the reviewed manifest')
+    for retired in ('data', 'workbench', 'ld-capture', 'demo.js'):
+        if (PUBLIC / 'demo' / retired).exists():
+            error(demo_manifest, f'retired demo artifact remains: {retired}')
+except (OSError, ValueError, KeyError, TypeError) as exc:
+    error(PUBLIC / 'demo', f'malformed demo snapshot: {exc}')
 
 try:
     config = tomllib.loads((ROOT / 'netlify.toml').read_text())

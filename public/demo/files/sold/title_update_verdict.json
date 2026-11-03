@@ -1,0 +1,22 @@
+{
+  "reid": "0337359",
+  "pin": "0796444193",
+  "verdict": "NEEDS_REVIEW",
+  "good_thru": "2026-11-01T04:19:03-05:00",
+  "index_currency": [
+    "2026-10-30"
+  ],
+  "owners": [
+    "Ordanes, Reynold",
+    "Ordanes, Cristina"
+  ],
+  "doubts": [],
+  "owner_of_record": null,
+  "title_events": [],
+  "name_matched_instruments_reviewed": {
+    "Ordanes, Reynold": 0,
+    "Ordanes, Cristina": 0
+  },
+  "dots": [],
+  "dispositions": []
+}

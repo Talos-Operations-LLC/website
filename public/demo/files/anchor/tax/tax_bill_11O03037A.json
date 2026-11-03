@@ -1,0 +1,20 @@
+{
+  "source": "Johnston County property tax on PayIt (my.johnstonnc.gov), guest lookup by parcel number, 11/02/2026",
+  "parcel": "11O03037A",
+  "account": "002000264594",
+  "owners": [
+    "COCKRELL, RANSOM WAYNE",
+    "COCKRELL, PATRICIA CREECH"
+  ],
+  "available_bill": {
+    "year": 2026,
+    "amount": "$1,615.18",
+    "due": "01/05/2027",
+    "status": "not yet due"
+  },
+  "billing_history": {
+    "years": "2016-2025",
+    "bills": 10,
+    "balance_each": "$0.00"
+  }
+}

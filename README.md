@@ -20,7 +20,7 @@ Astro, built to static HTML. One dependency (`astro`, exact pin). See `BUILD.md`
 | `public/assets/js/` | `hero.js` (the globe), `home-motion.js` (homepage reveals), and `coverage.js` (the county map) |
 | `public/assets/data/` | `hero-geometry.json`, `county-map.json`, `coverage.json` (county statuses) |
 | `public/assets/images/` | Logo and icons (the browser ICO stays at `public/favicon.ico`) |
-| `public/demo/` | The temporary product demo at /demo; see `docs/demo.md` |
+| `public/demo/` | The Fee Simple workbench snapshot at /demo; see `docs/demo.md` |
 | `docs/FACTS.md` | Source for every factual claim on the site |
 | `docs/demo.md` | What the demo is and how it is wired in |
 | `tools/` | Optional Python helpers: `check_site.py`, `gen_hero_geo.py` |
