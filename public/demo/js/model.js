@@ -100,7 +100,8 @@ const properties = ['anchor','mortgages','trust','sold','clean'].map(id=>{
  p.flags.forEach(f=>{f.ev=f.ev.map(([label,path])=>{if(!path.startsWith('record:'))return [label,path];const instrument=p.documents.find(d=>normBook(d.id)===normBook(path.slice(7)));return instrument?.file?[instrument.type+' · '+instrument.id,instrument.file]:[label,path]})});
  const statewide=section(raw,'Statewide parcel record (NC OneMap)')?.tables?.[0]?.rows||[];
  p.sourceSteps=p.sourceSteps.map(step=>step.label==='Cross-check statewide'&&statewide.length?{...step,result:statewide.filter(row=>row[3]==='agree').length+' of '+statewide.length+' fields agree with the county'}:step.label==='Decide the title'?{...step,result:verdictLabels[p.verdict]+'. '+p.summary}:step);
- p.files=FILE_MANIFEST.filter(f=>f.path.startsWith('files/'+id+'/'));
+ const cited=JSON.stringify(raw);
+ p.files=FILE_MANIFEST.filter(f=>f.path.startsWith('files/'+id+'/')||(f.path.startsWith('files/shared/')&&cited.includes(f.path)));
  return p;
 });
 const propertyById=id=>properties.find(p=>p.id===id);

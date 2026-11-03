@@ -46,7 +46,7 @@ To compare against what is live now, check out `main` in a second folder, run
 ## Generated files: never hand-edit
 
 - **`public/demo/`** — the captured Fee Simple workbench. Exported from the product
-  repository using `demo/export_public_snapshot.py <website checkout>` after a public-data
+  repository using `apps/demo/tools/export_public_snapshot.py <website checkout>` after a public-data
   review. Requires Node, Beautiful Soup, and PyMuPDF. The exporter replaces this folder,
   sanitizes captures, redacts reviewed financial identifiers, and regenerates file sizes.
   Never copy the raw product-repository demo directory directly into this public repo.

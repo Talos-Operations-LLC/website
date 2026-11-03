@@ -12,7 +12,7 @@ window.renderPdf=async function(container,file,title,toolbar=null){
  container.pdfCleanup=dispose;
  dialog?.addEventListener('close',onClose);
  try{
-  const pdfjs=await import('./vendor/pdf.mjs');
+  const pdfjs=await import('../vendor/pdf.mjs');
   if(!active())return;
   pdfjs.GlobalWorkerOptions.workerSrc='./vendor/pdf.worker.mjs';
   loadingTask=pdfjs.getDocument({url:file,isEvalSupported:false});

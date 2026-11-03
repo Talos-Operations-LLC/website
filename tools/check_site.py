@@ -112,10 +112,10 @@ except (KeyError, TypeError, AttributeError) as exc:
     error(PUBLIC / 'assets/data', f'missing or malformed map/hero data: {exc}')
 
 try:
-    demo_manifest = PUBLIC / 'demo/manifest.js'
+    demo_manifest = PUBLIC / 'demo/data/manifest.js'
     records = json.loads(demo_manifest.read_text().split('=', 1)[1].strip().rstrip(';'))
-    if len(records) != 595:
-        error(demo_manifest, 'expected the 595 reviewed evidence files')
+    if len(records) != 589:
+        error(demo_manifest, 'expected the 589 reviewed evidence files')
     for record in records:
         target = check_link(PUBLIC / 'demo/index.html', record['path'], fragment=False)
         if target and target.is_file() and target.stat().st_size != record['bytes']:
@@ -129,7 +129,7 @@ try:
                  for path in (PUBLIC / 'demo').rglob('*') if path.is_file()}
     if published != reviewed:
         error(demo_manifest, 'snapshot differs from the public review hashes')
-    for retired in ('data', 'workbench', 'ld-capture', 'demo.js'):
+    for retired in ('workbench', 'ld-capture', 'demo.js'):
         if (PUBLIC / 'demo' / retired).exists():
             error(demo_manifest, f'retired demo artifact remains: {retired}')
 except (OSError, ValueError, KeyError, TypeError) as exc:
