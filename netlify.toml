@@ -47,3 +47,11 @@
   from = "/demo/ld-capture/*"
   to = "/demo/"
   status = 301
+
+# Shared by direct link only. Kept out of robots.txt on purpose: a Disallow
+# line there would publish the path to anyone who reads it.
+[[headers]]
+  for = "/deck-w27-dhoik4ej.pdf"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    Content-Disposition = "inline"
