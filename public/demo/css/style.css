@@ -55,3 +55,4 @@ dialog{position:fixed;inset:0;margin:auto;max-width:calc(100vw - 32px);backgroun
 .search-evidence tbody tr[data-action]{cursor:pointer}.search-evidence tbody tr[data-action]:hover{background:var(--record-row-hover)}.search-evidence tbody tr:focus-within{background:#ffffff08;outline:2px solid var(--mint);outline-offset:-2px}.search-result-open:focus-visible{outline:none}
 
 :root{--record-row-hover:#ffffff08}.supporting-record-grid .quiet-row{padding-inline:12px;margin-inline:-12px;width:calc(100% + 24px);border-radius:5px;cursor:pointer}.supporting-record-grid .quiet-row:hover{background:var(--record-row-hover)}.supporting-record-grid .quiet-row:focus-visible{background:var(--record-row-hover);outline:2px solid var(--mint);outline-offset:-2px}
+.redacted{background:#000;color:#000;border-radius:2px;box-shadow:0 0 0 1px #3a4541;user-select:none}

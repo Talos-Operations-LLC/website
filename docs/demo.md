@@ -24,7 +24,11 @@ The 589 evidence files are allowlisted by `data/manifest.js`. The source pack wa
 with text scans, OCR of 670 newly added PDF pages and 79 images, comparison against
 previously reviewed files, barcode detection, and visual checks of flagged pages.
 Financial account, loan, mortgage-system and related barcode identifiers in 53
-instruments are permanently redacted. The originals remain in the product repository.
+instruments are permanently redacted. People's names, company names, street addresses
+other than the five demonstration properties, contact details and personal descriptors
+are blacked out in the screens, records, PDFs and images (243 documents carry pixel
+redactions, from OCR plus a page-by-page hand review); evidence files once saved under
+a person's name are renamed. The originals remain in the product repository.
 Parcel, tax-account, book/page and recorded instrument identifiers remain.
 Internal worksheet comparisons, machine/capture paths and the Zillow capture are
 excluded. The captured verdict statuses are preserved, including Needs review;

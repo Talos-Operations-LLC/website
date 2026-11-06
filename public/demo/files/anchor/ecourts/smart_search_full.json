@@ -1,28 +1,28 @@
 {
-  "search": "Smart Search, name Cockrell, Ransom, location Johnston County, run 11/02/2026, all parties on one page",
+  "search": "Smart Search, name \u2588\u2588\u2588\u2588\u2588\u2588, location Johnston County, run 11/02/2026, all parties on one page",
   "parties": [
     {
-      "party": "COCKRELL, RANSOM",
+      "party": "\u2588\u2588\u2588\u2588\u2588\u2588",
       "dob": "",
       "cases": [
         {
           "case_number": "16CR050651-500",
-          "style": "JOHNSON, GARRETT WAYNE",
+          "style": "\u2588\u2588\u2588\u2588\u2588\u2588",
           "filed": "02/02/2016",
           "type": "Criminal",
           "status": "Disposed",
           "location": "Johnston District Court",
-          "party": "JOHNSON, GARRETT WAYNE \u00b7 Defendant"
+          "party": "\u2588\u2588\u2588\u2588\u2588\u2588 \u00b7 Defendant"
         }
       ]
     },
     {
-      "party": "Cockrell, Ransom Wayne",
+      "party": "\u2588\u2588\u2588\u2588\u2588\u2588",
       "dob": "",
       "cases": [
         {
           "case_number": "26E001338-500",
-          "style": "IN THE MATTER OF THE ESTATE OF Ransom Wayne Cockrell",
+          "style": "IN THE MATTER OF THE ESTATE OF \u2588\u2588\u2588\u2588\u2588\u2588",
           "filed": "10/29/2026",
           "type": "Decedents' Estate - Small Estate",
           "status": "Disposed - Clerk of Superior Court",

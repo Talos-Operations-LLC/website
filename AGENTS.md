@@ -19,7 +19,8 @@ pages.
 
 `public/demo/` contains five captured North Carolina public-record searches.
 Publish only the reviewed snapshot: 589 evidence files, static HTML captures,
-redacted financial account numbers, and no internal worksheet inputs or session data.
+redacted financial account numbers, blacked-out names and personal details, and no
+internal worksheet inputs or session data.
 Keep the public-data checks and noindex headers. See `docs/demo.md`.
 
 ## Structure

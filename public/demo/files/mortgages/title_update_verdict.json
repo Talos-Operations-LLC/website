@@ -7,27 +7,27 @@
     "2026-10-30"
   ],
   "owners": [
-    "Moran, Kevin",
-    "Moran, Sharon"
+    "\u2588\u2588\u2588\u2588\u2588\u2588",
+    "\u2588\u2588\u2588\u2588\u2588\u2588"
   ],
   "doubts": [],
   "owner_of_record": null,
   "title_events": [],
   "name_matched_instruments_reviewed": {
-    "Moran, Kevin": 0,
-    "Moran, Sharon": 5
+    "\u2588\u2588\u2588\u2588\u2588\u2588": 0,
+    "\u2588\u2588\u2588\u2588\u2588\u2588 ": 5
   },
   "dots": [
     {
       "book": "015681",
       "page": "00994",
       "recorded": "06/05/2014 12:00 AM",
-      "lender": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC.",
+      "lender": "\u2588\u2588\u2588\u2588\u2588\u2588",
       "status": "Satisfied",
       "document_id": "DOCC109248750",
       "owners": [
-        "Moran, Kevin",
-        "Moran, Sharon"
+        "\u2588\u2588\u2588\u2588\u2588\u2588",
+        "\u2588\u2588\u2588\u2588\u2588\u2588"
       ],
       "sat_book": "016432",
       "sat_page": "01884"
@@ -36,11 +36,11 @@
       "book": "016395",
       "page": "01891",
       "recorded": "05/24/2016 12:00 AM",
-      "lender": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC.",
+      "lender": "\u2588\u2588\u2588\u2588\u2588\u2588",
       "status": "Satisfied",
       "document_id": "DOCC110191510",
       "owners": [
-        "Moran, Sharon"
+        "\u2588\u2588\u2588\u2588\u2588\u2588"
       ],
       "sat_book": "017925",
       "sat_page": "01162"
@@ -49,11 +49,11 @@
       "book": "017878",
       "page": "01495",
       "recorded": "05/21/2020 12:00 AM",
-      "lender": "MORTGAGE ELECTRONIC REGISTRATION SYSTEMS, INC.",
+      "lender": "\u2588\u2588\u2588\u2588\u2588\u2588",
       "status": "Open",
       "document_id": "DOCC110958245",
       "owners": [
-        "Moran, Sharon"
+        "\u2588\u2588\u2588\u2588\u2588\u2588"
       ]
     }
   ],

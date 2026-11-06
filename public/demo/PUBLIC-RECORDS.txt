@@ -2,6 +2,6 @@ Fee Simple public demonstration
 
 Five captured North Carolina public-record searches. This is a replay, not a current title opinion.
 Internal comparison inputs and local capture paths are omitted. Captured result statuses are retained.
-Financial account, loan and mortgage-system identifiers are redacted in the reviewed instruments. County parcel, tax-account, book/page and instrument identifiers remain.
+Personal names, company names, street addresses other than the five demonstration properties, contact details and personal descriptors are blacked out in the screens, records and documents. Financial account, loan and mortgage-system identifiers are redacted in the reviewed instruments. County parcel, tax-account, book/page and instrument identifiers remain.
 HTML captures have no portal scripts, forms, session attributes or external resources. Zillow captures are excluded.
 Settings, notes, requests and simulated API keys stay in the visitor browser. No requests are sent.

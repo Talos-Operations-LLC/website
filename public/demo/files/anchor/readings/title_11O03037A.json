@@ -4,29 +4,29 @@
   "address": "10720 OLD BEULAH RD, KENLY",
   "verdict": "CERTIFIED_CURRENT",
   "good_thru": "2026-10-30",
-  "good_thru_source": "date the pack's four index searches were run (grantor and grantee, COCKRELL RANSOM and COCKRELL RANSOM WAYNE)",
+  "good_thru_source": "date the pack's four index searches were run (grantor and grantee, \u2588\u2588\u2588\u2588\u2588\u2588 and \u2588\u2588\u2588\u2588\u2588\u2588)",
   "deed_in": {
     "book": "06571",
     "page": "0407",
     "recorded": "11/02/2023 12:02:38 PM",
     "instrument": "DEED",
     "legal": "1.581 A PB 99/190",
-    "grantors": "COCKRELL RANSOM WAYNE; COCKRELL PATRICIA CREECH; COCKRELL PATRICIA LEE C.",
-    "grantees": "COCKRELL RANSOM WAYNE; COCKRELL PATRICIA CREECH"
+    "grantors": "\u2588\u2588\u2588\u2588\u2588\u2588; \u2588\u2588\u2588\u2588\u2588\u2588; \u2588\u2588\u2588\u2588\u2588\u2588",
+    "grantees": "\u2588\u2588\u2588\u2588\u2588\u2588; \u2588\u2588\u2588\u2588\u2588\u2588"
   },
   "owners": [
     {
-      "last": "Cockrell",
-      "first": "Ransom",
-      "middle": "Wayne"
+      "last": "\u2588\u2588\u2588\u2588\u2588\u2588",
+      "first": "\u2588\u2588\u2588\u2588\u2588\u2588",
+      "middle": "\u2588\u2588\u2588\u2588\u2588\u2588"
     },
     {
-      "last": "Cockrell",
-      "first": "Patricia",
-      "middle": "Creech"
+      "last": "\u2588\u2588\u2588\u2588\u2588\u2588",
+      "first": "\u2588\u2588\u2588\u2588\u2588\u2588",
+      "middle": "\u2588\u2588\u2588\u2588\u2588\u2588"
     }
   ],
-  "owner_of_record": "Ransom Wayne Cockrell and Patricia Creech Cockrell",
+  "owner_of_record": "\u2588\u2588\u2588\u2588\u2588\u2588 and \u2588\u2588\u2588\u2588\u2588\u2588",
   "title_events": [],
   "dispositions": [
     {
@@ -45,7 +45,7 @@
       "kept": false,
       "rule": "TU-22(2c)",
       "code": "DISCARD_LOCATION_MISMATCH",
-      "reason": "legal is .691 A PB 102/462, a lot out of 11O03037B conveyed to Gregory Wayne and Crystal W. Cockrell; not the subject"
+      "reason": "legal is .691 A PB 102/462, a lot out of 11O03037B conveyed to \u2588\u2588\u2588\u2588\u2588\u2588 and \u2588\u2588\u2588\u2588\u2588\u2588; not the subject"
     },
     {
       "doc": "06571/0410",
@@ -80,23 +80,23 @@
       "book": "02016",
       "page": "0787",
       "recorded": "02/12/2001",
-      "lender": "First Union National Bank (index grantee: TRSTE INC -TR)",
+      "lender": "\u2588\u2588\u2588\u2588\u2588\u2588 (index grantee: \u2588\u2588\u2588\u2588\u2588\u2588 -TR)",
       "status": "Satisfied",
       "sat_book": "05827",
       "sat_page": "0823",
       "sat_recorded": "01/29/2021",
-      "sat_detail": "Wells Fargo Bank, N.A., successor by merger to Wachovia f/k/a First Union, satisfied it on 01/29/2021; the satisfaction names 10720 Old Beulah Rd."
+      "sat_detail": "\u2588\u2588\u2588\u2588\u2588\u2588, N.A., successor by merger to \u2588\u2588\u2588\u2588\u2588\u2588 f/k/a \u2588\u2588\u2588\u2588\u2588\u2588, satisfied it on 01/29/2021; the satisfaction names 10720 Old Beulah Rd."
     }
   ],
   "dot_notes": [
     "Satisfaction 2020/212 (02/21/2001) releases DT Book 1075 Page 207, a deed of trust not in the pack's results; it shows an older loan was paid off."
   ],
   "name_matched_instruments_reviewed": {
-    "Cockrell, Ransom (grantor)": 12,
-    "Cockrell, Ransom (grantee)": 8
+    "\u2588\u2588\u2588\u2588\u2588\u2588 (grantor)": 12,
+    "\u2588\u2588\u2588\u2588\u2588\u2588 (grantee)": 8
   },
   "how_to_check": [
-    "Johnston ROD (EagleWeb, public login): grantor search COCKRELL / RANSOM, recorded from 11/02/2023 to today; confirm no deed whose legal cites PB 99/190.",
+    "Johnston ROD (\u2588\u2588\u2588\u2588\u2588\u2588, public login): grantor search \u2588\u2588\u2588\u2588\u2588\u2588 / \u2588\u2588\u2588\u2588\u2588\u2588, recorded from 11/02/2023 to today; confirm no deed whose legal cites PB 99/190.",
     "Open Book 6571 Page 407 and read the vesting clause: tenants by the entirety.",
     "Open Book 5827 Page 823 and confirm it cites Book 2016 Page 787."
   ]

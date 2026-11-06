@@ -1,0 +1,50 @@
+{
+  "search": "Smart Search, name \u2588\u2588\u2588\u2588\u2588\u2588, location Johnston County, run 11/02/2026, all parties on one page",
+  "parties": [
+    {
+      "party": "\u2588\u2588\u2588\u2588\u2588\u2588",
+      "dob": "",
+      "cases": [
+        {
+          "case_number": "08E000620-500",
+          "style": "IN THE MATTER OF THE ESTATE OF \u2588\u2588\u2588\u2588\u2588\u2588",
+          "filed": "08/13/2008",
+          "type": "Decedents' Estate - Small Estate",
+          "status": "Disposed - Clerk of Superior Court",
+          "location": "Johnston Clerk of Superior Court",
+          "party": ""
+        }
+      ]
+    },
+    {
+      "party": "\u2588\u2588\u2588\u2588\u2588\u2588",
+      "dob": "",
+      "cases": [
+        {
+          "case_number": "08E000620-500",
+          "style": "IN THE MATTER OF THE ESTATE OF \u2588\u2588\u2588\u2588\u2588\u2588",
+          "filed": "08/13/2008",
+          "type": "Decedents' Estate - Small Estate",
+          "status": "Disposed - Clerk of Superior Court",
+          "location": "Johnston Clerk of Superior Court",
+          "party": ""
+        }
+      ]
+    },
+    {
+      "party": "\u2588\u2588\u2588\u2588\u2588\u2588",
+      "dob": "",
+      "cases": [
+        {
+          "case_number": "26E001338-500",
+          "style": "IN THE MATTER OF THE ESTATE OF \u2588\u2588\u2588\u2588\u2588\u2588",
+          "filed": "10/29/2026",
+          "type": "Decedents' Estate - Small Estate",
+          "status": "Disposed - Clerk of Superior Court",
+          "location": "Johnston Clerk of Superior Court",
+          "party": ""
+        }
+      ]
+    }
+  ]
+}
