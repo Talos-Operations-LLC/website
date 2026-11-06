@@ -52,6 +52,13 @@ const url = path ? new URL(path, Astro.site).href : undefined;
 <link href={fontStylesheet} rel="stylesheet">
 {jsonld.map((d) => <script is:inline type="application/ld+json" set:html={JSON.stringify(d, null, 2)} />)}
 <link rel="stylesheet" href="/assets/css/site.css">
+<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-F3EH9RXW9Y"></script>
+<script is:inline>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-F3EH9RXW9Y');
+</script>
 <slot name="head" />
 </head>
 <body>
