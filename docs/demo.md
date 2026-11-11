@@ -12,10 +12,14 @@ findings, chain, mortgages, documents, parcel map and record-pack export.
 All five properties use the same Overview and Title chain layouts with their own
 saved facts and source links. Owner search is not a search mode.
 
-The runtime is plain HTML, CSS and JavaScript. `data/records.js` supplies captured results,
-`js/model.js` builds property models, and `js/app.js` routes views. `js/property-view.js` and `css/property-view.css` renders
-the property screens; `js/search-map.js` uses MapLibre, and property maps use Leaflet. PDF.js renders
-saved PDFs; JSZip exports records. Vendor licenses are included.
+The demo is the Fee Simple production app built to run with no server, so it looks and
+works like the product: the same Home, Search, Properties, property tabs, title report,
+Settings and light and dark themes. `index.html` loads the bundled app from `assets/`;
+`data/demo.json` supplies the five captured property records, and the app answers its
+own searches from them in the browser. Routes sit after the `#`. The search globe uses
+MapLibre and property maps use Leaflet; PDF.js renders saved PDFs with the plain
+JavaScript decoders in `pdf/`, because the demo's content policy does not allow wasm;
+JSZip exports records. `THIRD-PARTY-LICENSES.txt` carries the bundled packages' licenses.
 
 ## Public snapshot
 
@@ -38,7 +42,8 @@ portal scripts, forms, hidden inputs, session attributes and external resources.
 The account defaults to the fictional Alex Morgan with no email or phone number.
 No working credentials, backend, email delivery, live property lookup or integrations
 are included. Requests and generated example API keys remain in browser local storage.
-Restart clears all five demo-owned storage keys and restores the three saved properties.
+Restart clears the demo's saved settings, notes, review marks, recent list and finished
+searches, and restores the three saved properties.
 
 Regenerate with `apps/demo/tools/export_public_snapshot.py <website checkout>` in the product
 repository after reviewing any changed records. Do not copy raw source captures.
@@ -51,4 +56,5 @@ the demo index remains application HTML.
 
 The demo stays out of search indexes and the sitemap. Its CSP allows only local code
 and the two Esri tile hosts used by the maps. Open `/demo/` to check Search, a property,
-a PDF, an export, Settings and Restart. The footer identifies captured demo records.
+a PDF, an export, Settings and Restart. The top bar's About this demo and Restart demo
+buttons identify it as captured demo records.
