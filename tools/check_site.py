@@ -129,7 +129,7 @@ try:
                  for path in (PUBLIC / 'demo').rglob('*') if path.is_file()}
     if published != reviewed:
         error(demo_manifest, 'snapshot differs from the public review hashes')
-    for retired in ('workbench', 'ld-capture', 'demo.js'):
+    for retired in ('workbench', 'ld-capture', 'demo.js', 'js', 'css', 'vendor', 'data/records.js'):
         if (PUBLIC / 'demo' / retired).exists():
             error(demo_manifest, f'retired demo artifact remains: {retired}')
 except (OSError, ValueError, KeyError, TypeError) as exc:
