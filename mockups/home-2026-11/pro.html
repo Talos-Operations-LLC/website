@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fee Simple: parcel diligence for North Carolina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#141414; --ink2:#3e4145; --mute:#6f7378; --line:#e8e6e1; --soft:#f7f6f3; --warm:#efede9;
+  --coral:#ff6b4a; --ok:#1f7a4d;
+  --r:16px; --wrap:1160px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:#fff;color:var(--ink);font:400 17px/1.6 Figtree,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+h1,h2,h3{font-weight:500;margin:0;letter-spacing:-.025em}
+p{margin:0}
+
+/* buttons */
+.btn,.btn-line{display:inline-flex;align-items:center;justify-content:center;height:46px;padding:0 22px;border-radius:999px;font:500 16px/1 Figtree,sans-serif;text-decoration:none;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.btn{background:var(--ink);color:#fff;border:1px solid var(--ink)}
+.btn:hover{background:#2c2c2c}
+.btn-line{background:#fff;color:var(--ink);border:1px solid #d9d6cf}
+.btn-line:hover{border-color:var(--ink)}
+.btn:focus-visible,.btn-line:focus-visible,a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+/* header */
+.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid transparent;transition:border-color .25s}
+.top.scrolled{border-bottom-color:var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:68px;max-width:1240px}
+.bar .l,.bar .r{display:flex;align-items:center;gap:28px}
+.brand{font-weight:600;font-size:20px;letter-spacing:-.02em;text-decoration:none;white-space:nowrap}
+.brand b{color:var(--coral);font-weight:600}
+.nl{font-size:15px;font-weight:500;color:var(--ink2);text-decoration:none;white-space:nowrap}
+.nl:hover{color:var(--ink)}
+.login{position:relative}
+.login a{display:inline-flex;align-items:center;height:38px;padding:0 16px;border:1px solid #d9d6cf;border-radius:999px;font-size:15px;font-weight:500;text-decoration:none;white-space:nowrap;cursor:default}
+.tip{position:absolute;top:calc(100% + 10px);left:50%;transform:translate(-50%,-4px);background:var(--ink);color:#fff;font-size:13px;font-weight:500;padding:7px 11px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s}
+.tip::before{content:"";position:absolute;top:-4px;left:50%;width:8px;height:8px;background:var(--ink);transform:translateX(-50%) rotate(45deg)}
+.login:hover .tip,.login:focus-within .tip,.login.show .tip{opacity:1;transform:translate(-50%,0)}
+
+/* hero */
+.hero{text-align:center;padding:88px 24px 56px}
+.pill{display:inline-flex;align-items:center;gap:9px;height:34px;padding:0 14px 0 12px;border:1px solid var(--line);border-radius:999px;font-size:14px;font-weight:500;color:var(--ink2);text-decoration:none;background:#fff}
+.pill:hover{border-color:#cfccc4}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 0 rgba(255,107,74,.5);animation:pulse 2.4s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,107,74,.45)}70%{box-shadow:0 0 0 7px rgba(255,107,74,0)}100%{box-shadow:0 0 0 0 rgba(255,107,74,0)}}
+.hero h1{font-size:clamp(40px,5.2vw,68px);line-height:1.05;letter-spacing:-.035em;max-width:18ch;margin:26px auto 0;text-wrap:balance}
+.lede{max-width:600px;margin:24px auto 0;font-size:19px;line-height:1.55;color:var(--ink2)}
+.cta{display:flex;gap:12px;justify-content:center;margin-top:34px;flex-wrap:wrap}
+
+/* demo frame */
+.demo{max-width:1288px;margin:0 auto;padding:0 24px}
+.frame{border:1px solid var(--line);border-radius:20px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.04),0 30px 70px -30px rgba(30,25,15,.22);overflow:hidden}
+.fbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:46px;padding:0 18px;background:var(--soft);border-bottom:1px solid var(--line);font-size:13.5px;color:var(--mute)}
+.live{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--ink)}
+.url{background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-size:13px;color:var(--mute)}
+.full{justify-self:end;text-decoration:none;font-weight:500;color:var(--ink2)}
+.full:hover{color:var(--ink)}
+.stage{position:relative;height:min(74vh,720px);min-height:520px;background:var(--warm)}
+.stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;opacity:0;transition:opacity .5s}
+.stage iframe.ready{opacity:1}
+.stage .still{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:left top}
+.cover{position:absolute;inset:0;width:100%;border:0;background:transparent;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding-bottom:28px;transition:opacity .3s}
+.cover span{display:inline-flex;align-items:center;gap:10px;height:44px;padding:0 20px;border-radius:999px;background:var(--ink);color:#fff;font:500 15px/1 Figtree,sans-serif;box-shadow:0 12px 30px -10px rgba(0,0,0,.45);transition:transform .2s}
+.cover:hover span{transform:translateY(-2px)}
+.cover.off{opacity:0;pointer-events:none}
+.cap{text-align:center;font-size:14px;color:var(--mute);margin-top:16px}
+
+/* sources band (stands in for a client logo wall) */
+.band{padding-top:84px}
+.label{font-size:14px;font-weight:500;color:var(--mute);text-align:center}
+.srcs{list-style:none;margin:26px 0 0;padding:0;display:flex;justify-content:center;flex-wrap:wrap;gap:14px 44px}
+.srcs li{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:600;letter-spacing:-.015em;color:#4a4d52}
+.srcs svg{width:22px;height:22px;stroke:#8a8d92;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.fine{font-size:13px;color:var(--mute);text-align:center;margin-top:18px}
+.logos{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.logos li{height:64px;border:1px dashed #d7d3ca;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#a3a39e}
+.ph{display:inline-block;font-style:normal;font-size:11.5px;font-weight:600;color:#8a5a00;background:#fff4d6;border:1px solid #f1dda2;padding:1px 8px;border-radius:999px;vertical-align:2px;margin-left:8px;letter-spacing:.01em}
+.firms{margin-top:56px}
+
+/* section heads */
+section.s{padding-top:128px}
+.head{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:end;margin-bottom:44px}
+.head h2,.h2{font-size:clamp(30px,3.4vw,44px);line-height:1.08;text-wrap:balance}
+.head p{color:var(--ink2);max-width:470px}
+
+/* product tour */
+.tour{display:grid;grid-template-columns:330px 1fr;gap:40px;align-items:start}
+.tabs{display:flex;flex-direction:column;gap:2px}
+.tab{all:unset;cursor:pointer;display:block;padding:14px 18px;border-radius:12px;transition:background .2s}
+.tab:hover{background:var(--soft)}
+.tab b{display:block;font-weight:600;font-size:16.5px;color:var(--mute);transition:color .2s}
+.tab span{display:block;max-height:0;overflow:hidden;opacity:0;font-size:15px;line-height:1.5;color:var(--ink2);transition:max-height .35s ease,opacity .3s,margin .3s}
+.tab[aria-selected="true"]{background:var(--soft)}
+.tab[aria-selected="true"] b{color:var(--ink)}
+.tab[aria-selected="true"] span{max-height:90px;opacity:1;margin-top:6px}
+.tab:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.shot{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--warm);aspect-ratio:1600/1077;box-shadow:0 20px 50px -30px rgba(30,25,15,.2);position:relative}
+.shot img{width:100%;height:100%;object-fit:cover;object-position:left top;transition:opacity .28s}
+.shot img.fade{opacity:0}
+.shot a{position:absolute;right:14px;bottom:14px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;font-weight:500;text-decoration:none;box-shadow:0 6px 20px -8px rgba(0,0,0,.2)}
+.shot a:hover{border-color:var(--ink)}
+
+/* report */
+.report{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.report .intro{color:var(--ink2);margin-top:18px;max-width:480px}
+.steps{list-style:none;padding:0;margin:30px 0 32px;border-top:1px solid var(--line)}
+.steps li{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line);font-size:15.5px}
+.steps .n{font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
+.steps .src{font-size:14px;color:var(--mute);text-align:right}
+.steps .ck{color:var(--ok);margin-right:8px}
+.paper{margin:0;position:sticky;top:96px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--warm);box-shadow:0 30px 60px -34px rgba(30,25,15,.28)}
+.paper figcaption{font-size:13.5px;color:var(--mute);padding:12px 16px;background:#fff;border-top:1px solid var(--line)}
+
+/* principles */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:44px 48px}
+.pr svg{width:26px;height:26px;stroke:var(--ink);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;margin-bottom:16px}
+.pr h3{font-size:19px;font-weight:600;letter-spacing:-.015em}
+.pr p{font-size:15.5px;color:var(--ink2);margin-top:8px}
+.pr.ghost h3,.pr.ghost p{color:#9a9a95}
+.pr.ghost svg{stroke:#b8b6b0}
+
+/* audiences + quote */
+.who{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.alist{list-style:none;padding:0;margin:28px 0 0;border-top:1px solid var(--line)}
+.alist li{padding:16px 0;border-bottom:1px solid var(--line)}
+.alist b{display:block;font-weight:600;font-size:16.5px}
+.alist span{display:block;color:var(--ink2);font-size:15.5px;margin-top:3px}
+.quote{border:1px dashed #d7d3ca;border-radius:20px;padding:40px;background:var(--soft)}
+.quote blockquote{margin:18px 0 0;font-size:24px;line-height:1.4;letter-spacing:-.015em;color:#8d8c87}
+.quote .who2{display:flex;align-items:center;gap:14px;margin-top:28px;color:#a3a39e;font-size:15px}
+.quote .av{width:44px;height:44px;border-radius:50%;border:1px dashed #cfcbc1}
+
+/* coverage */
+.cov{display:grid;grid-template-columns:1fr 1.4fr;gap:64px;align-items:start}
+.big{font-size:clamp(64px,8vw,104px);font-weight:500;letter-spacing:-.05em;line-height:.95}
+.cov .sub{color:var(--ink2);margin-top:14px;max-width:360px}
+.cov .btn-line{margin-top:28px}
+.counties{list-style:none;padding:0;margin:0;columns:3;column-gap:32px;font-size:16px}
+.counties li{padding:7px 0;border-bottom:1px solid var(--line);break-inside:avoid;display:flex;align-items:center;gap:10px}
+.counties li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ok);flex:none}
+.more{margin-top:18px;font-size:15px;color:var(--mute)}
+
+/* coming next */
+.next{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.slot{border:1px dashed #d7d3ca;border-radius:var(--r);padding:26px;min-height:150px}
+.slot h3{font-size:18px;font-weight:600;color:#9a9a95}
+.slot p{color:#a3a39e;font-size:15px;margin-top:8px}
+
+/* talk */
+.talk{margin-top:136px;background:var(--soft);border-top:1px solid var(--line);padding:104px 0}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.talk .intro{color:var(--ink2);margin-top:18px;max-width:440px}
+.contact{margin-top:28px;display:flex;flex-direction:column;gap:6px;font-size:16px}
+.contact a{text-decoration:none;font-weight:500}
+.contact a:hover{text-decoration:underline}
+form{background:#fff;border:1px solid var(--line);border-radius:20px;padding:32px;box-shadow:0 20px 50px -34px rgba(30,25,15,.25)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:block;font-size:14px;font-weight:500;margin-bottom:16px}
+label i{font-style:normal;color:var(--mute);font-weight:400}
+input,textarea{display:block;width:100%;margin-top:7px;font:400 16px/1.4 Figtree,sans-serif;color:var(--ink);background:#fff;border:1px solid #dcd9d2;border-radius:10px;padding:12px 14px;transition:border-color .2s}
+input:focus,textarea:focus{border-color:var(--ink);outline:none}
+textarea{min-height:104px;resize:vertical}
+form .btn{width:100%;margin-top:6px}
+.formnote{font-size:13px;color:var(--mute);margin-top:12px;text-align:center}
+.thanks{text-align:center;padding:40px 8px}
+.thanks h3{font-size:24px}
+.thanks p{color:var(--ink2);margin-top:8px}
+[hidden]{display:none!important}
+
+/* footer */
+footer{padding:44px 0 56px}
+.fgrid{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.fgrid nav{display:flex;gap:26px;flex-wrap:wrap}
+.fgrid nav a{text-decoration:none;font-size:15px;color:var(--ink2)}
+.fgrid nav a:hover{color:var(--ink)}
+.legal{display:flex;justify-content:space-between;gap:16px;margin-top:28px;padding-top:24px;border-top:1px solid var(--line);font-size:13.5px;color:var(--mute);flex-wrap:wrap}
+.legal a{text-decoration:none;color:var(--mute);margin-left:20px}
+.legal a:first-child{margin-left:0}
+
+/* reveal: only when JS runs and motion is allowed; watchdog in script */
+.js .rv{opacity:0;transform:translateY(16px);transition:opacity .8s ease,transform .9s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
+.js .rv.in{opacity:1;transform:none}
+.js .demo.rv{transform:translateY(40px)}
+.js .demo.rv.in{transform:none}
+
+/* responsive */
+@media (max-width:1000px){
+  .head,.report,.who,.cov,.tgrid{grid-template-columns:1fr;gap:36px}
+  .tour{grid-template-columns:1fr;gap:20px}
+  .tabs{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:none;padding:9px 15px;border:1px solid var(--line);border-radius:999px}
+  .tab b{font-size:15px}
+  .tab span{display:none}
+  .tab[aria-selected="true"]{background:var(--ink);border-color:var(--ink)}
+  .tab[aria-selected="true"] b{color:#fff}
+  .paper{position:static}
+  .pgrid{grid-template-columns:1fr 1fr}
+  .logos{grid-template-columns:repeat(3,1fr)}
+  .next{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .wrap{padding:0 16px}
+  .bar{height:60px}
+  .bar .l,.bar .r{gap:14px}
+  .brand{font-size:18px}
+  .nl{font-size:14px}
+  .login a{height:34px;padding:0 12px;font-size:14px}
+  .tip{left:auto;right:0;transform:translate(0,-4px)}
+  .tip::before{left:auto;right:22px;transform:rotate(45deg)}
+  .login:hover .tip,.login:focus-within .tip,.login.show .tip{transform:none}
+  .hero{padding:56px 16px 40px}
+  .lede{font-size:17px}
+  .demo{padding:0 12px}
+  .fbar{grid-template-columns:1fr auto;padding:0 14px}
+  .url{display:none}
+  .stage{height:auto;min-height:0;aspect-ratio:1600/1077}
+  .cover{padding-bottom:16px}
+  .band{padding-top:64px}
+  .srcs{gap:12px 24px}
+  .srcs li{font-size:16px}
+  section.s{padding-top:96px}
+  .shot a{right:10px;bottom:10px;padding:6px 11px;font-size:12.5px}
+  .pgrid{grid-template-columns:1fr;gap:32px}
+  .steps .src{display:none}
+  .steps li{grid-template-columns:30px 1fr}
+  .counties{columns:2}
+  .quote{padding:28px}
+  .quote blockquote{font-size:20px}
+  .row{grid-template-columns:1fr;gap:0}
+  form{padding:22px}
+  .talk{padding:72px 0;margin-top:104px}
+}
+@media (max-width:370px){ .bar .l .nl{display:none} }
+@media (prefers-reduced-motion:reduce){ .dot{animation:none} html{scroll-behavior:auto} }
+</style>
+</head>
+<body>
+
+<header class="top" id="top">
+  <div class="wrap bar">
+    <div class="l">
+      <a class="brand" href="#">Fee Simple<b>.</b></a>
+      <a class="nl" href="#talk">Talk to us</a>
+    </div>
+    <div class="r">
+      <a class="nl" href="demo/">Demo</a>
+      <span class="login" id="login">
+        <a href="#" aria-describedby="soon">Log in</a>
+        <span class="tip" role="tooltip" id="soon">Coming soon</span>
+      </span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <a class="pill rv" style="--d:0ms" href="#coverage"><i class="dot"></i>Live in 27 North Carolina counties</a>
+    <h1 class="rv" style="--d:90ms">The highest and most complete form of parcel diligence.</h1>
+    <p class="lede rv" style="--d:200ms">Fee Simple searches the county tax office, the Register of Deeds and the state court portal for a North Carolina parcel. You get the owner of record, and every document behind the answer.</p>
+    <div class="cta rv" style="--d:300ms">
+      <a class="btn" href="#demo">Try the live demo</a>
+      <a class="btn-line" href="#talk">Talk to us</a>
+    </div>
+  </section>
+
+  <section class="demo rv" id="demo" style="--d:440ms">
+    <div class="frame">
+      <div class="fbar">
+        <span class="live"><i class="dot"></i>Live demo</span>
+        <span class="url">talosoperations.com/demo</span>
+        <a class="full" href="demo/" target="_blank" rel="noopener">Open full screen</a>
+      </div>
+      <div class="stage">
+        <img class="still" src="img/overview.jpg" alt="Fee Simple showing a Wake County townhome: Title moved, owner of record, the deed and the county tax record.">
+        <iframe id="app" title="Fee Simple live demo" tabindex="-1"></iframe>
+        <button class="cover" id="cover" type="button" aria-label="Use the live demo"><span>Click to use the live demo</span></button>
+      </div>
+    </div>
+    <p class="cap">This is the working product, not a recording. Real North Carolina public records, with names blacked out.</p>
+  </section>
+
+  <section class="band wrap">
+    <p class="label rv">Every search reads the public record at the source</p>
+    <ul class="srcs rv" style="--d:80ms">
+      <li><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/><path d="M8 7h8M8 11h6"/></svg>Register of Deeds</li>
+      <li><svg viewBox="0 0 24 24"><path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>County tax office</li>
+      <li><svg viewBox="0 0 24 24"><path d="M9 3 3 6v15l6-3 6 3 6-3V3l-6 3z"/><path d="M9 3v15M15 6v15"/></svg>County GIS</li>
+      <li><svg viewBox="0 0 24 24"><path d="M12 3v18M5 21h14M4 8h16M7 8l-3 7a3 3 0 0 0 6 0zM17 8l-3 7a3 3 0 0 0 6 0z"/></svg>NC eCourts</li>
+      <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>NC OneMap</li>
+    </ul>
+    <p class="fine rv" style="--d:140ms">Fee Simple is independent and is not affiliated with these offices.</p>
+
+    <div class="firms rv">
+      <p class="label">Firms using Fee Simple <em class="ph">Placeholder</em></p>
+      <ul class="logos">
+        <li>Firm logo</li><li>Firm logo</li><li>Firm logo</li><li>Firm logo</li><li>Firm logo</li><li>Firm logo</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="s wrap" id="product">
+    <div class="head rv">
+      <h2>Everything on the parcel, in one place.</h2>
+      <p>Eight views of one Wake County townhome, taken from the demo. Real public records, with names blacked out.</p>
+    </div>
+    <div class="tour rv" style="--d:80ms">
+      <div class="tabs" role="tablist" aria-label="Product views">
+        <button class="tab" role="tab" aria-selected="true" data-img="overview" data-route="overview"><b>Owner of record</b><span>The answer first: who holds title today, how it is held, and the deed that put it there.</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-img="title" data-route="title"><b>Chain of title</b><span>Every recorded deed for the parcel, newest first, back to the developer.</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-img="mortgages" data-route="mortgages"><b>Deeds of trust</b><span>Every loan the name searches returned, open or satisfied, with the satisfaction that closed it.</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-img="parcel" data-route="parcel"><b>Parcel and tax card</b><span>The county's parcel outline, the tax card, and the owner's mailing address as the county has it.</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-img="court" data-route="court"><b>Court and estates</b><span>Estates, liens and judgments for current and prior owners, saved from the NC eCourts portal.</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-img="findings" data-route="findings"><b>Findings</b><span>When the records disagree, a plain-words note with the document behind it.</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-img="documents" data-route="documents"><b>All records</b><span>Every record the search touched, in one list. Each one opens the original.</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-img="activity" data-route="activity"><b>Search log</b><span>Each step of the search: what was checked, where, and what came back.</span></button>
+      </div>
+      <div class="shot">
+        <img id="tourimg" src="img/overview.jpg" alt="Owner of record view in Fee Simple">
+        <a id="tourlink" href="demo/#/property/trust/overview" target="_blank" rel="noopener">Open this in the demo</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="s wrap">
+    <div class="report">
+      <div class="rv">
+        <h2 class="h2">Thirteen steps, written down.</h2>
+        <p class="intro">Each search ends in a title report that says what was searched, where, and what it found. This is the list from the report in the demo.</p>
+        <ol class="steps">
+          <li><span class="n">01</span><span><span class="ck">✓</span>Parcel identification</span><span class="src">County GIS</span></li>
+          <li><span class="n">02</span><span><span class="ck">✓</span>Tax account</span><span class="src">County tax office</span></li>
+          <li><span class="n">03</span><span><span class="ck">✓</span>Tax bills</span><span class="src">County tax office</span></li>
+          <li><span class="n">04</span><span><span class="ck">✓</span>Deed index, owner names</span><span class="src">Register of Deeds</span></li>
+          <li><span class="n">05</span><span><span class="ck">✓</span>Chain of title to the developer</span><span class="src">Register of Deeds</span></li>
+          <li><span class="n">06</span><span><span class="ck">✓</span>Covenants</span><span class="src">Register of Deeds</span></li>
+          <li><span class="n">07</span><span><span class="ck">✓</span>Courts, prior owners</span><span class="src">NC eCourts</span></li>
+          <li><span class="n">08</span><span><span class="ck">✓</span>Deeds of trust and releases</span><span class="src">Register of Deeds</span></li>
+          <li><span class="n">09</span><span><span class="ck">✓</span>Recorded plats</span><span class="src">Book of maps</span></li>
+          <li><span class="n">10</span><span><span class="ck">✓</span>Liens and judgments</span><span class="src">Deed index, NC eCourts</span></li>
+          <li><span class="n">11</span><span><span class="ck">✓</span>Courts, current owners</span><span class="src">NC eCourts</span></li>
+          <li><span class="n">12</span><span><span class="ck">✓</span>Statewide parcel record</span><span class="src">NC OneMap</span></li>
+          <li><span class="n">13</span><span><span class="ck">✓</span>Ownership conclusion</span><span class="src">Record review</span></li>
+        </ol>
+        <a class="btn-line" href="demo/#/property/trust/report" target="_blank" rel="noopener">Open the sample report</a>
+      </div>
+      <figure class="paper rv" style="--d:120ms">
+        <img src="img/report.jpg" alt="The first page of a Fee Simple title report for a Wake County townhome" loading="lazy">
+        <figcaption>Title report from the demo, page one.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="s wrap">
+    <div class="head rv">
+      <h2>Built to be checked.</h2>
+      <p>Nobody should take software at its word on who owns a property. Every answer in Fee Simple can be traced back to the record it came from.</p>
+    </div>
+    <div class="pgrid">
+      <div class="pr rv">
+        <svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
+        <h3>Matched by parcel number</h3>
+        <p>The tax card and the recorded deed are tied together by the county's parcel number, not by a name or a street address.</p>
+      </div>
+      <div class="pr rv" style="--d:80ms">
+        <svg viewBox="0 0 24 24"><path d="M4 21V4M4 4h12l-2 4 2 4H4"/></svg>
+        <h3>Says when records disagree</h3>
+        <p>The tax card can still show the previous owner after a new deed is recorded. When that happens, you get a finding, not a guess.</p>
+      </div>
+      <div class="pr rv" style="--d:160ms">
+        <svg viewBox="0 0 24 24"><path d="M14 3h7v7M21 3l-9 9"/><path d="M19 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5"/></svg>
+        <h3>Every source opens</h3>
+        <p>Each finding opens the recorded document or the county page it came from.</p>
+      </div>
+      <div class="pr rv">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+        <h3>Clear about what it is</h3>
+        <p>A report summarizes the public records Fee Simple read. It is not a title opinion or a commitment to insure.</p>
+      </div>
+      <div class="pr ghost rv" style="--d:80ms">
+        <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        <h3>Security and data handling <em class="ph">Placeholder</em></h3>
+        <p>How searches and saved records are stored, and who can see them.</p>
+      </div>
+      <div class="pr ghost rv" style="--d:160ms">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 4.8"/></svg>
+        <h3>The team behind it <em class="ph">Placeholder</em></h3>
+        <p>Who builds Fee Simple, and the background they bring to it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="s wrap">
+    <div class="who">
+      <div class="rv">
+        <h2 class="h2">For people who act on ownership.</h2>
+        <ul class="alist">
+          <li><b>HOA management companies</b><span>Confirm the owner and mailing address before a 15-day letter goes out.</span></li>
+          <li><b>HOA collections attorneys</b><span>Check the owner of record on referred accounts, with the documents for the file.</span></li>
+          <li><b>Foreclosure trustees</b><span>Check the owner of record and mailing address from the county's own records.</span></li>
+          <li><b>Self-managed HOAs</b><span>Look up an owner before sending a notice, without learning two county websites.</span></li>
+          <li><b>Real estate investors</b><span>Find the owner of record, including parcels held by an LLC or a trust.</span></li>
+        </ul>
+      </div>
+      <figure class="quote rv" style="--d:120ms">
+        <em class="ph" style="margin-left:0">Placeholder</em>
+        <blockquote>“A short quote from a firm using Fee Simple goes here, in their own words, once they agree to be named.”</blockquote>
+        <figcaption class="who2"><span class="av"></span><span>Name, title<br>Firm</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="s wrap" id="coverage">
+    <div class="cov">
+      <div class="rv">
+        <div class="big">27</div>
+        <h2 class="h2" style="margin-top:12px">North Carolina counties live today.</h2>
+        <p class="sub">Another 47 counties are mapped and on the way.</p>
+        <a class="btn-line" href="https://talosoperations.com/coverage/">See the coverage map</a>
+      </div>
+      <div class="rv" style="--d:100ms">
+        <ul class="counties">
+          <li>Brunswick</li><li>Cumberland</li><li>Currituck</li><li>Durham</li><li>Edgecombe</li><li>Forsyth</li><li>Franklin</li><li>Granville</li><li>Guilford</li><li>Harnett</li><li>Iredell</li><li>Johnston</li><li>Lee</li><li>Mecklenburg</li><li>Moore</li><li>Nash</li><li>New Hanover</li><li>Pender</li><li>Person</li><li>Randolph</li><li>Rowan</li><li>Sampson</li><li>Stokes</li><li>Union</li><li>Wake</li><li>Watauga</li><li>Wilkes</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="s wrap">
+    <div class="head rv">
+      <h2>Coming to Fee Simple. <em class="ph">Placeholder</em></h2>
+      <p>Room for what we build next. Each card gets a name and one line when it is ready to announce.</p>
+    </div>
+    <div class="next rv" style="--d:80ms">
+      <div class="slot"><h3>Product name</h3><p>One line on what it does and who it is for.</p></div>
+      <div class="slot"><h3>Product name</h3><p>One line on what it does and who it is for.</p></div>
+      <div class="slot"><h3>Product name</h3><p>One line on what it does and who it is for.</p></div>
+    </div>
+  </section>
+
+  <section class="talk" id="talk">
+    <div class="wrap tgrid">
+      <div class="rv">
+        <h2 class="h2">Talk to us.</h2>
+        <p class="intro">Fee Simple is in early access in North Carolina. Tell us what you need to check, and we will write back to set up a conversation.</p>
+        <div class="contact">
+          <a href="mailto:info@talosoperations.com">info@talosoperations.com</a>
+          <a href="https://www.linkedin.com/company/talos_operations/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+      </div>
+      <div class="rv" style="--d:100ms">
+        <form id="talkform" name="talk" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="talk">
+          <p hidden><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+          <div class="row">
+            <label>Name<input name="name" autocomplete="name"></label>
+            <label>Work email<input name="email" type="email" autocomplete="email" placeholder="you@firm.com" required></label>
+          </div>
+          <label>Firm or association <i>(optional)</i><input name="firm" autocomplete="organization"></label>
+          <label>What do you need to check? <i>(optional)</i><textarea name="need" placeholder="For example: owner checks on HOA collection accounts in Wake County"></textarea></label>
+          <button class="btn" type="submit">Send</button>
+          <p class="formnote">We only use your email to reply.</p>
+        </form>
+        <div class="thanks" id="thanks" hidden>
+          <h3>Thanks. We will be in touch.</h3>
+          <p>We will reply to the email you gave us.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fgrid">
+      <a class="brand" href="#">Fee Simple<b>.</b></a>
+      <nav aria-label="Footer">
+        <a href="demo/">Demo</a>
+        <a href="https://talosoperations.com/coverage/">Coverage</a>
+        <a href="#talk">Talk to us</a>
+        <a href="mailto:info@talosoperations.com">info@talosoperations.com</a>
+        <a href="https://www.linkedin.com/company/talos_operations/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </nav>
+    </div>
+    <div class="legal">
+      <span>© 2026 Talos Operations LLC. Fee Simple is a Talos Operations product.</span>
+      <span><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* header hairline once the page scrolls */
+  var top=document.getElementById('top');
+  var onScroll=function(){top.classList.toggle('scrolled',scrollY>8)};
+  addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+  /* Log in: tooltip only, never navigates */
+  var login=document.getElementById('login');
+  login.querySelector('a').addEventListener('click',function(e){
+    e.preventDefault(); login.classList.add('show');
+    clearTimeout(login._t); login._t=setTimeout(function(){login.classList.remove('show')},1800);
+  });
+
+  /* live demo: real iframe on wide screens, screenshot + link on phones */
+  var app=document.getElementById('app'), cover=document.getElementById('cover');
+  var wide=matchMedia('(min-width: 900px)').matches;
+  function dismissIntro(){
+    var tries=0, iv=setInterval(function(){
+      tries++;
+      try{
+        var d=app.contentDocument, b=d&&[].find.call(d.querySelectorAll('button'),function(x){return /Got it/.test(x.textContent)});
+        if(b){b.click();clearInterval(iv)}
+      }catch(e){clearInterval(iv)}
+      if(tries>25)clearInterval(iv);
+    },120);
+  }
+  if(wide){
+    app.addEventListener('load',function(){dismissIntro();setTimeout(function(){app.classList.add('ready')},250)});
+    setTimeout(function(){app.src='demo/#/property/trust/overview'},reduce?0:700);
+    cover.addEventListener('click',function(){cover.classList.add('off');app.removeAttribute('tabindex');app.focus()});
+  }else{
+    app.remove();
+    cover.querySelector('span').textContent='Open the live demo';
+    cover.addEventListener('click',function(){location.href='demo/'});
+  }
+
+  /* product tour tabs */
+  var tabs=[].slice.call(document.querySelectorAll('.tab')), img=document.getElementById('tourimg'), link=document.getElementById('tourlink');
+  function show(t){
+    tabs.forEach(function(x){x.setAttribute('aria-selected',x===t?'true':'false');x.tabIndex=x===t?0:-1});
+    var src='img/'+t.dataset.img+'.jpg';
+    link.href='demo/#/property/trust/'+t.dataset.route;
+    if(img.getAttribute('src')===src)return;
+    img.classList.add('fade');
+    setTimeout(function(){img.src=src;img.alt=t.querySelector('b').textContent+' view in Fee Simple'},reduce?0:180);
+  }
+  img.addEventListener('load',function(){img.classList.remove('fade')});
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){show(t)});
+    t.addEventListener('keydown',function(e){
+      var k=e.key, j=null;
+      if(k==='ArrowDown'||k==='ArrowRight')j=(i+1)%tabs.length;
+      if(k==='ArrowUp'||k==='ArrowLeft')j=(i-1+tabs.length)%tabs.length;
+      if(j!==null){e.preventDefault();tabs[j].focus();show(tabs[j])}
+    });
+    if(i)t.tabIndex=-1;
+  });
+  addEventListener('load',function(){tabs.forEach(function(t){var p=new Image();p.src='img/'+t.dataset.img+'.jpg'})});
+
+  /* talk form (mock: no network) */
+  document.getElementById('talkform').addEventListener('submit',function(e){
+    e.preventDefault(); this.hidden=true; document.getElementById('thanks').hidden=false;
+  });
+
+  /* quiet reveal: gated on JS + motion allowed, with a watchdog so nothing stays hidden */
+  if(reduce||!('IntersectionObserver' in window))return;
+  root.classList.add('js');
+  var els=[].slice.call(document.querySelectorAll('.rv')), fired=false;
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(en){if(en.isIntersecting){fired=true;en.target.classList.add('in');io.unobserve(en.target)}});
+  },{rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(el){io.observe(el)});
+  /* anything already scrolled past is shown at once */
+  addEventListener('scroll',function(){els.forEach(function(el){if(!el.classList.contains('in')&&el.getBoundingClientRect().bottom<0)el.classList.add('in')})},{passive:true});
+  setTimeout(function(){if(!fired)els.forEach(function(el){el.classList.add('in')})},2500);
+})();
+</script>
+</body>
+</html>

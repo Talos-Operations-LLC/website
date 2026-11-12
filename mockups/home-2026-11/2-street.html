@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fee Simple | 2. Storybook street</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1b2130; --muted:#5d6577; --bg:#ffffff;
+  --sun:#ffd23f; --sky:#e8f5ff; --skyd:#7cc4ff; --leaf:#5cc98a; --grass:#c9f0d6; --blush:#ffc4b5; --pop:#ff6b4a; --mint:#9be3b7;
+  --pen:2.5px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.55 Figtree,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--skyd);outline-offset:3px;border-radius:10px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+h1,h2,h3,.brand{font-family:"Bricolage Grotesque",Figtree,sans-serif}
+
+.top{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.brand{font-weight:800;font-size:26px;letter-spacing:-.03em;text-decoration:none}
+.brand span{color:var(--pop)}
+.nav{display:flex;gap:6px;align-items:center}
+.nav a{text-decoration:none;font-weight:600;font-size:16px;padding:10px 14px;border-radius:12px}
+.nav a:hover{background:#f3f4f7}
+.chunky{display:inline-flex;align-items:center;gap:10px;font:inherit;font-weight:700;text-decoration:none;cursor:pointer;
+  background:var(--ink);color:#fff;border:var(--pen) solid var(--ink);border-radius:16px;padding:13px 22px;box-shadow:4px 4px 0 var(--pop);transition:transform .15s,box-shadow .15s}
+.chunky:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--pop)}
+.chunky:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--pop)}
+.chunky.light{background:#fff;color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.chunky.light:hover{box-shadow:6px 6px 0 var(--ink)}
+
+.hero{padding:40px 0 0;display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:end}
+.hero h1{font-size:clamp(46px,6.8vw,92px);line-height:.95;letter-spacing:-.04em;font-weight:800;margin:0}
+.hero h1 .u{background:linear-gradient(transparent 62%,var(--sun) 62%,var(--sun) 92%,transparent 92%)}
+.hero p{font-size:20px;color:var(--muted);margin:0 0 24px;max-width:40ch}
+.hero .btns{display:flex;gap:14px;flex-wrap:wrap}
+
+/* the street */
+.scene{position:relative;margin-top:44px;border:var(--pen) solid var(--ink);border-radius:32px;background:var(--sky);overflow:visible;box-shadow:8px 8px 0 var(--ink)}
+.scene svg{display:block;width:100%;height:auto;border-radius:30px}
+.house{cursor:pointer}
+.house:focus{outline:none}
+.house:focus-visible .body{stroke:var(--pop);stroke-width:5}
+.house .check{opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(.3);transition:opacity .25s,transform .35s cubic-bezier(.3,1.6,.5,1)}
+.house.seen .check{opacity:1;transform:none}
+#lens{transition:transform 1.1s cubic-bezier(.65,0,.25,1)}
+.tag{position:absolute;transform:translate(-50%,-100%) scale(.85);opacity:0;pointer-events:none;transition:opacity .25s,transform .35s cubic-bezier(.3,1.5,.5,1);
+  background:#fff;border:var(--pen) solid var(--ink);border-radius:20px;padding:14px 18px 16px;width:280px;box-shadow:5px 5px 0 var(--ink);z-index:2}
+.tag.on{opacity:1;transform:translate(-50%,-100%) scale(1)}
+.tag::after{content:"";position:absolute;left:50%;bottom:-12px;width:20px;height:20px;background:#fff;border-right:var(--pen) solid var(--ink);border-bottom:var(--pen) solid var(--ink);transform:translateX(-50%) rotate(45deg)}
+.tag .addr{font-size:14px;font-weight:600;color:var(--muted)}
+.tag .owner{font-family:"Bricolage Grotesque";font-weight:800;font-size:23px;letter-spacing:-.02em;line-height:1.1;margin:2px 0 6px}
+.tag .mail{font-size:15px;line-height:1.35}
+.sticker{display:inline-block;margin-top:10px;font-weight:700;font-size:14px;padding:5px 11px;border-radius:999px;border:2px solid var(--ink)}
+.sticker.ok{background:var(--mint)} .sticker.moved{background:var(--sun)} .sticker.review{background:var(--blush)}
+.scene-hint{position:absolute;right:22px;top:18px;font-weight:600;font-size:15px;background:#fff;border:2px solid var(--ink);border-radius:999px;padding:6px 14px}
+
+/* sections */
+section{padding:96px 0 0}
+h2{font-size:clamp(34px,4.6vw,58px);line-height:1;letter-spacing:-.035em;font-weight:800;margin:0 0 14px}
+.sub{font-size:20px;color:var(--muted);max-width:52ch;margin:0}
+
+.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px}
+.panel{border:var(--pen) solid var(--ink);border-radius:26px;overflow:hidden;background:#fff;box-shadow:6px 6px 0 var(--ink)}
+.panel .art{height:210px;display:grid;place-items:center;border-bottom:var(--pen) solid var(--ink)}
+.panel:nth-child(1) .art{background:#fff6d1}
+.panel:nth-child(2) .art{background:#e3f3ff}
+.panel:nth-child(3) .art{background:#dff7e8}
+.panel .txt{padding:20px 22px 24px}
+.panel .num{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;font-weight:800;font-family:"Bricolage Grotesque";margin-bottom:10px}
+.panel h3{font-size:25px;letter-spacing:-.02em;margin:0 0 6px}
+.panel p{margin:0;color:var(--muted)}
+
+.split{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:stretch}
+.box{border:var(--pen) solid var(--ink);border-radius:30px;padding:40px;box-shadow:8px 8px 0 var(--ink)}
+.box.yellow{background:var(--sun)}
+.box.yellow .big{font-family:"Bricolage Grotesque";font-weight:800;font-size:clamp(70px,9vw,128px);line-height:.85;letter-spacing:-.05em}
+.box.yellow h3{font-size:30px;letter-spacing:-.02em;margin:12px 0 6px;line-height:1.05}
+.box.yellow p{margin:0 0 22px;font-size:18px}
+.ncmap{display:block;width:100%;height:auto;margin:6px 0 18px}
+.box.white{background:#fff;display:flex;flex-direction:column}
+.stickers{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.stickers span{font-weight:700;font-size:18px;padding:10px 18px;border:var(--pen) solid var(--ink);border-radius:999px;background:#fff}
+.stickers span:nth-child(6n+1){background:var(--mint);transform:rotate(-2deg)}
+.stickers span:nth-child(6n+2){background:#fff;transform:rotate(1.5deg)}
+.stickers span:nth-child(6n+3){background:var(--blush);transform:rotate(-1deg)}
+.stickers span:nth-child(6n+4){background:#cfe9ff;transform:rotate(2deg)}
+.stickers span:nth-child(6n+5){background:var(--sun);transform:rotate(-1.5deg)}
+.box.white .why{margin-top:auto;padding-top:26px;font-size:18px;color:var(--muted)}
+.box.white .why b{color:var(--ink)}
+
+.mailbox{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;background:#fff4f0;border:var(--pen) solid var(--ink);border-radius:32px;padding:44px clamp(26px,5vw,60px);box-shadow:8px 8px 0 var(--ink)}
+.mailbox form{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.mailbox input{flex:1;min-width:220px;font:inherit;font-size:18px;padding:14px 18px;border:var(--pen) solid var(--ink);border-radius:16px;background:#fff;outline:0}
+.mailbox input:focus{box-shadow:0 0 0 4px var(--sun)}
+.mailbox .ok{font-weight:700;margin:14px 0 0;min-height:1.5em}
+
+footer{margin-top:90px;padding:36px 0 44px;border-top:var(--pen) solid var(--ink);display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;font-size:16px}
+footer nav{display:flex;gap:20px;flex-wrap:wrap}
+footer a{text-decoration:none;font-weight:600}
+footer a:hover{text-decoration:underline;text-decoration-thickness:2px}
+
+@media (max-width:900px){
+  .hero,.split,.mailbox{grid-template-columns:1fr}
+  .strip{grid-template-columns:1fr}
+  .nav a.hide-sm{display:none}
+  .mailbox svg{width:120px;height:auto}
+  .scene-hint{display:none}
+}
+@media (max-width:700px){
+  .tag{position:static;transform:none;opacity:1;width:auto;margin:0 14px 14px;box-shadow:4px 4px 0 var(--ink)}
+  .tag::after{display:none}
+  .scene{border-radius:24px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#">Fee Simple<span>.</span></a>
+    <nav class="nav" aria-label="Main">
+      <a class="hide-sm" href="https://talosoperations.com/coverage.html">Coverage</a>
+      <a class="hide-sm" href="https://talosoperations.com/demo/">Demo</a>
+      <a class="chunky" href="#access" style="padding:10px 18px">Get access</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1>Find out who really owns every house on the street.</h1>
+      <div>
+        <p>Fee Simple reads the county's tax card and deed for you, then hands back the owner and the address to mail them.</p>
+        <div class="btns">
+          <a class="chunky" href="https://talosoperations.com/demo/">Try the demo</a>
+          <a class="chunky light" href="#how">How it works</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="scene" id="scene">
+      <span class="scene-hint">Tap a house</span>
+      <svg viewBox="0 0 1200 480" role="group" aria-label="A street of six houses. Choose one to see who owns it." id="street"></svg>
+      <div class="tag" id="tag" aria-live="polite"></div>
+    </div>
+
+    <section id="how">
+      <h2>How it works, in three panels.</h2>
+      <p class="sub">The county keeps two records of who owns a property. They don't always agree. Fee Simple reads both.</p>
+      <div class="strip">
+        <div class="panel">
+          <div class="art">
+            <svg width="190" height="160" viewBox="0 0 190 160" fill="none" stroke="#1b2130" stroke-width="3" stroke-linejoin="round" aria-hidden="true">
+              <rect x="30" y="14" width="130" height="134" rx="12" fill="#fff"/>
+              <rect x="46" y="32" width="60" height="10" rx="5" fill="#1b2130" stroke="none"/>
+              <rect x="44" y="58" width="102" height="18" rx="6" fill="#ffd23f"/>
+              <path d="M48 96h90M48 112h70M48 128h80" stroke-linecap="round"/>
+              <circle cx="140" cy="38" r="12" fill="#ff6b4a"/>
+            </svg>
+          </div>
+          <div class="txt"><span class="num">1</span><h3>It reads the tax card.</h3><p>That's the county tax office's record: who gets the bill, and where it's mailed.</p></div>
+        </div>
+        <div class="panel">
+          <div class="art">
+            <svg width="190" height="160" viewBox="0 0 190 160" fill="none" stroke="#1b2130" stroke-width="3" stroke-linejoin="round" aria-hidden="true">
+              <path d="M36 12h92l26 26v110H36z" fill="#fff"/>
+              <path d="M128 12v26h26"/>
+              <path d="M52 44h56M52 62h82M52 78h70" stroke-linecap="round"/>
+              <rect x="50" y="92" width="88" height="16" rx="6" fill="#7cc4ff"/>
+              <circle cx="122" cy="128" r="15" fill="#ff6b4a"/>
+              <path d="m115 128 5 5 9-9" stroke="#fff"/>
+            </svg>
+          </div>
+          <div class="txt"><span class="num">2</span><h3>It reads the deed.</h3><p>That's the Register of Deeds' record: who the property was actually deeded to.</p></div>
+        </div>
+        <div class="panel">
+          <div class="art">
+            <svg width="210" height="160" viewBox="0 0 210 160" fill="none" stroke="#1b2130" stroke-width="3" stroke-linejoin="round" aria-hidden="true">
+              <rect x="18" y="30" width="96" height="104" rx="10" fill="#fff" transform="rotate(-6 66 82)"/>
+              <rect x="96" y="26" width="96" height="104" rx="10" fill="#fff" transform="rotate(5 144 78)"/>
+              <rect x="56" y="62" width="98" height="34" rx="17" fill="#5cc98a"/>
+              <path d="m84 79 8 8 16-16" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+              <text x="140" y="85" font-family="Figtree" font-weight="700" font-size="13" fill="#1b2130" stroke="none">PIN</text>
+            </svg>
+          </div>
+          <div class="txt"><span class="num">3</span><h3>It matches them up.</h3><p>Both records are matched by parcel number. Then you get one plain answer.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="split">
+        <div class="box yellow">
+          <div class="big">27</div>
+          <h3>North Carolina counties, ready today.</h3>
+          <p>47 more are mapped and on the way.</p>
+          <svg class="ncmap" id="nc" viewBox="0 0 600 240" aria-hidden="true"></svg>
+          <a class="chunky light" href="https://talosoperations.com/coverage.html">See the map</a>
+        </div>
+        <div class="box white">
+          <h2 style="font-size:clamp(30px,3.6vw,44px)">Made for people who mail property owners.</h2>
+          <div class="stickers">
+            <span>HOA managers</span><span>Self-managed HOAs</span><span>Attorneys</span><span>Title teams</span><span>Foreclosure trustees</span><span>Investors</span>
+          </div>
+          <p class="why"><b>Why both records?</b> The tax card can still show the previous owner after a new deed is recorded. Every answer links to the county document it came from.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="access">
+      <div class="mailbox">
+        <svg width="190" height="200" viewBox="0 0 190 200" fill="none" stroke="#1b2130" stroke-width="3.5" stroke-linejoin="round" aria-hidden="true">
+          <rect x="84" y="110" width="20" height="86" fill="#fff"/>
+          <path d="M30 60a40 40 0 0 1 80 0v60H30z" fill="#7cc4ff"/>
+          <path d="M70 20h50a40 40 0 0 1 40 40v60h-50V60a40 40 0 0 0-40-40z" fill="#fff"/>
+          <rect x="138" y="44" width="8" height="46" fill="#ff6b4a"/>
+          <rect x="146" y="44" width="26" height="18" fill="#ff6b4a"/>
+          <path d="M44 74h52" stroke-linecap="round"/>
+          <path d="M14 196h162" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <h2>Drop your email in the box.</h2>
+          <p class="sub">We'll reach out and set up access for your team.</p>
+          <form onsubmit="event.preventDefault();document.getElementById('ok').textContent='Got it! Watch your inbox.'">
+            <label for="em" style="position:absolute;left:-9999px">Email address</label>
+            <input id="em" type="email" required placeholder="you@company.com" autocomplete="email">
+            <button class="chunky">Get early access</button>
+          </form>
+          <p class="ok" id="ok" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Talos Operations LLC</span>
+    <nav aria-label="Footer"><a href="mailto:info@talosoperations.com">info@talosoperations.com</a><a href="https://www.linkedin.com/company/talos_operations/">LinkedIn</a><a href="https://talosoperations.com/privacy.html">Privacy</a><a href="https://talosoperations.com/terms.html">Terms</a></nav>
+  </footer>
+</div>
+
+<script>
+const INK='#1b2130';
+const H=[
+  {fill:'#ffd23f',h:150,roof:'tri',addr:'12 Maple St',owner:'The Okafor family',mail:'Mail goes to the house.',v:'ok',vt:'All good'},
+  {fill:'#ffffff',h:186,roof:'tri',addr:'14 Maple St',owner:'Rosa Delgado',mail:'Mail to PO Box 220, Apex, NC 27502',v:'ok',vt:'All good'},
+  {fill:'#ffc4b5',h:136,roof:'flat',addr:'16 Maple St',owner:'Sam & Lee Park',mail:'Sold in June. The tax card still lists the last owner.',v:'moved',vt:'Title moved'},
+  {fill:'#9be3b7',h:172,roof:'tri',addr:'18 Maple St',owner:'Maple Street Rentals LLC',mail:'Mail to 900 Main St, Suite 3, Raleigh, NC 27601',v:'ok',vt:'All good'},
+  {fill:'#cfe9ff',h:156,roof:'tri',addr:'20 Maple St',owner:'Two names, two deeds',mail:'Fee Simple shows you both so a person can decide.',v:'review',vt:'Needs a look'},
+  {fill:'#fff',h:140,roof:'flat',addr:'22 Maple St',owner:'Grace Ellison',mail:'Mail goes to the house.',v:'ok',vt:'All good'}
+];
+const G=404, W=140, GAP=52, X0=44;
+const cx=i=>X0+i*(W+GAP)+W/2;
+function houseSVG(d,i){
+  const x=X0+i*(W+GAP), y=G-d.h;
+  let roof;
+  if(d.roof==='tri') roof=`<path d="M${x-14} ${y+2} L${x+W/2} ${y-64} L${x+W+14} ${y+2} Z" fill="${INK}" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="${x+W-40}" y="${y-56}" width="18" height="34" fill="#fff" stroke="${INK}" stroke-width="3"/>`;
+  else roof=`<rect x="${x-8}" y="${y-16}" width="${W+16}" height="18" rx="4" fill="${INK}"/>`;
+  const win=(wx,wy)=>`<rect x="${wx}" y="${wy}" width="32" height="32" rx="5" fill="#fff6c7" stroke="${INK}" stroke-width="3"/><path d="M${wx+16} ${wy}v32M${wx} ${wy+16}h32" stroke="${INK}" stroke-width="2.5"/>`;
+  const wins = d.h>160 ? win(x+20,y+24)+win(x+W-52,y+24)+win(x+20,y+74) : win(x+20,y+22)+win(x+W-52,y+22);
+  return `<g class="house" data-i="${i}" tabindex="0" role="button" aria-label="${d.addr}">
+    ${roof}
+    <rect class="body" x="${x}" y="${y}" width="${W}" height="${d.h}" rx="6" fill="${d.fill}" stroke="${INK}" stroke-width="3"/>
+    ${wins}
+    <path d="M${x+W/2-19} ${G} v-44 a19 19 0 0 1 38 0 v44" fill="#ff6b4a" stroke="${INK}" stroke-width="3"/>
+    <circle cx="${x+W/2+10}" cy="${G-24}" r="3" fill="${INK}"/>
+    <g class="check"><circle cx="${x+W-6}" cy="${y+8}" r="17" fill="#5cc98a" stroke="${INK}" stroke-width="3"/><path d="m${x+W-14} ${y+8} 6 6 10-11" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></g>
+  </g>`;
+}
+function tree(x){return `<path d="M${x} ${G} v-34" stroke="${INK}" stroke-width="4"/><circle cx="${x}" cy="${G-52}" r="22" fill="#5cc98a" stroke="${INK}" stroke-width="3"/>`}
+const svg=document.getElementById('street');
+let s=`<circle cx="1110" cy="86" r="40" fill="#ffd23f" stroke="${INK}" stroke-width="3"/>
+<path d="M150 90c0-16 22-22 34-12 6-14 32-14 38 2 16-2 22 18 8 24H158c-10 0-12-8-8-14z" fill="#fff" stroke="${INK}" stroke-width="3"/>
+<path d="M610 60c0-14 20-19 30-10 6-12 28-12 34 2 14-2 19 15 7 20H617c-9 0-11-7-7-12z" fill="#fff" stroke="${INK}" stroke-width="3"/>
+<rect x="-10" y="${G}" width="1220" height="90" fill="#c9f0d6" stroke="${INK}" stroke-width="3"/>
+<rect x="-10" y="${G+20}" width="1220" height="22" fill="#fff" stroke="${INK}" stroke-width="3"/>`;
+for(let i=0;i<5;i++) s+=tree(X0+W+GAP/2+i*(W+GAP));
+H.forEach((d,i)=>s+=houseSVG(d,i));
+s+=`<g id="lens" style="transform:translate(${cx(0)}px,300px)"><g transform="rotate(-8)"><line x1="34" y1="34" x2="74" y2="74" stroke="${INK}" stroke-width="14" stroke-linecap="round"/><circle r="50" fill="rgba(255,255,255,.35)" stroke="${INK}" stroke-width="9"/><path d="M-26 -18a32 32 0 0 1 22 -16" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round"/></g></g>`;
+svg.innerHTML=s;
+
+const tag=document.getElementById('tag'),lens=document.getElementById('lens');
+const houses=[...svg.querySelectorAll('.house')];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let cur=-1,timer=null,tagT=null;
+function show(i){
+  cur=i;const d=H[i];
+  const ly=G-d.h/2-10;
+  lens.style.transform=`translate(${cx(i)}px,${ly}px)`;
+  tag.classList.remove('on');
+  clearTimeout(tagT);
+  tagT=setTimeout(()=>{
+    houses[i].classList.add('seen');
+    tag.innerHTML=`<div class="addr">${d.addr}</div><div class="owner">${d.owner}</div><div class="mail">${d.mail}</div><span class="sticker ${d.v}">${d.vt}</span>`;
+    const peak=G-d.h-(d.roof==='tri'?64:16)-14;
+    tag.style.left=(cx(i)/1200*100)+'%';
+    tag.style.top=(peak/480*100)+'%';
+    tag.classList.add('on');
+  },reduce?0:900);
+}
+function tour(){clearInterval(timer);timer=setInterval(()=>show((cur+1)%H.length),4200)}
+houses.forEach((h,i)=>{
+  const go=()=>{clearInterval(timer);show(i)};
+  h.addEventListener('click',go);
+  h.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}});
+});
+show(0); if(!reduce) tour();
+
+// little NC map for the coverage box
+const NC=[[-84.32,35.0],[-83.11,35.0],[-82.3,35.19],[-81.04,35.15],[-80.93,35.1],[-80.78,34.82],[-79.67,34.8],[-78.54,33.86],[-77.96,33.88],[-77.6,34.4],[-76.95,34.66],[-76.4,34.75],[-75.75,35.2],[-75.5,35.6],[-75.75,36.2],[-75.87,36.55],[-81.68,36.59],[-82.0,36.3],[-82.6,36.0],[-83.1,35.75],[-83.7,35.55],[-84.0,35.3]];
+const px=([lo,la])=>[(lo+84.6)*64,(36.85-la)*78];
+document.getElementById('nc').innerHTML=`<path d="M${NC.map(p=>px(p).map(n=>n.toFixed(1)).join(' ')).join('L')}Z" fill="#fff" stroke="${INK}" stroke-width="3" stroke-linejoin="round"/>
+${[[-78.64,35.78,'Raleigh'],[-80.84,35.23,'Charlotte'],[-77.94,34.23,'Wilmington'],[-79.8,36.07,'Greensboro']].map(([lo,la,n])=>{const[x,y]=px([lo,la]);return `<circle cx="${x}" cy="${y}" r="9" fill="#ff6b4a" stroke="${INK}" stroke-width="2.5"/><text x="${x+14}" y="${y+5}" font-family="Figtree" font-weight="700" font-size="16" fill="${INK}">${n}</text>`}).join('')}`;
+</script>
+<script src="switcher.js"></script>
+</body>
+</html>

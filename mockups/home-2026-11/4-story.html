@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fee Simple | 4. One house, two records</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..800,0..100,0..1&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#12302a;--muted:#5a6b66;--line:#e4ebe8;--teal:#0f7a63;--teal-s:#e2f3ee;--hl:#ffe766;--pop:#ff6b4a;--pop-s:#ffe9e3;--amber-s:#fff3d6;--amber:#8d5a00;
+  --shadow:0 2px 6px rgba(18,48,42,.05),0 30px 60px -30px rgba(18,48,42,.35)}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font:18px/1.6 "Instrument Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--teal);outline-offset:3px;border-radius:10px}
+.serif{font-family:Fraunces,Georgia,serif;font-variation-settings:"SOFT" 100,"WONK" 0}
+.wrap{max-width:1180px;margin:0 auto;padding:0 26px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.brand{font-family:Fraunces,serif;font-variation-settings:"SOFT" 100;font-weight:700;font-size:26px;letter-spacing:-.02em;text-decoration:none}
+.brand span{color:var(--pop)}
+.nav{display:flex;gap:24px;align-items:center;font-weight:600;font-size:16px}
+.nav a{text-decoration:none;color:var(--muted)}
+.nav a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:700;font-size:16.5px;text-decoration:none;border:0;cursor:pointer;background:var(--ink);color:#fff!important;border-radius:999px;padding:14px 24px;transition:background .2s}
+.btn:hover{background:#1f4a41}
+.btn.ghost{background:var(--teal-s);color:var(--ink)!important}
+.btn.ghost:hover{background:#d2ece4}
+
+.hero{padding:70px 0 40px;max-width:980px}
+.hero h1{font-family:Fraunces,serif;font-variation-settings:"SOFT" 100,"WONK" 1;font-weight:560;font-size:clamp(44px,6.6vw,94px);line-height:1;letter-spacing:-.03em;margin:0 0 26px}
+.hero p{font-size:clamp(19px,1.8vw,22px);color:var(--muted);max-width:48ch;margin:0 0 30px}
+.cue{display:flex;align-items:center;gap:12px;color:var(--muted);font-weight:600;font-size:15.5px;margin-top:46px}
+.cue i{width:26px;height:40px;border:2px solid #b9c7c2;border-radius:14px;position:relative}
+.cue i::after{content:"";position:absolute;left:50%;top:8px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:var(--teal);animation:cue 1.6s ease-in-out infinite}
+@keyframes cue{50%{transform:translateY(10px);opacity:.3}}
+
+/* scrolly */
+.scrolly{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;position:relative}
+.steps{padding:6vh 0 30vh}
+.step{min-height:78vh;display:flex;flex-direction:column;justify-content:center;opacity:.28;transition:opacity .4s}
+.step.on{opacity:1}
+.step .n{font-weight:700;font-size:15px;color:var(--teal);margin-bottom:10px}
+.step h2{font-family:Fraunces,serif;font-variation-settings:"SOFT" 100,"WONK" 0;font-weight:600;font-size:clamp(28px,3vw,42px);line-height:1.08;letter-spacing:-.02em;margin:0 0 14px}
+.step p{color:var(--muted);font-size:19px;margin:0;max-width:40ch}
+.stage-wrap{position:relative}
+.stage{position:sticky;top:10vh;height:80vh;max-height:720px}
+
+.house{position:absolute;left:50%;top:22%;transform:translate(-50%,0) scale(1.35);transform-origin:top left;transition:all .7s cubic-bezier(.6,0,.2,1);display:flex;align-items:center;gap:14px;background:#fff;border-radius:22px;padding:14px 20px 14px 14px;box-shadow:var(--shadow);border:1px solid var(--line);white-space:nowrap}
+.house svg{flex:none}
+.house b{display:block;font-size:19px}
+.house span{color:var(--muted);font-size:14.5px}
+.stage[data-step]:not([data-step="1"]) .house{left:0;top:0;transform:translate(0,0) scale(1)}
+
+.doc{position:absolute;width:60%;background:#fff;border-radius:20px;box-shadow:var(--shadow);border:1px solid var(--line);padding:22px 24px 20px;opacity:0;transition:opacity .6s,transform .7s cubic-bezier(.3,1.2,.4,1),filter .5s}
+.doc h3{margin:0 0 2px;font-size:13.5px;font-weight:700;color:var(--muted);letter-spacing:.01em}
+.doc .t{font-family:Fraunces,serif;font-variation-settings:"SOFT" 100;font-weight:600;font-size:23px;margin:0 0 14px;letter-spacing:-.01em}
+.doc dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:0}
+.doc dt,.doc dd{margin:0;padding:9px 0;border-top:1px solid var(--line);font-size:15.5px}
+.doc dt{color:var(--muted);padding-right:16px}
+.doc dd{font-weight:600}
+.mark{background:linear-gradient(var(--hl),var(--hl)) no-repeat 0 85%/0% 70%;transition:background-size .7s .3s ease;padding:0 2px;border-radius:3px}
+.pin{border-radius:8px;transition:box-shadow .4s}
+.tax{left:0;top:17%;transform:translateY(24px) rotate(-2.5deg)}
+.deed{right:0;top:38%;transform:translateX(40px) rotate(2deg)}
+.stale{display:inline-block;margin-left:8px;font-size:12.5px;font-weight:700;color:var(--pop);background:var(--pop-s);border-radius:999px;padding:2px 9px;opacity:0;transition:opacity .4s .5s;vertical-align:2px}
+.same{position:absolute;left:47%;top:47%;transform:translate(-50%,10px);opacity:0;transition:all .5s;z-index:3;background:var(--teal);color:#fff;font-weight:700;font-size:15px;border-radius:999px;padding:9px 16px;box-shadow:0 10px 24px -10px rgba(15,122,99,.8);display:flex;gap:8px;align-items:center;white-space:nowrap}
+.verdict{position:absolute;left:5%;right:5%;bottom:0;z-index:4;background:#fff;border-radius:26px;box-shadow:0 2px 6px rgba(18,48,42,.06),0 40px 80px -30px rgba(18,48,42,.5);border:1px solid var(--line);padding:26px 28px;opacity:0;transform:translateY(40px);transition:all .7s cubic-bezier(.3,1.2,.4,1)}
+.verdict .chip{display:inline-flex;align-items:center;gap:7px;background:var(--amber-s);color:var(--amber);font-weight:700;font-size:15px;border-radius:999px;padding:7px 13px}
+.verdict .say{font-family:Fraunces,serif;font-variation-settings:"SOFT" 100,"WONK" 1;font-size:clamp(24px,2.4vw,32px);font-weight:600;line-height:1.15;margin:14px 0 16px}
+.verdict .src{display:flex;flex-wrap:wrap;gap:8px}
+.verdict .src a{font-size:14.5px;font-weight:600;text-decoration:none;background:var(--teal-s);color:var(--teal);border-radius:10px;padding:7px 12px}
+
+/* states */
+.stage[data-step="2"] .tax,.stage[data-step="3"] .tax,.stage[data-step="4"] .tax,.stage[data-step="5"] .tax{opacity:1;transform:rotate(-2.5deg)}
+.stage[data-step="3"] .deed,.stage[data-step="4"] .deed,.stage[data-step="5"] .deed{opacity:1;transform:rotate(2deg)}
+.stage[data-step="2"] .tax .mark,.stage[data-step="3"] .tax .mark,.stage[data-step="4"] .tax .mark,.stage[data-step="5"] .tax .mark{background-size:100% 70%}
+.stage[data-step="3"] .deed .mark,.stage[data-step="4"] .deed .mark,.stage[data-step="5"] .deed .mark{background-size:100% 70%}
+.stage[data-step="3"] .stale,.stage[data-step="4"] .stale,.stage[data-step="5"] .stale{opacity:1}
+.stage[data-step="4"] .pin,.stage[data-step="5"] .pin{box-shadow:0 0 0 3px var(--teal)}
+.stage[data-step="4"] .same{opacity:1;transform:translate(-50%,0)}
+.stage[data-step="5"] .doc{filter:saturate(.6) opacity(.55)}
+.stage[data-step="5"] .verdict{opacity:1;transform:none}
+
+/* after */
+section{padding:100px 0 0}
+.h2{font-family:Fraunces,serif;font-variation-settings:"SOFT" 100,"WONK" 0;font-weight:600;font-size:clamp(34px,4.4vw,58px);line-height:1.02;letter-spacing:-.025em;margin:0 0 16px}
+.sub{color:var(--muted);font-size:20px;max-width:52ch;margin:0}
+.verdicts{margin-top:40px;border-top:2px solid var(--ink)}
+.verdicts .v{display:grid;grid-template-columns:280px 1fr;gap:30px;align-items:baseline;padding:28px 0;border-bottom:1px solid var(--line)}
+.verdicts .v b{font-family:Fraunces,serif;font-variation-settings:"SOFT" 100,"WONK" 1;font-weight:600;font-size:30px;display:flex;align-items:center;gap:12px}
+.verdicts .v b i{width:14px;height:14px;border-radius:50%;flex:none}
+.verdicts .v p{margin:0;font-size:20px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.panel{border-radius:32px;padding:44px}
+.panel.teal{background:var(--teal);color:#fff}
+.panel.teal .big{font-family:Fraunces,serif;font-variation-settings:"SOFT" 100,"WONK" 1;font-size:clamp(80px,9vw,130px);line-height:.9;font-weight:600;letter-spacing:-.04em}
+.panel.teal p{font-size:20px;margin:10px 0 24px;color:#d4efe7}
+.panel.teal a{color:#fff;font-weight:700;text-underline-offset:4px}
+.panel.soft{background:var(--teal-s)}
+.panel.soft ul{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:4px}
+.panel.soft li{font-family:Fraunces,serif;font-variation-settings:"SOFT" 100;font-size:clamp(22px,2.2vw,28px);font-weight:500;padding:8px 0;border-bottom:1px solid rgba(18,48,42,.1)}
+.panel.soft li:last-child{border-bottom:0}
+.join{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:end;padding:56px 0 0}
+.join form{display:flex;gap:10px;border-bottom:2px solid var(--ink);padding-bottom:10px}
+.join input{flex:1;min-width:0;border:0;outline:0;font:inherit;font-size:20px;background:transparent;padding:10px 0}
+.join small{display:block;color:var(--muted);margin-top:12px;font-size:15px}
+footer{margin-top:100px;padding:36px 0 44px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--muted);font-size:15.5px}
+footer nav{display:flex;gap:22px;flex-wrap:wrap}
+footer a{text-decoration:none}
+footer a:hover{color:var(--ink)}
+
+@media (max-width:900px){
+  .scrolly{grid-template-columns:1fr;gap:0}
+  .stage[data-step="1"] .house{transform:translate(-50%,0) scale(1);left:50%}
+  .deed{transform:translateY(30px) rotate(2deg)}
+  main{overflow-x:clip}
+  .stage-wrap{order:-1;position:sticky;top:0;z-index:5;background:#fff;height:58vh}
+  .stage{position:relative;top:0;height:56vh}
+  .steps{padding-top:2vh}
+  .step{min-height:60vh;justify-content:flex-start;padding-top:4vh}
+  .doc{width:78%;padding:16px 18px}
+  .doc .t{font-size:19px;margin-bottom:8px}
+  .doc dt,.doc dd{font-size:13.5px;padding:6px 0}
+  .tax{top:15%}.deed{top:53%}
+  .verdict{padding:18px 20px}
+  .house{padding:10px 14px 10px 10px}
+  .two,.join{grid-template-columns:1fr}
+  .verdicts .v{grid-template-columns:1fr;gap:6px}
+  .nav a:not(.btn){display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#">Fee Simple<span>.</span></a>
+    <nav class="nav" aria-label="Main">
+      <a href="https://talosoperations.com/coverage.html">Coverage</a>
+      <a href="https://talosoperations.com/demo/">Demo</a>
+      <a class="btn" href="#join">Get early access</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <h1>When the county disagrees with itself, Fee Simple notices.</h1>
+      <p>Every North Carolina property has a tax card and a recorded deed, kept by two different offices. Fee Simple reads both and tells you who really owns it.</p>
+      <a class="btn" href="https://talosoperations.com/demo/">Try the demo</a>
+      <div class="cue"><i></i>Scroll to follow one house</div>
+    </div>
+
+    <div class="scrolly">
+      <div class="steps" id="steps">
+        <div class="step" data-s="1"><div class="n">The house</div><h2>This is 418 Willow Bend Ct.</h2><p>A normal house in Johnston County. Say you need to send its owner a letter.</p></div>
+        <div class="step" data-s="2"><div class="n">The tax card</div><h2>The tax office says Paul Whitaker owns it.</h2><p>That's who the county bills, and where the bill goes. Most look-ups stop right here.</p></div>
+        <div class="step" data-s="3"><div class="n">The deed</div><h2>The Register of Deeds says the Holloways do.</h2><p>A deed recorded in September moved the house to them. The tax card hasn't caught up yet. That happens more than you'd think.</p></div>
+        <div class="step" data-s="4"><div class="n">The match</div><h2>Fee Simple reads both and lines them up by parcel.</h2><p>Same parcel number, two records. Now the difference is easy to see.</p></div>
+        <div class="step" data-s="5"><div class="n">The answer</div><h2>Then it tells you, plainly.</h2><p>Title moved. Write to the Holloways. Every finding opens the county document it came from.</p></div>
+      </div>
+      <div class="stage-wrap">
+        <div class="stage" id="stage" data-step="1" aria-live="polite">
+          <div class="house">
+            <svg width="54" height="54" viewBox="0 0 54 54" aria-hidden="true"><rect width="54" height="54" rx="14" fill="#e2f3ee"/><path d="M13 27 27 15l14 12v13H13z" fill="#fff" stroke="#12302a" stroke-width="2.4" stroke-linejoin="round"/><path d="M23 40v-8h8v8" fill="#ff6b4a" stroke="#12302a" stroke-width="2.4" stroke-linejoin="round"/></svg>
+            <div><b>418 Willow Bend Ct</b><span>Clayton, Johnston County</span></div>
+          </div>
+          <div class="doc tax">
+            <h3>Johnston County tax office</h3>
+            <p class="t">Tax card</p>
+            <dl>
+              <dt>Parcel</dt><dd><span class="pin">166908-27-1154</span></dd>
+              <dt>Owner</dt><dd><span class="mark">Paul Whitaker</span><span class="stale">Not updated yet</span></dd>
+              <dt>Bill mailed to</dt><dd>88 Birch Rd, Smithfield</dd>
+            </dl>
+          </div>
+          <div class="doc deed">
+            <h3>Register of Deeds, Book 6123 Page 412</h3>
+            <p class="t">Recorded deed</p>
+            <dl>
+              <dt>Parcel</dt><dd><span class="pin">166908-27-1154</span></dd>
+              <dt>From</dt><dd>Paul Whitaker</dd>
+              <dt>To</dt><dd><span class="mark">Dana &amp; Chris Holloway</span></dd>
+              <dt>Recorded</dt><dd>September 2026</dd>
+            </dl>
+          </div>
+          <div class="same"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Same parcel</div>
+          <div class="verdict">
+            <span class="chip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Title moved</span>
+            <p class="say">Owner of record: Dana &amp; Chris Holloway. The tax card still lists Paul Whitaker.</p>
+            <div class="src"><a href="https://talosoperations.com/demo/">Open the tax card</a><a href="https://talosoperations.com/demo/">Open the deed</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section style="padding-top:20px">
+      <h2 class="h2">Most houses aren't a mystery. Fee Simple tells you which ones are.</h2>
+      <div class="verdicts">
+        <div class="v"><b><i style="background:#1f9d74"></i>Certified current</b><p>Both records agree. Send the letter.</p></div>
+        <div class="v"><b><i style="background:#e0a100"></i>Title moved</b><p>A newer deed names a new owner. Fee Simple shows you who.</p></div>
+        <div class="v"><b><i style="background:var(--pop)"></i>Needs review</b><p>Something doesn't line up, so a person should take a look. You'll see exactly what.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="two">
+        <div class="panel teal">
+          <div class="big">27</div>
+          <p>North Carolina counties are live today. 47 more are mapped and on the way.</p>
+          <a href="https://talosoperations.com/coverage.html">See the coverage map</a>
+        </div>
+        <div class="panel soft">
+          <h2 class="h2" style="font-size:clamp(28px,3vw,38px)">Made for people who have to get it right.</h2>
+          <ul><li>HOA management companies</li><li>Self-managed HOAs</li><li>Attorneys and title teams</li><li>Foreclosure trustees</li><li>Investors</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="join" id="join">
+      <div>
+        <h2 class="h2">Try it on your next letter.</h2>
+        <p class="sub">Leave your email and we'll set up access. Or <a href="https://talosoperations.com/demo/" style="font-weight:700;color:var(--teal)">open the demo</a> first.</p>
+      </div>
+      <div>
+        <form onsubmit="event.preventDefault();this.nextElementSibling.textContent='Thank you. We\'ll be in touch soon.'">
+          <label for="em" style="position:absolute;left:-9999px">Email address</label>
+          <input id="em" type="email" required placeholder="you@company.com" autocomplete="email">
+          <button class="btn">Get early access</button>
+        </form>
+        <small aria-live="polite">We'll only use it to set up your access.</small>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span>© 2026 Talos Operations LLC. Fee Simple is a Talos Operations product.</span>
+    <nav aria-label="Footer"><a href="mailto:info@talosoperations.com">info@talosoperations.com</a><a href="https://www.linkedin.com/company/talos_operations/">LinkedIn</a><a href="https://talosoperations.com/privacy.html">Privacy</a><a href="https://talosoperations.com/terms.html">Terms</a></nav>
+  </footer>
+</div>
+<script>
+const stage=document.getElementById('stage'),steps=[...document.querySelectorAll('.step')];
+function pick(){
+  const narrow=innerWidth<=900, line=innerHeight*(narrow?0.78:0.55);
+  let cur=steps[0];
+  for(const s of steps){if(s.getBoundingClientRect().top<line)cur=s}
+  steps.forEach(s=>s.classList.toggle('on',s===cur));
+  stage.dataset.step=cur.dataset.s;
+}
+addEventListener('scroll',pick,{passive:true});addEventListener('resize',pick);pick();
+</script>
+<script src="switcher.js"></script>
+</body>
+</html>

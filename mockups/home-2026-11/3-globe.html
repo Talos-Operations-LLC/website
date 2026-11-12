@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fee Simple | 3. Globe in daylight</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0b1b3a;--muted:#55627e;--line:#e5e9f3;--soft:#f3f6ff;--blue:#2f5bff;--blue-d:#1f45e0;--pop:#ff6b4a;--green:#0b8a5f;--green-s:#e4f6ee;
+  --shadow:0 2px 4px rgba(11,27,58,.04),0 24px 60px -24px rgba(11,27,58,.25)}
+*{box-sizing:border-box}
+body{margin:0;background:#fff;color:var(--ink);font:18px/1.55 Urbanist,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:12px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:20px 0;position:relative;z-index:3}
+.brand{font-weight:800;font-size:24px;letter-spacing:-.02em;text-decoration:none}
+.brand span{color:var(--pop)}
+.nav{display:flex;align-items:center;gap:28px;font-weight:600;font-size:16px}
+.nav a{text-decoration:none;color:var(--muted)}
+.nav a:hover{color:var(--ink)}
+.pill{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:700;font-size:17px;text-decoration:none;border-radius:999px;padding:15px 26px;cursor:pointer;border:2px solid transparent;transition:background .2s,box-shadow .2s,transform .2s}
+.pill.blue{background:var(--blue);color:#fff;box-shadow:0 10px 24px -10px rgba(47,91,255,.7)}
+.pill.blue:hover{background:var(--blue-d);transform:translateY(-1px)}
+.pill.line{border-color:var(--line);color:var(--ink);background:#fff}
+.pill.line:hover{border-color:#c8d0e6}
+.nav .pill{padding:11px 20px;font-size:15px;color:#fff}
+
+.hero{display:grid;grid-template-columns:1fr 1.05fr;align-items:center;gap:20px;min-height:calc(100vh - 90px);max-height:860px;padding-bottom:30px}
+.hero h1{font-size:clamp(46px,6.2vw,88px);line-height:.98;letter-spacing:-.04em;font-weight:800;margin:0 0 24px}
+.hero p{font-size:clamp(18px,1.7vw,21px);color:var(--muted);max-width:44ch;margin:0 0 34px}
+.hero .btns{display:flex;gap:12px;flex-wrap:wrap}
+.globe{position:relative;aspect-ratio:1/1;width:100%;max-width:660px;justify-self:end}
+.globe canvas{position:absolute;inset:0;width:100%;height:100%}
+.place{position:absolute;left:50%;bottom:8%;transform:translate(-50%,10px);opacity:0;transition:opacity .5s,transform .5s;background:#fff;border-radius:999px;padding:11px 18px 11px 14px;box-shadow:var(--shadow);font-weight:700;font-size:16px;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.place.on{opacity:1;transform:translate(-50%,0)}
+.place i{width:12px;height:12px;border-radius:50%;background:var(--pop);box-shadow:0 0 0 5px rgba(255,107,74,.2)}
+.place span{color:var(--muted);font-weight:600}
+
+section{padding:110px 0 0}
+h2{font-size:clamp(34px,4.4vw,60px);line-height:1;letter-spacing:-.035em;font-weight:800;margin:0 0 18px}
+.sub{color:var(--muted);font-size:20px;margin:0;max-width:50ch}
+
+.answer{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:center}
+.points{list-style:none;padding:0;margin:34px 0 0;display:grid;gap:22px}
+.points li{display:grid;grid-template-columns:30px 1fr;gap:14px;font-size:19px}
+.points li b{display:block;font-size:20px}
+.points li span{color:var(--muted)}
+.points svg{margin-top:3px}
+
+.app{background:#fff;border-radius:28px;box-shadow:var(--shadow);border:1px solid var(--line);overflow:hidden}
+.app .bar{display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--soft);border-bottom:1px solid var(--line);font-weight:600;font-size:15px;color:var(--muted)}
+.app .bar .q{flex:1;background:#fff;border-radius:999px;padding:8px 14px;color:var(--ink);display:flex;align-items:center;gap:8px;border:1px solid var(--line)}
+.app .body{padding:26px 28px 28px}
+.app .head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.app h3{margin:0;font-size:26px;letter-spacing:-.02em}
+.app .meta{color:var(--muted);font-size:15px;margin-top:2px}
+.badge{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:14.5px;border-radius:999px;padding:7px 13px;background:var(--green-s);color:var(--green)}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0}
+.kv div{background:var(--soft);border-radius:18px;padding:16px 18px}
+.kv small{display:block;font-size:13.5px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.kv b{font-size:19px;line-height:1.3}
+.chain{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.chain li{display:grid;grid-template-columns:96px 1fr auto;gap:14px;align-items:center;padding:13px 2px;border-bottom:1px solid var(--line);font-size:15.5px}
+.chain .d{color:var(--muted);font-weight:600}
+.chain a{font-weight:700;color:var(--blue);text-decoration:none;font-size:14.5px}
+.chain a:hover{text-decoration:underline}
+.chain .label{font-size:14px;font-weight:700;color:var(--muted);padding:16px 2px 8px;border:0;display:block}
+
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px}
+.num{border-radius:28px;padding:30px 30px 28px;background:var(--soft)}
+.num:first-child{background:var(--blue);color:#fff}
+.num b{display:block;font-size:clamp(56px,6vw,84px);line-height:1;letter-spacing:-.05em;font-weight:800}
+.num span{font-size:18px;font-weight:600;opacity:.85}
+
+.people{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.people span{font-weight:700;font-size:19px;padding:12px 20px;border-radius:999px;background:#fff;border:2px solid var(--line)}
+
+.join{margin-top:110px;background:var(--soft);border-radius:40px;padding:64px clamp(28px,6vw,80px);text-align:left;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.join form{display:flex;gap:10px;background:#fff;padding:8px;border-radius:999px;box-shadow:var(--shadow)}
+.join input{flex:1;min-width:0;border:0;outline:0;font:inherit;padding:0 18px;background:transparent}
+.join small{display:block;margin:12px 0 0 20px;color:var(--muted);font-size:15px}
+
+footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;padding:44px 0;color:var(--muted);font-size:15.5px}
+footer nav{display:flex;gap:22px;flex-wrap:wrap}
+footer a{text-decoration:none}
+footer a:hover{color:var(--ink)}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:0;max-height:none;padding-top:20px}
+  .globe{justify-self:center;max-width:520px}
+  .answer,.join{grid-template-columns:1fr}
+  .nums{grid-template-columns:1fr}
+  .nav a:not(.pill){display:none}
+}
+@media (max-width:520px){
+  .kv{grid-template-columns:1fr}
+  .chain li{grid-template-columns:78px 1fr}
+  .chain li a{grid-column:2}
+  .join form{flex-direction:column;border-radius:24px}
+  .join input{padding:12px 14px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#">Fee Simple<span>.</span></a>
+    <nav class="nav" aria-label="Main">
+      <a href="https://talosoperations.com/coverage.html">Coverage</a>
+      <a href="https://talosoperations.com/demo/">Demo</a>
+      <a class="pill blue" href="#join">Get early access</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <h1>Know who owns it before you mail it.</h1>
+        <p>Fee Simple reads North Carolina county records, the tax card and the recorded deed, and tells you the owner of record and their mailing address.</p>
+        <div class="btns">
+          <a class="pill blue" href="https://talosoperations.com/demo/">Try the demo</a>
+          <a class="pill line" href="#how">See an answer</a>
+        </div>
+      </div>
+      <div class="globe" id="globe">
+        <canvas id="field" role="img" aria-label="A dotted globe that turns to North America and zooms into North Carolina."></canvas>
+        <div class="place" id="place"><i></i>North Carolina <span>27 counties live</span></div>
+      </div>
+    </div>
+
+    <section id="how" class="answer">
+      <div>
+        <h2>One address in. One clear answer out.</h2>
+        <p class="sub">No digging through two county websites. No guessing which one is current.</p>
+        <ul class="points">
+          <li><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2f5bff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m7.5 12 3 3 6-6"/></svg><div><b>Both records, checked</b><span>The tax card can still show the previous owner after a new deed is recorded.</span></div></li>
+          <li><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2f5bff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m7.5 12 3 3 6-6"/></svg><div><b>Matched by parcel</b><span>So you know both records describe the same property.</span></div></li>
+          <li><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2f5bff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m7.5 12 3 3 6-6"/></svg><div><b>Proof you can open</b><span>Every finding links to the county document it came from.</span></div></li>
+        </ul>
+      </div>
+      <div class="app" aria-label="Sample Fee Simple result">
+        <div class="bar"><span class="q"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>418 Willow Bend Ct, Clayton</span>Sample</div>
+        <div class="body">
+          <div class="head">
+            <div><h3>418 Willow Bend Ct</h3><div class="meta">Johnston County, parcel 166908-27-1154</div></div>
+            <span class="badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Certified current</span>
+          </div>
+          <div class="kv">
+            <div><small>Owner of record</small><b>Dana &amp; Chris Holloway</b></div>
+            <div><small>Mailing address</small><b>PO Box 1187, Clayton, NC 27528</b></div>
+          </div>
+          <ul class="chain">
+            <li class="label">Chain of title</li>
+            <li><span class="d">Mar 2019</span><span>Deed to Dana &amp; Chris Holloway</span><a href="https://talosoperations.com/demo/">Open deed</a></li>
+            <li><span class="d">Aug 2011</span><span>Deed to Paul Whitaker</span><a href="https://talosoperations.com/demo/">Open deed</a></li>
+            <li><span class="d">Jun 2004</span><span>Deed to Willow Bend Homes LLC</span><a href="https://talosoperations.com/demo/">Open deed</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Live across North Carolina, and growing.</h2>
+      <div class="nums">
+        <div class="num"><b>27</b><span>counties live today</span></div>
+        <div class="num"><b>47</b><span>more counties mapped</span></div>
+        <div class="num"><b>100</b><span>counties in the state, the goal</span></div>
+      </div>
+      <p style="margin-top:22px"><a href="https://talosoperations.com/coverage.html" style="font-weight:700;color:var(--blue);text-underline-offset:4px">See every county on the map</a></p>
+    </section>
+
+    <section>
+      <h2>Built with the people who send the letters.</h2>
+      <p class="sub">If your work starts with finding the right owner, Fee Simple is for you.</p>
+      <div class="people"><span>HOA management companies</span><span>Self-managed HOAs</span><span>Attorneys</span><span>Title teams</span><span>Foreclosure trustees</span><span>Investors</span></div>
+    </section>
+
+    <div class="join" id="join">
+      <div><h2 style="margin-bottom:10px">Get early access.</h2><p class="sub">Leave your email and we'll set up access for your team.</p></div>
+      <div>
+        <form onsubmit="event.preventDefault();this.nextElementSibling.textContent='Thanks! We\'ll be in touch.'">
+          <label for="em" style="position:absolute;left:-9999px">Email address</label>
+          <input id="em" type="email" required placeholder="you@company.com" autocomplete="email">
+          <button class="pill blue">Request access</button>
+        </form>
+        <small aria-live="polite">We'll only use it to reach you about access.</small>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span>© 2026 Talos Operations LLC. Fee Simple is a Talos Operations product.</span>
+    <nav aria-label="Footer"><a href="mailto:info@talosoperations.com">info@talosoperations.com</a><a href="https://www.linkedin.com/company/talos_operations/">LinkedIn</a><a href="https://talosoperations.com/privacy.html">Privacy</a><a href="https://talosoperations.com/terms.html">Terms</a></nav>
+  </footer>
+</div>
+
+<script>
+(async()=>{
+const cv=document.getElementById('field'),ctx=cv.getContext('2d'),box=document.getElementById('globe'),place=document.getElementById('place');
+const GEO=await (await fetch('hero-geometry.json')).json();
+const D=Math.PI/180;
+const NC=[[-84.32,35.0],[-83.11,35.0],[-82.3,35.19],[-81.04,35.15],[-80.93,35.1],[-80.78,34.82],[-79.67,34.8],[-78.54,33.86],[-77.96,33.88],[-77.6,34.4],[-76.95,34.66],[-76.4,34.75],[-75.75,35.2],[-75.5,35.6],[-75.75,36.2],[-75.87,36.55],[-81.68,36.59],[-82.0,36.3],[-82.6,36.0],[-83.1,35.75],[-83.7,35.55],[-84.0,35.3]];
+function inNC(x,y){let c=false;for(let i=0,j=NC.length-1;i<NC.length;j=i++){const[xi,yi]=NC[i],[xj,yj]=NC[j];if((yi>y)!==(yj>y)&&x<(xj-xi)*(y-yi)/(yj-yi)+xi)c=!c}return c}
+// points: lon, lat (radians), kind 0 world, 1 us coarse, 2 us fine, 3 nc
+const P=[];
+for(let i=0;i<GEO.world.length;i+=2)P.push(GEO.world[i]/10*D,GEO.world[i+1]/10*D,0);
+// on the globe, the US shows one dot per 1-degree cell (the one nearest the cell's centre),
+// matching the world grid; the rest fade in with the zoom. Kinds: 1/2 US coarse/fine, 3/4 NC coarse/fine.
+const best=new Map();
+for(let i=0;i<GEO.us.length;i+=2){const lo=GEO.us[i]/100,la=GEO.us[i+1]/100,key=Math.round(lo)+':'+Math.round(la),d=(lo-Math.round(lo))**2+(la-Math.round(la))**2;const b=best.get(key);if(!b||d<b[1])best.set(key,[i,d])}
+const keep=new Set([...best.values()].map(v=>v[0]));
+for(let i=0;i<GEO.us.length;i+=2){const lo=GEO.us[i]/100,la=GEO.us[i+1]/100;P.push(lo*D,la*D,(inNC(lo,la)?3:1)+(keep.has(i)?0:1))}
+const N=P.length/3;
+let W=0,H=0,dpr=1;
+function size(){const r=box.getBoundingClientRect();dpr=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr}
+size();addEventListener('resize',size);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const lerp=(a,b,t)=>a+(b-a)*t;
+// keyframes: [time s, lon0, lat0, zoom, ncGlow]
+const K=[[0,10,18,1,0],[5,-70,26,1,0],[8.2,-96,37,3.1,0],[10,-96,37,3.1,0],[13,-79.6,35.3,9.5,1],[18,-79.6,35.3,9.5,1],[22,10,18,1,0]];
+const LOOP=22;
+function cam(t){
+  if(t<=K[0][0])return K[0].slice(1);
+  for(let i=1;i<K.length;i++){if(t<=K[i][0]){const a=K[i-1],b=K[i];const e=ease((t-a[0])/(b[0]-a[0]));
+    // zoom in log space so it feels even
+    return [lerp(a[1],b[1],e),lerp(a[2],b[2],e),Math.exp(lerp(Math.log(a[3]),Math.log(b[3]),e)),lerp(a[4],b[4],e)]}}
+  return K[K.length-1].slice(1);
+}
+const BUCKETS=7;
+const COLORS=[[47,91,255],[31,69,224],[255,107,74]];
+let start=performance.now();
+function frame(now){
+  let t=reduce?11.5:((now-start)/1000)%LOOP;
+  // after the loop ends, keep spinning from where it is
+  let [l0,p0,z,glow]=cam(t);
+  if(t>K[K.length-2][0]){/* pull back phase */}
+  const R=Math.min(W,H)*0.43*z, cx=W/2, cy=H/2+ (z>1.2?0:0);
+  const sl=Math.sin(p0*D),cl=Math.cos(p0*D),L0=l0*D;
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+  // globe body, fades as we zoom
+  const bodyA=Math.max(0,1-(z-1)/1.4);
+  if(bodyA>0){ctx.globalAlpha=bodyA;ctx.beginPath();ctx.arc(cx,cy,R,0,7);const g=ctx.createRadialGradient(cx-R*.35,cy-R*.4,R*.1,cx,cy,R);g.addColorStop(0,'#ffffff');g.addColorStop(1,'#edf1ff');ctx.fillStyle=g;ctx.fill();ctx.strokeStyle='#dfe5f7';ctx.lineWidth=1.5;ctx.stroke();ctx.globalAlpha=1}
+  const fineA=Math.min(1,Math.max(0,(z-1.4)/1.2));
+  // dot size follows the spacing of the grid on screen: the 1-degree world grid, then the 0.28-degree US grid
+  const base=Math.max(1.4,Math.min(9,lerp(R*D*0.42,R*GEO.uss*D*0.58,fineA)));
+  const paths=[];for(let c=0;c<3;c++){paths[c]=[];for(let b=0;b<BUCKETS;b++)paths[c][b]=new Path2D()}
+  const big=base>3.2;
+  for(let i=0;i<N;i++){
+    const lo=P[i*3],la=P[i*3+1],k=P[i*3+2];
+    const fine=k===2||k===4;
+    if(fine&&fineA<=0)continue;
+    const cp=Math.cos(la),dl=lo-L0;
+    const zz=sl*Math.sin(la)+cl*cp*Math.cos(dl);
+    if(zz<=0)continue;
+    const x=cx+R*cp*Math.sin(dl), y=cy-R*(cl*Math.sin(la)-sl*cp*Math.cos(dl));
+    if(x<-10||y<-10||x>W+10||y>H+10)continue;
+    let a=0.25+0.75*zz, col=0, s=base;
+    if(k===0){a*= (1-0.75*Math.min(1,(z-1)/2));}
+    else {col=1; if(fine)a*=fineA; if(k>=3){col=glow>0.5?2:1; a=Math.max(a, glow*(fine?fineA:1)); s=base*(1+0.25*glow)} else a*=(1-0.55*glow)}
+    if(a<0.04)continue;
+    const b=Math.min(BUCKETS-1,Math.floor(a*BUCKETS));
+    if(big){paths[col][b].moveTo(x+s/2,y);paths[col][b].arc(x,y,s/2,0,6.283)}
+    else paths[col][b].rect(x-s/2,y-s/2,s,s);
+  }
+  for(let c=0;c<3;c++)for(let b=0;b<BUCKETS;b++){const [r,g,bb]=COLORS[c];ctx.fillStyle=`rgba(${r},${g},${bb},${((b+1)/BUCKETS).toFixed(2)})`;ctx.fill(paths[c][b])}
+  // soft fade at the edges once the globe has grown past its box
+  if(z>1.3){const g2=ctx.createRadialGradient(cx,cy,Math.min(W,H)*.33,cx,cy,Math.min(W,H)*.52);g2.addColorStop(0,'rgba(255,255,255,0)');g2.addColorStop(1,'rgba(255,255,255,1)');ctx.globalAlpha=Math.min(1,(z-1.3)/1.2);ctx.fillStyle=g2;ctx.fillRect(0,0,W,H);ctx.globalAlpha=1}
+  place.classList.toggle('on',glow>0.8);
+  if(!reduce)requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+})();
+</script>
+<script src="switcher.js"></script>
+</body>
+</html>
