@@ -8,12 +8,13 @@ pinned. `BUILD.md` explains the build; `README.md` says where to edit.
 
 ## Site direction
 
-Home, Coverage, Learn, and the Demo link. The home page and its globe hero are the
+Home, Learn, and the Demo link. The home page and its globe hero are the
 priority. The demo at `public/demo/` is the Fee Simple workbench snapshot.
 
 `src/content/learn/` and `src/content/for/` are kept. Preserve their noindex
 settings on draft pages; do not delete this content. Privacy and Terms are footer
-pages.
+pages. The retired county coverage page is removed; old coverage and ledger
+URLs redirect to the homepage.
 
 ## Demo data
 

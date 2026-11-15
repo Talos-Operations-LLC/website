@@ -38,14 +38,13 @@ a.wordmark:hover { color: var(--pop); }
 .wrap > .home-footer { margin-top: 80px; }
 .home-footer { position: relative; border-top: 1px solid transparent; padding-top: 32px; }
 .home-footer::before { content: ''; position: absolute; top: -1px; left: 0; right: 0; height: 1px; background: #262a32; transform-origin: left; }
-.footer-top { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; padding-bottom: 44px; }
+.footer-top { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding-bottom: 44px; }
 .footer-brand { font-size: 24px; font-weight: 550; letter-spacing: -1px; }
 .footer-brand span { color: var(--pop); }
 .footer-identity p { color: var(--subtle); font-size: 12px; margin-top: 8px; }
 .footer-top nav { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; font: 11px/1.6 var(--mono); }
 .footer-top nav a { display: flex; gap: 40px; justify-content: space-between; }
 .footer-contact { justify-self: end; }
-.footer-explore { padding-left: 30px; border-left: 1px solid #252c38; }
 .footer-top nav a span { color: var(--pop); transition: transform .2s ease-out; }
 .footer-top nav a:hover span { transform: translate(3px, -3px); }
 .footer-top a:hover, .footer-bottom a:hover { color: var(--pop); }
@@ -81,7 +80,6 @@ a.wordmark:hover { color: var(--pop); }
   .footer-top nav { gap: 0; }
   .footer-top nav a { width: 100%; min-height: 44px; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; white-space: nowrap; }
   .footer-contact { justify-self: stretch; }
-  .footer-explore { border: 0; padding-left: 0; }
   .footer-bottom { flex-wrap: nowrap; justify-content: space-between; gap: 10px; padding-top: 0; padding-bottom: max(24px, env(safe-area-inset-bottom)); font-size: 9px; }
   .footer-bottom > span { width: auto; white-space: nowrap; }
   .footer-bottom nav { margin-left: 0; gap: 14px; }

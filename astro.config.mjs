@@ -1,8 +1,6 @@
 import { defineConfig } from 'astro/config';
 
-// "preserve" keeps every URL the old static site had: coverage.astro builds
-// to /coverage.html and learn/x/index.astro to /learn/x/. Changing it moves
-// pages that search engines already know.
+// Preserve established URLs so existing search results keep working.
 // Uncompressed HTML so built pages can be diffed line by line against the
 // old hand-written files.
 // No smart quotes: copy renders exactly as written, straight quotes included.

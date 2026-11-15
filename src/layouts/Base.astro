@@ -12,7 +12,7 @@ interface Props {
   // robots tag so nobody lifts the noindex without knowing why it is there.
   noindex?: string;
   jsonld?: object[];
-  active?: 'coverage' | 'learn';
+  active?: 'learn';
   homeOnly?: boolean;
   // The homepage brings its own header and footer placement; every other
   // marketing page uses the shared navigation and footer below.
@@ -26,7 +26,7 @@ const {
   title, description, path, ogType = 'website', noindex, jsonld = [], active,
   bare = false, viewport = 'width=device-width, initial-scale=1.0',
   fontStylesheet = FONTS,
-  homeOnly = active === 'coverage' || active === 'learn',
+  homeOnly = active === 'learn',
 } = Astro.props;
 const url = path ? new URL(path, Astro.site).href : undefined;
 ---

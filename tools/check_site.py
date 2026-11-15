@@ -96,20 +96,13 @@ for path in PUBLIC.rglob('*.json'):
     except (ValueError, OSError) as exc:
         error(path, f'invalid JSON: {exc}')
 try:
-    topology = data['county-map.json']
-    fips_ids = {str(g['id']).zfill(5) for g in topology['objects']['counties']['geometries']}
-    for fips, county in data['coverage.json']['counties'].items():
-        if not re.fullmatch(r'\d{5}', fips) or fips not in fips_ids:
-            error(PUBLIC / 'assets/data/coverage.json', f'unknown county FIPS: {fips}')
-        if county['status'] not in ('live', 'surveyed'):
-            error(PUBLIC / 'assets/data/coverage.json', f'invalid status for {fips}')
     for key in ('world', 'us'):
         values = data['hero-geometry.json'][key]
         if (not isinstance(values, list) or not values or len(values) % 2
                 or not all(type(v) in (int, float) and math.isfinite(v) for v in values)):
             error(PUBLIC / 'assets/data/hero-geometry.json', f'invalid coordinate pairs: {key}')
 except (KeyError, TypeError, AttributeError) as exc:
-    error(PUBLIC / 'assets/data', f'missing or malformed map/hero data: {exc}')
+    error(PUBLIC / 'assets/data', f'missing or malformed hero data: {exc}')
 
 try:
     demo_manifest = PUBLIC / 'demo/data/manifest.js'

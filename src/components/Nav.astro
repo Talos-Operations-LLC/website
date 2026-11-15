@@ -1,11 +1,10 @@
 ---
 interface Props {
-  active?: 'coverage' | 'learn';
+  active?: 'learn';
   homeOnly?: boolean;
 }
 const { active, homeOnly = false } = Astro.props;
 const links = [
-  { key: 'coverage', href: '/coverage.html', label: '[coverage]' },
   { key: 'demo', href: '/demo/', label: '[demo]' },
 ];
 ---
