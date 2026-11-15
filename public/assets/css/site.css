@@ -85,3 +85,6 @@ a.wordmark:hover { color: var(--pop); }
   .footer-bottom nav { margin-left: 0; gap: 14px; }
   .footer-bottom nav a { min-height: 44px; display: flex; align-items: center; font-size: 10px; }
 }
+
+.skip { position: fixed; z-index: 20; top: 8px; left: 8px; padding: 10px; background: #fff; color: #000; transform: translateY(-200%); }
+.skip:focus { transform: none; }

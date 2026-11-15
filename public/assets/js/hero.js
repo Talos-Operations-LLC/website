@@ -56,6 +56,7 @@ async function startHero() {
   // The field fills its box, not the window, so content can sit around it.
   const hero = canvas.parentElement;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let paused = false;
   // WebGL first; the 2D context only if the browser has no WebGL (see the bootstrap).
   // Transparent, like the 2D canvas was: the page's own background shows through,
   // so there is no opaque layer for the browser to colour-shift against the page.
@@ -353,7 +354,7 @@ async function startHero() {
     if (!exploring) setExploring(true);
     stopMomentum();
     const target = fromCamera(-58, GLOBE_LAT);
-    if (reduced || still) { orientation = target; redraw(); }
+    if (reduced || still || paused) { orientation = target; redraw(); }
     else resetting = { from: [...orientation], to: target, start: performance.now() };
   }
   function onDown(e) {
@@ -439,7 +440,7 @@ async function startHero() {
       if (amount === 1) resetting = null;
       return;
     }
-    if (drag.on || CAM.z > 0.15 || pullback || reduced || still) return;
+    if (drag.on || CAM.z > 0.15 || pullback || reduced || still || paused) return;
     const speed = Math.hypot(...drag.velocity);
     if (speed > 0.008) {
       const decay = Math.exp(-dt * 1.8);
@@ -526,11 +527,11 @@ async function startHero() {
     else sampled = 0;
   }
   function schedule() {
-    if (queued || reduced || still || !visible) return;
+    if (queued || reduced || still || paused || !visible) return;
     queued = true;
-    requestAnimationFrame(ms => { queued = false; frame(ms); schedule(); });
+    requestAnimationFrame(ms => { queued = false; if (paused) return; frame(ms); schedule(); });
   }
-  function redraw() { if (reduced || still) frame(performance.now()); }   // one frame, when nothing loops
+  function redraw() { if (reduced || still || paused) frame(performance.now()); }   // one frame, when nothing loops
 
   // ---- render ----------------------------------------------------------------
   // frame() moves the camera, projects every dot and writes what the drawing
@@ -540,12 +541,12 @@ async function startHero() {
   let lastMs = 0, cursor = '';
   function frame(ms) {
     const dt = lastMs ? Math.min(0.05, (ms - lastMs) / 1000) : 1 / 60;
-    if (lastMs && !reduced && !still) govern(ms, ms - lastMs);
+    if (lastMs && !reduced && !still && !paused) govern(ms, ms - lastMs);
     lastMs = ms;
     const t = ms / 1000;
-    if (!reduced && !still && exploring && !drag.on && ms >= interactionUntil) setExploring(false);
+    if (!reduced && !still && !paused && exploring && !drag.on && ms >= interactionUntil) setExploring(false);
     spinStep(dt, ms);
-    if (!exploring && !drag.on && ms >= holdUntil && !pullback && !still && !reduced) sceneTime += dt;
+    if (!exploring && !drag.on && ms >= holdUntil && !pullback && !still && !reduced && !paused) sceneTime += dt;
     camera(ms);
     const { R, cx, cy, z } = CAM;
     matrix(CAM.q, ROT);
@@ -995,6 +996,17 @@ async function startHero() {
   hero.dataset.quality = 'full';
   if (gl) hero.dataset.renderer = 'webgl';
   hero.dataset.motion = reduced ? 'reduced' : 'full';
+  const motionButton = document.getElementById('globe-motion');
+  if (motionButton && !reduced) {
+    motionButton.hidden = false;
+    motionButton.addEventListener('click', () => {
+      paused = !paused;
+      hero.dataset.motion = paused ? 'paused' : 'full';
+      motionButton.textContent = paused ? 'Resume animation' : 'Pause animation';
+      lastMs = 0;
+      if (!paused) schedule();
+    });
+  }
   if (reduced) frame(performance.now()); else schedule();
 }
 

@@ -22,18 +22,18 @@ const words = headline.split(' ');
     <link rel="stylesheet" href="/assets/css/home.css">
   </Fragment>
   <div class="home">
-    <a class="skip" href="#main">Skip to main content</a>
     <header class="home-header shell">
       <a href="/" class="home-brand" aria-label="Fee Simple home">Fee Simple<span>.</span></a>
       <nav aria-label="Primary"><a href="/demo/" class="demo-button">Explore the demo <span aria-hidden="true">↗</span></a></nav>
     </header>
 
-    <main id="main">
+    <main id="main" tabindex="-1">
       <section class="hero">
         <div class="hero-copy shell">
           <h1 class="claim" aria-label={headline}>{words.map((word, index) => <Fragment><span class:list={['word-mask', { 'claim-accent': index >= 7 }]} aria-hidden="true"><span class="claim-word" style={`--word-delay: ${220 + index * 65}ms`}>{word}</span></span>{index < words.length - 1 ? ' ' : ''}</Fragment>)}</h1>
         </div>
         <div class="map" role="group" aria-label="Interactive globe and United States map">
+          <button id="globe-motion" class="globe-motion" type="button" aria-controls="field" hidden>Pause animation</button>
           <canvas id="field" tabindex="0" role="img" aria-label="Interactive globe. Drag or use arrow keys to rotate. Q and E roll the globe. Home resets; Escape resumes the tour."></canvas>
         </div>
       </section>

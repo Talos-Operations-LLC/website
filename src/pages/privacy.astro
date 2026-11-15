@@ -5,10 +5,11 @@ import Base from '../layouts/Base.astro';
 <Fragment slot="head">
 <link rel="stylesheet" href="/assets/css/legal.css">
 </Fragment>
+  <main id="main" tabindex="-1">
   <h1 class="headline">Privacy <span>policy.</span></h1>
   <p class="updated">Effective November 14, 2026</p>
 
-  <main class="doc">
+  <div class="doc">
     <p>Talos Operations LLC, a North Carolina company ("Talos", "we" or "us"), operates talosoperations.com and Fee Simple. This policy explains how we handle information on our website, in the Fee Simple app and public demo, and when you contact us. Private customer work and public property records are different categories of information.</p>
 
     <h2>1. Information we collect</h2>
@@ -96,5 +97,6 @@ import Base from '../layouts/Base.astro';
     <h2>13. Contact</h2>
     <p>Questions? Email us at <a href="mailto:info@talosoperations.com">info@talosoperations.com</a>.</p>
     <p>Talos Operations LLC · North Carolina, United States</p>
+  </div>
   </main>
 </Base>
