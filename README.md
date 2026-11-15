@@ -48,6 +48,14 @@ Astro, built to static HTML. One dependency (`astro`, exact pin). See `BUILD.md`
 
 ## Local development
 
+The Terms page covers the website, Fee Simple app and demo. Lead-sale terms
+stay in their separate agreements. The website is the sole maintained source
+of full policy text; the app links here. Preserve published versions in Git,
+and coordinate material changes with the app's terms/acceptance version.
+The November 14 Terms were approved for publication; firm-offboarding,
+Privacy Policy alignment and the app acceptance release remain tracked in
+the Fee Simple legal review.
+
 The homepage uses the approved adaptive Wider layout automatically. Desktop sizing
 in `public/assets/css/home.css` scales with viewport width and height; mobile keeps
 its stacked layout. No comparison switch or globe zoom controls are shipped.
