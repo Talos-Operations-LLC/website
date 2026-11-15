@@ -2,7 +2,6 @@
 // sitemap date live here; bump `updated` when the page's content changes.
 export const SITE_PAGES = [
   { path: '/', title: 'Home', llms: 'What Fee Simple does and how to request early access.', updated: '2026-11-01' },
-  { path: '/coverage.html', title: 'Coverage', llms: 'Which North Carolina counties Fee Simple covers today, live in production or surveyed with bulk data mapped.', updated: '2026-11-01' },
   { path: '/privacy.html', title: 'Privacy Policy', llms: 'How Talos handles account information, private workspace content, public records, website analytics and privacy requests.', updated: '2026-11-14' },
   { path: '/terms.html', title: 'Terms of Service', llms: 'Terms for the Talos website, Fee Simple app and demo, including free and paid access. Lead-sale agreements remain separate.', updated: '2026-11-14' },
 ];

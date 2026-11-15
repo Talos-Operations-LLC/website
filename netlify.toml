@@ -20,17 +20,14 @@
     X-Robots-Tag = "noindex, nofollow"
     Cache-Control = "public, max-age=0, must-revalidate"
 
-# /ledger was the original home page. Retired 2026-10-01: its county map now
-# lives on /coverage.html, so old links land there. The bare path is listed
-# too, in case the splat rule doesn't cover it.
 [[redirects]]
   from = "/ledger"
-  to = "/coverage.html"
+  to = "/"
   status = 301
 
 [[redirects]]
   from = "/ledger/*"
-  to = "/coverage.html"
+  to = "/"
   status = 301
 
 [[headers]]
@@ -55,3 +52,18 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow, noarchive"
     Content-Disposition = "inline"
+
+[[redirects]]
+  from = "/coverage"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/coverage.html"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/coverage/"
+  to = "/"
+  status = 301
