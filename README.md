@@ -78,10 +78,13 @@ node --test tools/globe-rotation.test.mjs tools/hero-interaction.test.mjs
 
 The globe supports free dragging, momentum, and hover particle movement.
 Drag directly to rotate; touch allows horizontal drags and vertical page scrolling.
-The USA tour resumes after ten seconds without interaction. With the canvas
+The USA tour resumes after ten seconds without interaction. Pause animation
+stops automatic motion until Resume animation is selected. With the canvas
 focused, arrow keys rotate, Q/E roll, Home resets, and Escape resumes.
 Reduced-motion mode renders a static map until keyboard exploration, then responds
 without inertia or automatic resuming.
+
+All page templates include a keyboard skip link to the main content.
 
 ## Deployment
 

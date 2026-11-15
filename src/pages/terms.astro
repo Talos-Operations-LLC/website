@@ -5,10 +5,11 @@ import Base from '../layouts/Base.astro';
 <Fragment slot="head">
 <link rel="stylesheet" href="/assets/css/legal.css">
 </Fragment>
+  <main id="main" tabindex="-1">
   <h1 class="headline">Terms <span>of service.</span></h1>
   <p class="updated">Effective November 14, 2026</p>
 
-  <main class="doc">
+  <div class="doc">
     <p>These Terms cover the Talos Operations website, the Fee Simple app and our public product demo (together, the "Service"). They are between you and Talos Operations LLC, a North Carolina limited liability company ("Talos", "we" or "us"). Talos provides property-information software, not legal services.</p>
 
     <h2>1. Scope and separate agreements</h2>
@@ -103,5 +104,6 @@ import Base from '../layouts/Base.astro';
     <p>Questions? Email us at <a href="mailto:info@talosoperations.com">info@talosoperations.com</a>.</p>
     <p>Talos Operations LLC · North Carolina, United States</p>
     <p>Use that address for support, account requests, accessibility assistance and notices under these Terms, unless a separate agreement specifies another method. We may send service and Terms notices to your account email or through the app; keep your contact information current.</p>
+  </div>
   </main>
 </Base>

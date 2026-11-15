@@ -7,7 +7,7 @@ import * as rotation from '../public/assets/js/globe-rotation.js';
 const source = (await readFile(process.env.HERO_SOURCE || new URL('../public/assets/js/hero.js', import.meta.url), 'utf8'))
   .replace(/^import .*\n/, '');
 
-async function setup() {
+async function setup(reduced = false) {
   let time = 1000, nextFrame, camera, dots = [];
   const element = () => ({
     style: {}, dataset: {}, hidden: false, listeners: {},
@@ -26,8 +26,10 @@ async function setup() {
     getContext: type => type === 'webgl' ? null : context,
     getBoundingClientRect: () => ({ left: 0, top: 0, width: 1600, height: 940 }),
     setPointerCapture() {}, releasePointerCapture() {},
+    cloneNode() { return this; }, replaceWith() {},
   };
-  const elements = { field: canvas };
+  const motion = { ...element(), hidden: true };
+  const elements = { field: canvas, 'globe-motion': motion };
   vm.runInNewContext(source, {
     ...rotation, Math: Object.assign(Object.create(Math), { random: () => .5 }),
     matrix(q, out) { camera = [...q]; return rotation.matrix(q, out); },
@@ -40,21 +42,21 @@ async function setup() {
       world: [0, 0, 0, 300, 300, 0, -900, 300],
       us: [-12400, 2500, -6700, 2500, -12400, 4900, -6700, 4900], ws: 1, uss: 1,
     }) }),
-    matchMedia: () => ({ matches: false }), innerWidth: 1440, devicePixelRatio: 1,
+    matchMedia: () => ({ matches: reduced }), innerWidth: 1440, devicePixelRatio: 1,
     performance: { now: () => time }, addEventListener() {}, console,
     requestAnimationFrame: fn => { nextFrame = fn; },
   });
   await new Promise(setImmediate);
   function advance(ms = 16) {
     const end = time + ms;
-    while (time < end) { time = Math.min(end, time + 16); nextFrame(time); }
+    while (time < end) { time = Math.min(end, time + 16); const callback = nextFrame; nextFrame = null; callback?.(time); }
   }
   function pointer(type, x = 800, y = 470, pointerType = 'mouse') {
     canvas.listeners[type]({ type, pointerId: 1, pointerType, button: 0,
       clientX: x, clientY: y, timeStamp: time, preventDefault() {} });
   }
   advance();
-  return { canvas, map, advance, pointer, camera: () => camera, dots: () => dots,
+  return { canvas, map, motion, advance, pointer, camera: () => camera, dots: () => dots,
     explore: () => { pointer('pointerdown'); pointer('pointerup'); } };
 }
 
@@ -152,4 +154,41 @@ test('touch can grab directly without an activation button', async () => {
   const before = h.camera();
   h.pointer('pointermove', 850, 470, 'touch'); h.advance();
   assert.ok(difference(before, h.camera()) > .2);
+});
+
+
+test('pause remains stopped beyond the inactivity timer and can resume', async () => {
+  const h = await setup();
+  h.advance(2000);
+  assert.equal(h.motion.hidden, false);
+  h.motion.listeners.click();
+  const before = h.camera();
+  h.advance(15000);
+  assert.deepEqual(h.camera(), before);
+  assert.equal(h.motion.textContent, 'Resume animation');
+  h.motion.listeners.click();
+  h.advance(500);
+  assert.ok(difference(before, h.camera()) > .001);
+  assert.equal(h.motion.textContent, 'Pause animation');
+});
+
+test('reduced motion does not offer an animation control', async () => {
+  const h = await setup(true);
+  assert.equal(h.motion.hidden, true);
+});
+
+
+test('Home resets the paused globe without restarting automatic motion', async () => {
+  const h = await setup();
+  h.explore(); h.advance(1200);
+  h.pointer('pointerdown'); h.pointer('pointermove', 880); h.pointer('pointerup', 880);
+  h.advance(300);
+  h.motion.listeners.click();
+  const moved = h.camera();
+  h.canvas.listeners.keydown({ key: 'Home', preventDefault() {} });
+  assert.ok(difference(moved, h.camera()) > .01, 'Home must redraw the reset immediately while paused');
+  const reset = h.camera();
+  h.advance(15000);
+  assert.deepEqual(h.camera(), reset);
+  assert.equal(h.map.dataset.motion, 'paused');
 });
