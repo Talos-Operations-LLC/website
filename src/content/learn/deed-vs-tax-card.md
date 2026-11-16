@@ -11,8 +11,6 @@ faq:
     a: "They answer different questions. The recorded deed is the source document for who took title; the tax card is the tax office's working copy."
 related:
   - "/learn/nc-property-owner-lookup/"
-  - "/learn/county-record-lag/"
-  - "/learn/verify-mailing-address/"
 order: 2
 blurb: "Two records, two offices, one parcel."
 llms: "What the recorded deed and the county tax card each are, and how to check one against the other."
@@ -27,7 +25,7 @@ The tax card is the county tax office's record for a parcel, kept for listing an
 
 ## Why is the mailing address a separate question?
 
-The tax card's mailing address is where the county sends the tax bill. It is a separate field from the property address, and it isn't part of the deed's conveyance. [Verifying a mailing address](/learn/verify-mailing-address/) describes how it's checked.
+The tax card's mailing address is where the county sends the tax bill. It is a separate field from the property address, and it isn't part of the deed's conveyance.
 
 ## How do you check both, and what does a match look like?
 

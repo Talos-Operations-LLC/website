@@ -13,7 +13,6 @@ faq:
     a: "County records stop at the entity's name. The NC Secretary of State's business registry lists the LLC's registered agent and filing history, and matching the deed's grantee name to that filing is how people find who is behind an entity-owned parcel."
 related:
   - "/learn/deed-vs-tax-card/"
-  - "/learn/county-record-lag/"
   - "/learn/llc-property-owner-nc/"
 order: 1
 blurb: "The two-office method that works in all 100 counties."
