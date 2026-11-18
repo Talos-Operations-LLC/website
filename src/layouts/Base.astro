@@ -17,6 +17,8 @@ interface Props {
   // The homepage brings its own header and footer placement; every other
   // marketing page uses the shared navigation and footer below.
   bare?: boolean;
+  // The legal pages end with their last section: no footer links below.
+  noFooter?: boolean;
   viewport?: string;
   fontStylesheet?: string;
 }
@@ -24,7 +26,7 @@ interface Props {
 const FONTS = 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;450;500;550;600;650;700&display=swap';
 const {
   title, description, path, ogType = 'website', noindex, jsonld = [], active,
-  bare = false, viewport = 'width=device-width, initial-scale=1.0',
+  bare = false, noFooter = false, viewport = 'width=device-width, initial-scale=1.0',
   fontStylesheet = FONTS,
   homeOnly = active === 'learn',
 } = Astro.props;
@@ -72,7 +74,7 @@ if (!navigator.globalPrivacyControl) {
 <div class="wrap">
 <Nav active={active} homeOnly={homeOnly} />
 <slot />
-<Footer full={homeOnly} />
+{!noFooter && <Footer full={homeOnly} />}
 </div>
 )}
 <slot name="end" />

@@ -1,13 +1,13 @@
 ---
 import Base from '../layouts/Base.astro';
 ---
-<Base title="Privacy Policy — Fee Simple" description="How Talos handles account information, private workspace content, public records, website analytics and privacy requests." homeOnly>
+<Base title="Privacy Policy — Fee Simple" description="How Talos handles account information, private workspace content, public records, website analytics and privacy requests." homeOnly noFooter fontStylesheet="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@300;400&display=swap">
 <Fragment slot="head">
 <link rel="stylesheet" href="/assets/css/legal.css">
 </Fragment>
   <main id="main" tabindex="-1">
   <h1 class="headline">Privacy <span>policy.</span></h1>
-  <p class="updated">Effective November 15, 2026</p>
+  <p class="updated">Effective November 17, 2026</p>
 
   <div class="doc">
     <p>Talos Operations LLC, a North Carolina company ("Talos", "we" or "us"), operates talosoperations.com and Fee Simple. This policy explains how we handle information on our website, in the Fee Simple app and public demo, and when you contact us. Private customer work and public property records are different categories of information.</p>
@@ -17,7 +17,8 @@ import Base from '../layouts/Base.astro';
       <li><strong>Account and access information.</strong> Your email address, profile information you provide, firm membership and role, invitations, and information needed to authenticate you. If you use Google sign-in, our identity provider receives the profile information supplied for that sign-in. Passwords are handled by our identity provider, not stored as readable passwords in Fee Simple.</li>
       <li><strong>Workspace content.</strong> Matters, client names, file numbers, closing details, saved properties, notes, review status, files and other information you submit or send us. This can include information about your clients and other people.</li>
       <li><strong>Public records and results.</strong> Property identifiers, addresses, owner names, recorded documents, tax and court information, source files, extracted fields, summaries and other results obtained or produced for the Service. Public records can contain personal information even though they are publicly available.</li>
-      <li><strong>Communications and business records.</strong> Website access requests, support messages, attachments, correspondence, agreed orders and related billing records. We also keep records needed to administer accounts, agreements and privacy requests.</li>
+      <li><strong>Website forms.</strong> Our website has two forms. Early access asks for your email address. Talk to us asks for your name, email address, firm or company, and a message. We receive what you enter in the form, plus the technical information described below.</li>
+      <li><strong>Communications and business records.</strong> Support messages, attachments, correspondence, agreed orders and related billing records. We also keep records needed to administer accounts, agreements and privacy requests.</li>
       <li><strong>Technical information.</strong> IP addresses, browser and device information, page requests, authentication and security events, errors and operational logs. Logs and alerts can contain account emails or property identifiers. This is not a promise that we keep a complete history of everything each user views, downloads or exports.</li>
       <li><strong>Browser storage.</strong> Sign-in cookies and browser storage used for settings, preferences, recent activity and demo or workspace state. Some information stays in your browser rather than being saved to your account.</li>
     </ul>
@@ -26,6 +27,7 @@ import Base from '../layouts/Base.astro';
     <h2>2. How we use information</h2>
     <ul>
       <li>To provide account access, retrieve and organize records, display results, save work and support authorized sharing.</li>
+      <li>To reply to messages sent through our website forms and to set up early access.</li>
       <li>To administer firms, invitations, agreements and payments, respond to requests and provide support.</li>
       <li>To maintain and secure the Service, investigate errors or misuse, and understand use of the public website.</li>
       <li>To communicate about accounts and services, send product news and promotional offers, and manage communication preferences.</li>
@@ -52,7 +54,7 @@ import Base from '../layouts/Base.astro';
         <tr><td>Auth0 (Okta)</td><td>Handles authentication, account identity, sign-in credentials and verification messages.</td></tr>
         <tr><td>Google</td><td>Provides optional Google sign-in, website analytics and web fonts. These features involve identity information or browser requests, depending on the feature.</td></tr>
         <tr><td>Microsoft 365</td><td>Handles our email and support correspondence, including messages and attachments you send us.</td></tr>
-        <tr><td>Netlify</td><td>Hosts the public website and receives website forms, including access requests, plus ordinary hosting logs.</td></tr>
+        <tr><td>Netlify</td><td>Hosts the public website and receives its Early access and Talk to us forms, plus ordinary hosting logs. Form entries are sent to us by email at info@talosoperations.com.</td></tr>
         <tr><td>ntfy.sh</td><td>Delivers operational alerts to Talos. Alert content can include sign-in email addresses and property identifiers or error details.</td></tr>
         <tr><td>Esri</td><td>Supplies map tiles requested by your browser. Requests disclose network information and the map area being loaded.</td></tr>
       </tbody>
