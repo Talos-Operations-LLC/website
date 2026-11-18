@@ -13,72 +13,71 @@ const jsonld = [
   }
 ];
 const description = 'Fee Simple: the highest and most complete form of parcel diligence.';
-const headline = 'The highest and most complete form of parcel diligence.';
-const words = headline.split(' ');
+const fonts = 'https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Mono:wght@300;400&display=swap';
 ---
 <Base title="Fee Simple — complete parcel diligence" description={description} jsonld={jsonld} bare
-  viewport="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  fontStylesheet={fonts} viewport="width=device-width, initial-scale=1, viewport-fit=cover">
   <Fragment slot="head">
+    <meta name="theme-color" content="#1d1e22">
     <link rel="stylesheet" href="/assets/css/home.css">
   </Fragment>
-  <div class="home">
-    <header class="home-header shell">
-      <a href="/" class="home-brand" aria-label="Fee Simple home">Fee Simple<span>.</span></a>
-      <nav aria-label="Primary"><a href="/demo/" class="demo-button">Explore the demo <span aria-hidden="true">↗</span></a></nav>
-    </header>
+  <canvas id="dust" aria-hidden="true"></canvas>
 
-    <main id="main" tabindex="-1">
-      <section class="hero">
-        <div class="hero-copy shell">
-          <h1 class="claim" aria-label={headline}>{words.map((word, index) => <Fragment><span class:list={['word-mask', { 'claim-accent': index >= 7 }]} aria-hidden="true"><span class="claim-word" style={`--word-delay: ${220 + index * 65}ms`}>{word}</span></span>{index < words.length - 1 ? ' ' : ''}</Fragment>)}</h1>
-        </div>
-        <div class="map" role="group" aria-label="Interactive globe and United States map">
-          <button id="globe-motion" class="globe-motion" type="button" aria-controls="field" hidden>Pause animation</button>
-          <canvas id="field" tabindex="0" role="img" aria-label="Interactive globe. Drag or use arrow keys to rotate. Q and E roll the globe. Home resets; Escape resumes the tour."></canvas>
-        </div>
-      </section>
+  <header class="top" style="--d:500ms">
+    <a class="u" href="#talk">Talk to us</a>
+    <div class="right">
+      <a class="login" href="https://feesimple.talosoperations.com/">Log in</a>
+      <a class="pill" href="/demo/">Demo <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"/></svg></a>
+    </div>
+  </header>
 
-      <section class="access shell" id="early-access" aria-labelledby="access-title">
-        <div class="access-heading" data-reveal="left">
-          <p class="eyebrow">FEE SIMPLE / EARLY ACCESS</p>
-          <h2 id="access-title">Request<br>early access.</h2>
-        </div>
-        <div class="access-form" data-reveal="up" data-reveal-delay="120">
-          <p class="access-copy">Enter your email. <span>We'll reach out to set up access.</span></p>
-          <form name="early-access" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
-            <input type="hidden" name="form-name" value="early-access">
-            <p hidden aria-hidden="true">
-              <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
-            </p>
-            <label for="email" class="visually-hidden">Email address</label>
-            <input id="email" name="email" type="email" placeholder="you@association.org" autocomplete="email" required>
-            <button type="submit" aria-label="Request early access"><span class="submit-text">Get access</span><span aria-hidden="true">↗</span></button>
-          </form>
-        </div>
-      </section>
-    </main>
+  <main class="dock" id="main" tabindex="-1">
+    <section class="panel home on" data-panel="home" aria-label="Fee Simple">
+      <nav class="links" aria-label="Sections">
+        <a class="u" href="#early-access">Early access</a>
+        <a class="u ext" href="https://www.linkedin.com/company/talos_operations/" target="_blank" rel="noopener noreferrer">LinkedIn<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"/></svg></a>
+      </nav>
+      <h1 class="brand"><img src="/assets/images/fee-simple-logo.png" alt=""><span class="bt">Fee Simple</span></h1>
+      <p class="tag">The highest and most complete form of parcel diligence.</p>
+    </section>
 
-    <footer class="home-footer shell" id="footer" data-reveal="line">
-      <div class="footer-top">
-        <div class="footer-identity" data-reveal="up" data-reveal-delay="60">
-          <a class="footer-brand" href="/">Fee Simple<span>.</span></a>
-          <p>A Talos Operations product.</p>
+    <section class="panel" data-panel="talk" id="talk" aria-labelledby="h-talk" hidden>
+      <h2 id="h-talk" tabindex="-1">Talk to us</h2>
+      <p>Tell us what you search for. We'll write back.</p>
+      <form class="form" name="talk" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="talk">
+        <p hidden aria-hidden="true"><label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <div class="two">
+          <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name"></div>
+          <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
         </div>
-        <nav class="footer-contact" aria-label="Contact" data-reveal="up" data-reveal-delay="220">
-          <a href="mailto:info@talosoperations.com">info@talosoperations.com <span aria-hidden="true">↗</span></a>
-          <a href="https://www.linkedin.com/company/talos_operations/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
-        </nav>
-      </div>
-      <div class="footer-bottom" data-reveal="up" data-reveal-delay="280">
-        <span>© {new Date().getFullYear()} Talos Operations LLC</span>
-        <nav aria-label="Legal"><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a></nav>
-      </div>
-    </footer>
-  </div>
+        <div class="field"><label for="f-firm">Firm or company</label><input id="f-firm" name="firm" autocomplete="organization"></div>
+        <div class="field"><label for="f-msg">Message</label><textarea id="f-msg" name="message"></textarea></div>
+        <div class="acts" style="margin-top:6px"><button class="pill" type="submit">Send</button><a class="u" href="#">Home</a><span class="sent" role="status"></span></div>
+      </form>
+    </section>
+
+    <section class="panel" data-panel="early-access" id="early-access" aria-labelledby="h-early-access" hidden>
+      <h2 id="h-early-access" tabindex="-1">Early access</h2>
+      <p>Drop your email. We'll reach out to set up access.</p>
+      <form class="form" name="early-access" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="early-access">
+        <p hidden aria-hidden="true"><label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <div class="field"><label for="a-email">Email</label>
+          <div class="inline"><input id="a-email" name="email" type="email" placeholder="you@association.org" autocomplete="email" required><button class="pill" type="submit">Request access</button></div>
+        </div>
+        <div class="acts" style="margin-top:6px"><a class="u" href="#">Home</a><span class="sent" role="status"></span></div>
+      </form>
+    </section>
+  </main>
+
+  <nav class="legal" style="--d:900ms" aria-label="Legal">
+    <span>© {new Date().getFullYear()} Talos Operations LLC</span>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/terms.html">Terms</a>
+  </nav>
 
   <Fragment slot="end">
-    <script is:inline type="module" src="/assets/js/hero.js"></script>
-    <script is:inline type="module" src="/assets/js/home-motion.js"></script>
-    <script is:inline nomodule>document.querySelector('.map').hidden = true;</script>
+    <script is:inline src="/assets/js/home.js"></script>
   </Fragment>
 </Base>
