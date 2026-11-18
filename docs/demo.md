@@ -5,21 +5,21 @@ Old Workbench and LD Capture URLs redirect to the new entry point. Astro copies 
 snapshot unchanged into `dist/demo/`; Netlify deploys website `main`.
 
 Five real North Carolina properties are replayed from captured public records.
-Old Beulah Road, the trust transfer, and the ownership-change example are preloaded;
-two additional properties can be searched. Search includes all 100 NC counties,
-address and parcel search, a globe-to-parcel map, and a step-by-step replay. Each property has its verdict,
-findings, chain, mortgages, documents, parcel map and record-pack export.
-All five properties use the same Overview and Title chain layouts with their own
-saved facts and source links. Owner search is not a search mode.
+Search lists all five as the app's search rows, with a note that searching does not
+run in the demo; typing narrows the five. Each property has its findings, chain,
+mortgages, documents, parcel map, title report and record-pack export, and Update
+records replays its captured search step by step. A sample account shows Matters with
+three sample matters and Home's upcoming closings. Saving, moving, deleting and every
+request are refused with a note that the demo saves and sends nothing.
 
 The demo is the Fee Simple production app built to run with no server, so it looks and
-works like the product: the same Home, Search, Properties, property tabs, title report,
+works like the product: the same Home, Search, Matters, property tabs, title report,
 Settings and light and dark themes. `index.html` loads the bundled app from `assets/`;
 `data/demo.json` supplies the five captured property records, and the app answers its
-own searches from them in the browser. Routes sit after the `#`. The search globe uses
-MapLibre and property maps use Leaflet; PDF.js renders saved PDFs with the plain
-JavaScript decoders in `pdf/`, because the demo's content policy does not allow wasm;
-JSZip exports records. `THIRD-PARTY-LICENSES.txt` carries the bundled packages' licenses.
+own searches from them in the browser. Routes sit after the `#`. Maps use Leaflet;
+PDF.js renders saved PDFs with the plain JavaScript decoders in `pdf/`, because the
+demo's content policy does not allow wasm; JSZip exports records.
+`THIRD-PARTY-LICENSES.txt` carries the bundled packages' licenses.
 
 ## Public snapshot
 
@@ -35,15 +35,17 @@ redactions, from OCR plus a page-by-page hand review); evidence files once saved
 a person's name are renamed. The originals remain in the product repository.
 Parcel, tax-account, book/page and recorded instrument identifiers remain.
 Internal worksheet comparisons, machine/capture paths and the Zillow capture are
-excluded. The captured verdict statuses are preserved, including Needs review;
-private comparison inputs behind that status are not distributed.
+excluded. Fee Simple flags for review and never decides title, so the statuses read
+as record facts (No newer deed found, New deed recorded, Needs review) and the captured
+records' conclusions are worded as what each record says; private comparison inputs
+are not distributed.
 HTML evidence is converted to inert, self-contained readable captures, removing
 portal scripts, forms, hidden inputs, session attributes and external resources.
-The account defaults to the fictional Alex Morgan with no email or phone number.
-No working credentials, backend, email delivery, live property lookup or integrations
-are included. Requests and generated example API keys remain in browser local storage.
-Restart clears the demo's saved settings, notes, review marks, recent list and finished
-searches, and restores the three saved properties.
+The sample account is the fictional Alex Morgan at Demo Law Group, with an example.com
+email and no phone number. No working credentials, backend, email delivery, live
+property lookup or integrations are included. Nothing is written to browser storage:
+settings, notes and review marks live in the page's memory and are gone when the
+visitor leaves; Restart clears them sooner.
 
 Regenerate with `apps/demo/tools/export_public_snapshot.py <website checkout>` in the product
 repository after reviewing any changed records. Do not copy raw source captures.
@@ -55,6 +57,6 @@ Captured HTML under public/demo/files/ is excluded from GitHub language statisti
 the demo index remains application HTML.
 
 The demo stays out of search indexes and the sitemap. Its CSP allows only local code
-and the two Esri tile hosts used by the maps. Open `/demo/` to check Search, a property,
+and the two Esri tile hosts used by the maps. Open `/demo/` to check Search, Matters, a property,
 a PDF, an export, Settings and Restart. The top bar's About this demo and Restart demo
 buttons identify it as captured demo records.
